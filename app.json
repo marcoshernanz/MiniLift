@@ -33,10 +33,41 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/inter/Inter_100Thin.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_100Thin_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_200ExtraLight.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_200ExtraLight_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_300Light.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_300Light_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_400Regular_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_500Medium_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_600SemiBold_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_700Bold_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_800ExtraBold.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_800ExtraBold_Italic.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_900Black.ttf",
+            "node_modules/@expo-google-fonts/inter/Inter_900Black_Italic.ttf"
+          ]
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3155cbf7-8362-43bd-b48c-ea4fbb91bbec"
+      }
     }
   }
 }
