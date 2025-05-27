@@ -5,7 +5,11 @@ export default function RootLayout() {
   return (
     <>
       <StatusBar style="light" />
-      <Stack />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
     </>
   );
 }

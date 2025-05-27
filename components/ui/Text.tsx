@@ -1,5 +1,11 @@
 import React from "react";
-import { Platform, StyleProp, Text, TextProps, TextStyle } from "react-native";
+import {
+  Platform,
+  Text as RNText,
+  StyleProp,
+  TextProps,
+  TextStyle,
+} from "react-native";
 
 const resolveFontFamily = (style: StyleProp<TextStyle>) => {
   const flatStyle = Array.isArray(style)
@@ -46,7 +52,7 @@ const resolveFontFamily = (style: StyleProp<TextStyle>) => {
   return fontFamily;
 };
 
-export default function InterText({ style, ...props }: TextProps) {
+export default function Text({ style, ...props }: TextProps) {
   const fontFamily = resolveFontFamily(style);
-  return <Text {...props} style={[{ fontFamily }, style]} />;
+  return <RNText {...props} style={[{ fontFamily }, style]} />;
 }
