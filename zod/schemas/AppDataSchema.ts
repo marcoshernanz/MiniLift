@@ -3,11 +3,19 @@ import { ExerciseSchema } from "./ExerciseSchema";
 import { LiftLogSchema } from "./LiftLogSchema";
 import { WeightSchema } from "./WeightSchema";
 
-export const AppStateSchema = z
+export const AppDataSchema = z
   .object({
     hasCompletedOnboarding: z.boolean().default(false),
     exercises: z.record(ExerciseSchema).default({}),
     liftLogs: z.array(LiftLogSchema).default([]),
     weightLogs: z.array(WeightSchema).default([]),
   })
-  .strict();
+  .strict()
+  .default({
+    hasCompletedOnboarding: false,
+    exercises: {},
+    liftLogs: [],
+    weightLogs: [],
+  });
+
+export type AppData = z.infer<typeof AppDataSchema>;
