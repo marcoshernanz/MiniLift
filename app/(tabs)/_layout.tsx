@@ -7,6 +7,17 @@ import {
   SettingsIcon,
   WeightIcon,
 } from "lucide-react-native";
+import React, { forwardRef } from "react";
+import { Pressable, type PressableProps } from "react-native";
+
+const TabBarPressableButton = forwardRef<any, PressableProps>((props, ref) => (
+  <Pressable
+    {...props}
+    ref={ref}
+    android_ripple={{ color: getColor("muted"), borderless: true }}
+  />
+));
+TabBarPressableButton.displayName = "TabBarPressableButton";
 
 export default function TabLayout() {
   return (
@@ -15,9 +26,10 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: getColor("primary"),
         tabBarInactiveTintColor: getColor("mutedForeground"),
+        tabBarButton: (props) => <TabBarPressableButton {...props} />,
         tabBarStyle: {
           backgroundColor: getColor("background"),
-          borderTopColor: getColor("border"),
+          borderColor: getColor("border"),
           borderTopWidth: 1,
         },
       }}
