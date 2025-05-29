@@ -59,7 +59,7 @@ export default function TabLayout() {
           options={{
             tabBarLabel: "",
             tabBarIcon: () => null,
-            tabBarButton: (props) => <TabBarPressableButton />,
+            tabBarButton: () => <TabBarPressableButton />,
           }}
         />
         <Tabs.Screen
