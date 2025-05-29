@@ -1,4 +1,3 @@
-import getColor from "@/lib/getColor";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Activity() {
@@ -6,7 +5,6 @@ export default function Activity() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: getColor("background"),
       }}
     ></SafeAreaView>
   );
