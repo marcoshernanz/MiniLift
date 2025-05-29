@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Statistics() {
+export default function StatisticsScreen() {
   return (
     <SafeAreaView
       style={{
