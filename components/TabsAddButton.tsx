@@ -1,13 +1,15 @@
 import getColor from "@/lib/getColor";
-import { useRouter } from "expo-router";
 import { DumbbellIcon, PlusIcon, WeightIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
+import BodyweightScreen from "./BodyweightScreen";
+import LiftScreen from "./LiftScreen";
 import Text from "./ui/Text";
 
 export default function TabsAddButton() {
   const [popoverVisible, setPopoverVisible] = useState(false);
-  const router = useRouter();
+  const [liftVisible, setLiftVisible] = useState(false);
+  const [bodyVisible, setBodyVisible] = useState(false);
 
   return (
     <>
@@ -39,7 +41,7 @@ export default function TabsAddButton() {
               android_ripple={{ color: getColor("muted") }}
               onPress={() => {
                 setPopoverVisible(false);
-                router.push("/lift");
+                setLiftVisible(true);
               }}
             >
               <DumbbellIcon
@@ -57,7 +59,7 @@ export default function TabsAddButton() {
               android_ripple={{ color: getColor("muted") }}
               onPress={() => {
                 setPopoverVisible(false);
-                router.push("/bodyweight");
+                setBodyVisible(true);
               }}
             >
               <WeightIcon
@@ -73,6 +75,24 @@ export default function TabsAddButton() {
         <View style={styles.arrowOuter} />
         <View style={styles.arrowInner} />
       </Modal>
+      {liftVisible && (
+        <Modal
+          visible={liftVisible}
+          animationType="slide"
+          onRequestClose={() => setLiftVisible(false)}
+        >
+          <LiftScreen />
+        </Modal>
+      )}
+      {bodyVisible && (
+        <Modal
+          visible={bodyVisible}
+          animationType="slide"
+          onRequestClose={() => setBodyVisible(false)}
+        >
+          <BodyweightScreen />
+        </Modal>
+      )}
     </>
   );
 }
