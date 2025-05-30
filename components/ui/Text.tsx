@@ -1,3 +1,4 @@
+import getColor from "@/lib/getColor";
 import React from "react";
 import {
   Platform,
@@ -54,5 +55,10 @@ const resolveFontFamily = (style: StyleProp<TextStyle>) => {
 
 export default function Text({ style, ...props }: TextProps) {
   const fontFamily = resolveFontFamily(style);
-  return <RNText {...props} style={[{ fontFamily }, style]} />;
+  return (
+    <RNText
+      {...props}
+      style={[{ fontFamily, color: getColor("foreground") }, style]}
+    />
+  );
 }
