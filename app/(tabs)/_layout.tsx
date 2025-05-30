@@ -1,10 +1,10 @@
+import TabsAddButton from "@/components/TabsAddButton";
 import getColor from "@/lib/getColor";
 import { Tabs } from "expo-router";
 import {
   ActivityIcon,
   BarChartIcon,
   HomeIcon,
-  PlusIcon,
   SettingsIcon,
 } from "lucide-react-native";
 import React, { forwardRef } from "react";
@@ -20,7 +20,6 @@ const TabBarPressableButton = forwardRef<any, PressableProps>((props, ref) => (
 TabBarPressableButton.displayName = "TabBarPressableButton";
 
 export default function TabLayout() {
-  // floating button will be a simple view overlaying the Tabs
   return (
     <View style={{ flex: 1 }}>
       <Tabs
@@ -81,27 +80,8 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-      <Pressable
-        style={{
-          position: "absolute",
-          bottom: 16,
-          left: "50%",
-          width: 60,
-          height: 60,
-          borderRadius: 9999,
-          backgroundColor: getColor("primary"),
-          borderWidth: 1,
-          borderColor: getColor("border"),
-          transform: [{ translateX: "-50%" }],
-          zIndex: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          elevation: 5,
-        }}
-        android_ripple={{ color: getColor("foreground", 0.25), radius: 30 }}
-      >
-        <PlusIcon color={getColor("primaryForeground")} size={32} />
-      </Pressable>
+
+      <TabsAddButton />
     </View>
   );
 }
