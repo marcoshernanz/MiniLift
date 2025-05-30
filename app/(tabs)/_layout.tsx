@@ -1,4 +1,4 @@
-import TabsAddButton from "@/components/TabsAddButton";
+import TabsAddButton from "@/components/screens/TabsAddButton";
 import getColor from "@/lib/getColor";
 import { Tabs } from "expo-router";
 import {

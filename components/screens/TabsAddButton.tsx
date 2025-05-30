@@ -2,9 +2,9 @@ import getColor from "@/lib/getColor";
 import { DumbbellIcon, PlusIcon, WeightIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
-import BodyweightScreen from "./screens/BodyweightScreen";
-import LiftScreen from "./LiftScreen";
-import Text from "./ui/Text";
+import LiftScreen from "../LiftScreen";
+import Text from "../ui/Text";
+import BodyweightScreen from "./BodyweightScreen";
 
 export default function TabsAddButton() {
   const [popoverVisible, setPopoverVisible] = useState(false);
