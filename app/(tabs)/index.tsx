@@ -6,7 +6,7 @@ export default function IndexScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: getColor("background"),
+        backgroundColor: getColor("foreground"),
       }}
     ></SafeAreaView>
   );

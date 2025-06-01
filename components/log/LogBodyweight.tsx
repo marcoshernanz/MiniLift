@@ -23,9 +23,7 @@ export default function LogBodyweight() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
+  container: {},
   input: {
     borderWidth: 1,
     borderColor: getColor("border"),

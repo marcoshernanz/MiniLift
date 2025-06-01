@@ -45,6 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#ffffff",
     },
     edgeToEdgeEnabled: true,
+    softwareKeyboardLayoutMode: "pan",
   },
   web: {
     bundler: "metro",

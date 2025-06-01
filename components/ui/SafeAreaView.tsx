@@ -1,12 +1,12 @@
 import getColor from "@/lib/getColor";
+import { StyleSheet } from "react-native";
 import {
-  SafeAreaView as RNSafeAreaView,
-  StyleSheet,
-  ViewProps,
-} from "react-native";
+  SafeAreaView,
+  SafeAreaViewProps,
+} from "react-native-safe-area-context";
 
-export default function SafeAreaView({ style, ...props }: ViewProps) {
-  return <RNSafeAreaView style={[styles.safeArea, style]} {...props} />;
+export default function SafeArea({ style, ...props }: SafeAreaViewProps) {
+  return <SafeAreaView style={[styles.safeArea, style]} {...props} />;
 }
 
 const styles = StyleSheet.create({

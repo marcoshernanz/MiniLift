@@ -10,7 +10,7 @@ export default function LogScreen() {
   const [logType, setLogType] = React.useState<"lift" | "bodyweight">("lift");
 
   return (
-    <SafeAreaView style={{ justifyContent: "space-between" }}>
+    <SafeAreaView style={styles.safeAreaView}>
       <View>
         {logType === "lift" && <LogLift />}
         {logType === "bodyweight" && <LogBodyweight />}
@@ -47,6 +47,9 @@ export default function LogScreen() {
 }
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    justifyContent: "space-between",
+  },
   container: {
     flexDirection: "row",
     height: 64,
