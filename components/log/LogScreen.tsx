@@ -1,6 +1,13 @@
 import getColor from "@/lib/getColor";
-import React from "react";
-import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 import Animated, {
   interpolate,
   useAnimatedScrollHandler,
@@ -28,10 +35,29 @@ export default function LogScreen() {
     opacity: interpolate(scrollX.value, [0, screenWidth], [0, 1], "clamp"),
   }));
 
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  useEffect(() => {
+    const showSub = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardOpen(true);
+    });
+    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardOpen(false);
+      // blur any remaining focused TextInput to remove caret
+      const currentlyFocused = TextInput.State.currentlyFocusedInput?.();
+      if (currentlyFocused) {
+        TextInput.State.blurTextInput(currentlyFocused);
+      }
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
   return (
     <SafeArea style={styles.safeArea}>
       <Animated.ScrollView
         ref={scrollViewRef}
+        scrollEnabled={!keyboardOpen}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
