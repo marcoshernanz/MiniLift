@@ -1,4 +1,3 @@
-import getColor from "@/lib/getColor";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function IndexScreen() {
@@ -6,7 +5,8 @@ export default function IndexScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: getColor("foreground"),
+        // backgroundColor: getColor("background"),
+        backgroundColor: "#0F0",
       }}
     ></SafeAreaView>
   );

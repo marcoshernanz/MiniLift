@@ -1,6 +1,6 @@
 import getColor from "@/lib/getColor";
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import SafeAreaView from "../ui/SafeAreaView";
 import Text from "../ui/Text";
 import LogBodyweight from "./LogBodyweight";
@@ -49,6 +49,8 @@ export default function LogScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     justifyContent: "space-between",
+    height: Dimensions.get("screen").height,
+    flex: 0,
   },
   container: {
     flexDirection: "row",
