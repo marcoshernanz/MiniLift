@@ -1,13 +1,6 @@
 import getColor from "@/lib/getColor";
-import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  Keyboard,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  View,
-} from "react-native";
+import React from "react";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedScrollHandler,
@@ -21,6 +14,9 @@ import LogLift from "./LogLift";
 
 export default function LogScreen() {
   const scrollViewRef = React.useRef<any>(null);
+  const [isInputFocused, setIsInputFocused] = React.useState(false);
+  const handleInputFocus = () => setIsInputFocused(true);
+  const handleInputBlur = () => setIsInputFocused(false);
   const screenWidth = Dimensions.get("screen").width;
   const scrollX = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler({
@@ -28,6 +24,7 @@ export default function LogScreen() {
       scrollX.value = event.contentOffset.x;
     },
   });
+
   const liftStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollX.value, [0, screenWidth], [1, 0], "clamp"),
   }));
@@ -35,41 +32,29 @@ export default function LogScreen() {
     opacity: interpolate(scrollX.value, [0, screenWidth], [0, 1], "clamp"),
   }));
 
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  useEffect(() => {
-    const showSub = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardOpen(true);
-    });
-    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardOpen(false);
-      // blur any remaining focused TextInput to remove caret
-      const currentlyFocused = TextInput.State.currentlyFocusedInput?.();
-      if (currentlyFocused) {
-        TextInput.State.blurTextInput(currentlyFocused);
-      }
-    });
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, []);
   return (
     <SafeArea style={styles.safeArea}>
       <Animated.ScrollView
         ref={scrollViewRef}
-        scrollEnabled={!keyboardOpen}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
+        scrollEnabled={!isInputFocused}
         scrollEventThrottle={16}
         onScroll={scrollHandler}
       >
         <View style={{ width: screenWidth }}>
-          <LogLift />
+          <LogLift
+            onInputFocus={handleInputFocus}
+            onInputBlur={handleInputBlur}
+          />
         </View>
         <View style={{ width: screenWidth }}>
-          <LogBodyweight />
+          <LogBodyweight
+            onInputFocus={handleInputFocus}
+            onInputBlur={handleInputBlur}
+          />
         </View>
       </Animated.ScrollView>
 

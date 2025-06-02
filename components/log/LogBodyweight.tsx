@@ -1,12 +1,28 @@
 import getColor from "@/lib/getColor";
-import { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Keyboard, StyleSheet, TextInput } from "react-native";
 import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import Title from "../ui/Title";
 
-export default function LogBodyweight() {
+interface LogBodyweightProps {
+  onInputFocus?: () => void;
+  onInputBlur?: () => void;
+}
+export default function LogBodyweight({
+  onInputFocus,
+  onInputBlur,
+}: LogBodyweightProps) {
   const [bodyweight, setBodyweight] = useState("");
+  const inputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    const subscription = Keyboard.addListener("keyboardDidHide", () => {
+      onInputBlur?.();
+      inputRef.current?.blur();
+    });
+    return () => subscription.remove();
+  }, [onInputBlur]);
 
   return (
     <SafeArea>
@@ -18,6 +34,9 @@ export default function LogBodyweight() {
         keyboardType="numeric"
         value={bodyweight}
         onChangeText={setBodyweight}
+        onFocus={onInputFocus}
+        onBlur={onInputBlur}
+        ref={inputRef}
       />
     </SafeArea>
   );

@@ -1,13 +1,28 @@
 import getColor from "@/lib/getColor";
-import { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Keyboard, StyleSheet, TextInput } from "react-native";
 import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import Title from "../ui/Title";
 
-export default function LogLift() {
+interface LogLiftProps {
+  onInputFocus?: () => void;
+  onInputBlur?: () => void;
+}
+export default function LogLift({ onInputFocus, onInputBlur }: LogLiftProps) {
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
+  const weightRef = useRef<TextInput>(null);
+  const repsRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    const subscription = Keyboard.addListener("keyboardDidHide", () => {
+      onInputBlur?.();
+      weightRef.current?.blur();
+      repsRef.current?.blur();
+    });
+    return () => subscription.remove();
+  }, [onInputBlur]);
 
   return (
     <SafeArea>
@@ -19,6 +34,9 @@ export default function LogLift() {
         keyboardType="numeric"
         value={weight}
         onChangeText={setWeight}
+        onFocus={onInputFocus}
+        onBlur={onInputBlur}
+        ref={weightRef}
       />
       <TextInput
         style={styles.input}
@@ -26,6 +44,9 @@ export default function LogLift() {
         keyboardType="numeric"
         value={reps}
         onChangeText={setReps}
+        onFocus={onInputFocus}
+        onBlur={onInputBlur}
+        ref={repsRef}
       />
     </SafeArea>
   );
