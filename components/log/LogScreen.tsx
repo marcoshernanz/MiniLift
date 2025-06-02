@@ -1,6 +1,12 @@
 import getColor from "@/lib/getColor";
 import React from "react";
-import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import SafeAreaView from "../ui/SafeAreaView";
 import Text from "../ui/Text";
 import LogBodyweight from "./LogBodyweight";
@@ -8,20 +14,38 @@ import LogLift from "./LogLift";
 
 export default function LogScreen() {
   const [logType, setLogType] = React.useState<"lift" | "bodyweight">("lift");
+  const scrollViewRef = React.useRef<ScrollView>(null);
+  const screenWidth = Dimensions.get("screen").width;
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <View>
-        {logType === "lift" && <LogLift />}
-        {logType === "bodyweight" && <LogBodyweight />}
-      </View>
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={(e) => {
+          const idx = Math.round(e.nativeEvent.contentOffset.x / screenWidth);
+          setLogType(idx === 0 ? "lift" : "bodyweight");
+        }}
+      >
+        <View style={{ width: screenWidth - 32 }}>
+          <LogLift />
+        </View>
+        <View style={{ width: screenWidth - 32 }}>
+          <LogBodyweight />
+        </View>
+      </ScrollView>
 
       <View style={styles.container}>
         <View style={styles.wrapperView}>
           <Pressable
             style={[styles.pressable]}
             android_ripple={{ color: getColor("muted") }}
-            onPress={() => setLogType("lift")}
+            onPress={() => {
+              setLogType("lift");
+              scrollViewRef.current?.scrollTo({ x: 0, animated: true });
+            }}
           >
             <Text>Lift</Text>
           </Pressable>
@@ -33,7 +57,13 @@ export default function LogScreen() {
           <Pressable
             style={[styles.pressable]}
             android_ripple={{ color: getColor("muted") }}
-            onPress={() => setLogType("bodyweight")}
+            onPress={() => {
+              setLogType("bodyweight");
+              scrollViewRef.current?.scrollTo({
+                x: screenWidth,
+                animated: true,
+              });
+            }}
           >
             <Text>Bodyweight</Text>
           </Pressable>
