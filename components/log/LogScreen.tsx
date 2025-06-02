@@ -1,12 +1,12 @@
 import getColor from "@/lib/getColor";
 import React from "react";
-import {
-  Animated,
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import Animated, {
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 import SafeArea from "../ui/SafeArea";
 import Text from "../ui/Text";
 import LogBodyweight from "./LogBodyweight";
@@ -15,17 +15,18 @@ import LogLift from "./LogLift";
 export default function LogScreen() {
   const scrollViewRef = React.useRef<any>(null);
   const screenWidth = Dimensions.get("screen").width;
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-  const liftBorderOpacity = scrollX.interpolate({
-    inputRange: [0, screenWidth],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
+  const scrollX = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollX.value = event.contentOffset.x;
+    },
   });
-  const bodyBorderOpacity = scrollX.interpolate({
-    inputRange: [0, screenWidth],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
-  });
+  const liftStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollX.value, [0, screenWidth], [1, 0], "clamp"),
+  }));
+  const bodyStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollX.value, [0, screenWidth], [0, 1], "clamp"),
+  }));
 
   return (
     <SafeArea style={styles.safeArea}>
@@ -36,10 +37,7 @@ export default function LogScreen() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
         scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false }
-        )}
+        onScroll={scrollHandler}
       >
         <View style={{ width: screenWidth }}>
           <LogLift />
@@ -62,7 +60,7 @@ export default function LogScreen() {
           </Pressable>
           <Animated.View
             pointerEvents="none"
-            style={[styles.selectedView, { opacity: liftBorderOpacity }]}
+            style={[styles.selectedView, liftStyle]}
           />
         </View>
         <View style={styles.wrapperView}>
@@ -80,7 +78,7 @@ export default function LogScreen() {
           </Pressable>
           <Animated.View
             pointerEvents="none"
-            style={[styles.selectedView, { opacity: bodyBorderOpacity }]}
+            style={[styles.selectedView, bodyStyle]}
           />
         </View>
       </View>
