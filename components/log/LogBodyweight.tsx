@@ -8,10 +8,12 @@ import Title from "../ui/Title";
 interface LogBodyweightProps {
   onInputFocus?: () => void;
   onInputBlur?: () => void;
+  editingEnabled?: boolean;
 }
 export default function LogBodyweight({
   onInputFocus,
   onInputBlur,
+  editingEnabled = true,
 }: LogBodyweightProps) {
   const [bodyweight, setBodyweight] = useState("");
   const inputRef = useRef<TextInput>(null);
@@ -34,6 +36,7 @@ export default function LogBodyweight({
         keyboardType="numeric"
         value={bodyweight}
         onChangeText={setBodyweight}
+        editable={editingEnabled}
         onFocus={onInputFocus}
         onBlur={onInputBlur}
         ref={inputRef}

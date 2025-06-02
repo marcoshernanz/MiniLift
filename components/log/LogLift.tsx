@@ -8,8 +8,13 @@ import Title from "../ui/Title";
 interface LogLiftProps {
   onInputFocus?: () => void;
   onInputBlur?: () => void;
+  editingEnabled?: boolean;
 }
-export default function LogLift({ onInputFocus, onInputBlur }: LogLiftProps) {
+export default function LogLift({
+  onInputFocus,
+  onInputBlur,
+  editingEnabled = true,
+}: LogLiftProps) {
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
   const weightRef = useRef<TextInput>(null);
@@ -34,6 +39,7 @@ export default function LogLift({ onInputFocus, onInputBlur }: LogLiftProps) {
         keyboardType="numeric"
         value={weight}
         onChangeText={setWeight}
+        editable={editingEnabled}
         onFocus={onInputFocus}
         onBlur={onInputBlur}
         ref={weightRef}
@@ -44,6 +50,7 @@ export default function LogLift({ onInputFocus, onInputBlur }: LogLiftProps) {
         keyboardType="numeric"
         value={reps}
         onChangeText={setReps}
+        editable={editingEnabled}
         onFocus={onInputFocus}
         onBlur={onInputBlur}
         ref={repsRef}

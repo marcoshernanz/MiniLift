@@ -15,6 +15,7 @@ import LogLift from "./LogLift";
 export default function LogScreen() {
   const scrollViewRef = React.useRef<any>(null);
   const [isInputFocused, setIsInputFocused] = React.useState(false);
+  const [isAnimating, setIsAnimating] = React.useState(false);
   const handleInputFocus = () => setIsInputFocused(true);
   const handleInputBlur = () => setIsInputFocused(false);
   const screenWidth = Dimensions.get("screen").width;
@@ -40,20 +41,24 @@ export default function LogScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
-        scrollEnabled={!isInputFocused}
+        scrollEnabled={!isInputFocused && !isAnimating}
         scrollEventThrottle={16}
         onScroll={scrollHandler}
+        onMomentumScrollBegin={() => setIsAnimating(true)}
+        onMomentumScrollEnd={() => setIsAnimating(false)}
       >
         <View style={{ width: screenWidth }}>
           <LogLift
             onInputFocus={handleInputFocus}
             onInputBlur={handleInputBlur}
+            editingEnabled={!isAnimating}
           />
         </View>
         <View style={{ width: screenWidth }}>
           <LogBodyweight
             onInputFocus={handleInputFocus}
             onInputBlur={handleInputBlur}
+            editingEnabled={!isAnimating}
           />
         </View>
       </Animated.ScrollView>
