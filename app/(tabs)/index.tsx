@@ -1,5 +1,5 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import SafeArea from "@/components/ui/SafeAreaView";
 
 export default function IndexScreen() {
-  return <SafeAreaView></SafeAreaView>;
+  return <SafeArea></SafeArea>;
 }
