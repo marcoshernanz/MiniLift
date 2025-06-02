@@ -1,4 +1,4 @@
-import SafeArea from "@/components/ui/SafeAreaView";
+import SafeArea from "@/components/ui/SafeArea";
 
 export default function ActivityScreen() {
   return <SafeArea></SafeArea>;

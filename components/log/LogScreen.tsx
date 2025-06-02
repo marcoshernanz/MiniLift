@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import SafeAreaView from "../ui/SafeAreaView";
+import SafeArea from "../ui/SafeArea";
 import Text from "../ui/Text";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
@@ -18,21 +18,22 @@ export default function LogScreen() {
   const screenWidth = Dimensions.get("screen").width;
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
+    <SafeArea style={styles.safeArea}>
       <ScrollView
         ref={scrollViewRef}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
+        overScrollMode="never"
         onMomentumScrollEnd={(e) => {
           const idx = Math.round(e.nativeEvent.contentOffset.x / screenWidth);
           setLogType(idx === 0 ? "lift" : "bodyweight");
         }}
       >
-        <View style={{ width: screenWidth - 32 }}>
+        <View style={{ width: screenWidth }}>
           <LogLift />
         </View>
-        <View style={{ width: screenWidth - 32 }}>
+        <View style={{ width: screenWidth }}>
           <LogBodyweight />
         </View>
       </ScrollView>
@@ -72,14 +73,16 @@ export default function LogScreen() {
           )}
         </View>
       </View>
-    </SafeAreaView>
+    </SafeArea>
   );
 }
 
 const styles = StyleSheet.create({
-  safeAreaView: {
+  safeArea: {
     justifyContent: "space-between",
     height: Dimensions.get("screen").height,
+    paddingHorizontal: 0,
+    paddingTop: 0,
     flex: 0,
   },
   container: {
@@ -87,6 +90,7 @@ const styles = StyleSheet.create({
     height: 64,
     gap: 8,
     marginBottom: 16,
+    marginHorizontal: 16,
   },
   wrapperView: {
     flex: 1,

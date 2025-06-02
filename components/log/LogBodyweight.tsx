@@ -1,14 +1,15 @@
 import getColor from "@/lib/getColor";
 import { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import Description from "../ui/Description";
+import SafeArea from "../ui/SafeArea";
 import Title from "../ui/Title";
 
 export default function LogBodyweight() {
   const [bodyweight, setBodyweight] = useState("");
 
   return (
-    <View style={styles.container}>
+    <SafeArea>
       <Title>Log Bodyweight</Title>
       <Description>Description</Description>
       <TextInput
@@ -18,7 +19,7 @@ export default function LogBodyweight() {
         value={bodyweight}
         onChangeText={setBodyweight}
       />
-    </View>
+    </SafeArea>
   );
 }
 

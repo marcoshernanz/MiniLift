@@ -1,7 +1,8 @@
 import getColor from "@/lib/getColor";
 import { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import Description from "../ui/Description";
+import SafeArea from "../ui/SafeArea";
 import Title from "../ui/Title";
 
 export default function LogLift() {
@@ -9,7 +10,7 @@ export default function LogLift() {
   const [reps, setReps] = useState("");
 
   return (
-    <View style={styles.container}>
+    <SafeArea>
       <Title>Log Lift</Title>
       <Description>Description</Description>
       <TextInput
@@ -26,7 +27,7 @@ export default function LogLift() {
         value={reps}
         onChangeText={setReps}
       />
-    </View>
+    </SafeArea>
   );
 }
 
