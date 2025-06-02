@@ -1,9 +1,9 @@
 import getColor from "@/lib/getColor";
 import React from "react";
 import {
+  Animated,
   Dimensions,
   Pressable,
-  ScrollView,
   StyleSheet,
   View,
 } from "react-native";
@@ -13,22 +13,33 @@ import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
 
 export default function LogScreen() {
-  const [logType, setLogType] = React.useState<"lift" | "bodyweight">("lift");
-  const scrollViewRef = React.useRef<ScrollView>(null);
+  const scrollViewRef = React.useRef<any>(null);
   const screenWidth = Dimensions.get("screen").width;
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const liftBorderOpacity = scrollX.interpolate({
+    inputRange: [0, screenWidth],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+  const bodyBorderOpacity = scrollX.interpolate({
+    inputRange: [0, screenWidth],
+    outputRange: [0, 1],
+    extrapolate: "clamp",
+  });
 
   return (
     <SafeArea style={styles.safeArea}>
-      <ScrollView
+      <Animated.ScrollView
         ref={scrollViewRef}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
-        onMomentumScrollEnd={(e) => {
-          const idx = Math.round(e.nativeEvent.contentOffset.x / screenWidth);
-          setLogType(idx === 0 ? "lift" : "bodyweight");
-        }}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false }
+        )}
       >
         <View style={{ width: screenWidth }}>
           <LogLift />
@@ -36,7 +47,7 @@ export default function LogScreen() {
         <View style={{ width: screenWidth }}>
           <LogBodyweight />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
 
       <View style={styles.container}>
         <View style={styles.wrapperView}>
@@ -44,22 +55,21 @@ export default function LogScreen() {
             style={[styles.pressable]}
             android_ripple={{ color: getColor("muted") }}
             onPress={() => {
-              setLogType("lift");
               scrollViewRef.current?.scrollTo({ x: 0, animated: true });
             }}
           >
             <Text>Lift</Text>
           </Pressable>
-          {logType === "lift" && (
-            <View pointerEvents="none" style={styles.selectedView} />
-          )}
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.selectedView, { opacity: liftBorderOpacity }]}
+          />
         </View>
         <View style={styles.wrapperView}>
           <Pressable
             style={[styles.pressable]}
             android_ripple={{ color: getColor("muted") }}
             onPress={() => {
-              setLogType("bodyweight");
               scrollViewRef.current?.scrollTo({
                 x: screenWidth,
                 animated: true,
@@ -68,9 +78,10 @@ export default function LogScreen() {
           >
             <Text>Bodyweight</Text>
           </Pressable>
-          {logType === "bodyweight" && (
-            <View pointerEvents="none" style={styles.selectedView} />
-          )}
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.selectedView, { opacity: bodyBorderOpacity }]}
+          />
         </View>
       </View>
     </SafeArea>
