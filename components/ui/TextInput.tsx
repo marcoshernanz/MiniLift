@@ -46,7 +46,7 @@ export default function TextInput({
   };
 
   return (
-    <TextInput
+    <RNTextInput
       ref={setInputRef}
       style={[
         styles.textInput,
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   textInput: {
     borderWidth: 1,
     borderColor: getColor("border"),
+    color: getColor("foreground"),
     borderRadius: 8,
     padding: 12,
     backgroundColor: getColor("background"),
