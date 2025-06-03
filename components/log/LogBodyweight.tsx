@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
+import Button from "../ui/Button";
 import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput from "../ui/TextInput";
@@ -30,6 +31,7 @@ export default function LogBodyweight({
         onFocus={onInputFocus}
         onBlur={onInputBlur}
       />
+      <Button containerStyle={styles.confirmButtonContainer}>Log</Button>
     </SafeArea>
   );
 }
@@ -37,5 +39,8 @@ export default function LogBodyweight({
 const styles = StyleSheet.create({
   description: {
     marginBottom: 20,
+  },
+  confirmButtonContainer: {
+    marginTop: 20,
   },
 });
