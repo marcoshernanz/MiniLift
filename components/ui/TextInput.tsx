@@ -1,16 +1,21 @@
 import getColor from "@/lib/getColor";
 import React, { useEffect, useRef, useState } from "react";
-import { Keyboard, StyleSheet, TextInput, TextInputProps } from "react-native";
+import {
+  Keyboard,
+  TextInput as RNTextInput,
+  StyleSheet,
+  TextInputProps,
+} from "react-native";
 
-export default function Title({
+export default function TextInput({
   style,
   onFocus,
   onBlur,
   ref,
   ...props
-}: TextInputProps & { ref?: React.Ref<TextInput | null> }) {
+}: TextInputProps & { ref?: React.Ref<RNTextInput | null> }) {
   const [isFocused, setIsFocused] = useState(false);
-  const internalRef = useRef<TextInput>(null);
+  const internalRef = useRef<RNTextInput>(null);
 
   const handleFocus = (e: any) => {
     setIsFocused(true);
@@ -29,13 +34,13 @@ export default function Title({
     return () => subscription.remove();
   }, []);
 
-  const setInputRef = (instance: TextInput | null) => {
+  const setInputRef = (instance: RNTextInput | null) => {
     internalRef.current = instance;
     if (ref) {
       if (typeof ref === "function") {
         ref(instance);
       } else if (typeof ref === "object" && ref !== null) {
-        (ref as React.RefObject<TextInput | null>).current = instance;
+        (ref as React.RefObject<RNTextInput | null>).current = instance;
       }
     }
   };
