@@ -1,6 +1,5 @@
-import getColor from "@/lib/getColor";
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput from "../ui/TextInput";
@@ -22,39 +21,36 @@ export default function LogLift({
   return (
     <SafeArea>
       <Title>Log Lift</Title>
-      <Description>Description</Description>
-      <TextInput
-        style={styles.input}
-        placeholder="Weight"
-        keyboardType="numeric"
-        value={weight}
-        onChangeText={setWeight}
-        editable={editingEnabled}
-        onFocus={onInputFocus}
-        onBlur={onInputBlur}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Repetitions"
-        keyboardType="numeric"
-        value={reps}
-        onChangeText={setReps}
-        editable={editingEnabled}
-        onFocus={onInputFocus}
-        onBlur={onInputBlur}
-      />
+      <Description style={styles.description}>Description</Description>
+      <View style={styles.inputsContainer}>
+        <TextInput
+          placeholder="Weight"
+          keyboardType="numeric"
+          value={weight}
+          onChangeText={setWeight}
+          editable={editingEnabled}
+          onFocus={onInputFocus}
+          onBlur={onInputBlur}
+        />
+        <TextInput
+          placeholder="Repetitions"
+          keyboardType="numeric"
+          value={reps}
+          onChangeText={setReps}
+          editable={editingEnabled}
+          onFocus={onInputFocus}
+          onBlur={onInputBlur}
+        />
+      </View>
     </SafeArea>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  input: {
-    borderWidth: 1,
-    borderColor: getColor("border"),
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 16,
-    backgroundColor: getColor("background"),
+  description: {
+    marginBottom: 20,
+  },
+  inputsContainer: {
+    gap: 16,
   },
 });

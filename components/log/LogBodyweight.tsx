@@ -1,4 +1,3 @@
-import getColor from "@/lib/getColor";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import Description from "../ui/Description";
@@ -21,9 +20,8 @@ export default function LogBodyweight({
   return (
     <SafeArea>
       <Title>Log Bodyweight</Title>
-      <Description>Description</Description>
+      <Description style={styles.description}>Description</Description>
       <TextInput
-        style={styles.input}
         placeholder="Bodyweight"
         keyboardType="numeric"
         value={bodyweight}
@@ -37,13 +35,7 @@ export default function LogBodyweight({
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  input: {
-    borderWidth: 1,
-    borderColor: getColor("border"),
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 16,
-    backgroundColor: getColor("background"),
+  description: {
+    marginBottom: 20,
   },
 });
