@@ -28,7 +28,7 @@ export default function TabsAddButton() {
           onRequestClose={() => setLogScreenVisible(false)}
           animationType="slide"
         >
-          <LogScreen />
+          <LogScreen onClose={() => setLogScreenVisible(false)} />
         </Modal>
       )}
     </>

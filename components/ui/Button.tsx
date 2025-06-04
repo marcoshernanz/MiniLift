@@ -60,10 +60,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 8,
   },
-
   baseButton: {
     padding: 12,
     borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
   },
   primaryButton: {
     backgroundColor: getColor("primary"),
@@ -79,7 +80,6 @@ const styles = StyleSheet.create({
   ghostButton: {
     backgroundColor: "transparent",
   },
-
   baseText: {
     textAlign: "center",
     fontWeight: 600,
