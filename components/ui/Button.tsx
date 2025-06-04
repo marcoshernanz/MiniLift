@@ -37,8 +37,12 @@ export default function Button({
           styles[`${variant}Button`],
           pressableStyle,
         ]}
-        // TODO
-        android_ripple={{ color: getColor("foreground") }}
+        android_ripple={{
+          color:
+            variant === "primary"
+              ? getColor("background", 0.25)
+              : getColor("muted"),
+        }}
         {...props}
       >
         <Text style={[styles.baseText, styles[`${variant}Text`], textStyle]}>
