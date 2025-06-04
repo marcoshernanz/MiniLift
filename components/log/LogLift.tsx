@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import Button from "../ui/Button";
 import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput from "../ui/TextInput";
@@ -42,6 +43,7 @@ export default function LogLift({
           onBlur={onInputBlur}
         />
       </View>
+      <Button containerStyle={styles.confirmButtonContainer}>Log</Button>
     </SafeArea>
   );
 }
@@ -52,5 +54,8 @@ const styles = StyleSheet.create({
   },
   inputsContainer: {
     gap: 16,
+  },
+  confirmButtonContainer: {
+    marginTop: 20,
   },
 });
