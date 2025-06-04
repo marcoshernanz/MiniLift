@@ -111,13 +111,14 @@ export default function ComboBox({
             keyExtractor={(item, index) => `${item}-${index}`}
             renderItem={({ item }) => (
               <Pressable
+                style={styles.dropdownItem}
                 onPress={() => {
                   setSearchText(item);
                   onChange(item);
                   setShowDropdown(false);
                 }}
               >
-                <Text style={styles.dropdownItem}>{item}</Text>
+                <Text style={styles.dropdownItemText}>{item}</Text>
               </Pressable>
             )}
           />
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     top: 45,
     left: 0,
     right: 0,
+    maxHeight: 221,
     backgroundColor: getColor("background"),
     borderColor: getColor("border"),
     borderWidth: 1,
@@ -140,9 +142,12 @@ const styles = StyleSheet.create({
     elevation: 1,
     zIndex: 1000,
   },
-  dropdownItem: {
-    padding: 10,
-    fontSize: 16,
+  dropdownItemText: {
     color: getColor("foreground"),
+  },
+  dropdownItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: getColor("border"),
   },
 });
