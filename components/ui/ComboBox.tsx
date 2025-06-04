@@ -1,5 +1,5 @@
 import getColor from "@/lib/getColor";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Animated, {
   Easing,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -37,8 +38,13 @@ export default function ComboBox({
   const [searchText, setSearchText] = useState(value);
   const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
   const [showDropdown, setShowDropdown] = useState(false);
-  // controls actual mounting for exit animation
+  // visible flag to keep mounted during exit animation
   const [visible, setVisible] = useState(showDropdown);
+  // ref to current showDropdown for animation callbacks
+  const showDropdownRef = useRef(showDropdown);
+  useEffect(() => {
+    showDropdownRef.current = showDropdown;
+  }, [showDropdown]);
 
   const opacity = useSharedValue(0);
   const scale = useSharedValue(0.9);
@@ -65,7 +71,7 @@ export default function ComboBox({
 
   useEffect(() => {
     if (showDropdown) {
-      // mount dropdown and animate in
+      // show and animate in
       setVisible(true);
       opacity.value = withTiming(1, {
         duration: 200,
@@ -76,16 +82,21 @@ export default function ComboBox({
         easing: Easing.out(Easing.ease),
       });
     } else {
-      // animate out and unmount after animation
-      opacity.value = withTiming(0, {
-        duration: 200,
-        easing: Easing.out(Easing.ease),
-      });
+      // animate out then unmount
+      opacity.value = withTiming(
+        0,
+        { duration: 200, easing: Easing.out(Easing.ease) },
+        (finished) => {
+          if (finished && !showDropdownRef.current) {
+            runOnJS(setVisible)(false);
+          }
+        }
+      );
+      // scale out without blocking unmount callback
       scale.value = withTiming(0.9, {
         duration: 200,
         easing: Easing.out(Easing.ease),
       });
-      setTimeout(() => setVisible(false), 200);
     }
   }, [showDropdown, opacity, scale]);
 
