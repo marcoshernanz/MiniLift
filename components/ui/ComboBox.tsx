@@ -1,12 +1,6 @@
 import getColor from "@/lib/getColor";
 import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -112,10 +106,11 @@ export default function ComboBox({
           }}
         >
           <FlatList
+            keyboardShouldPersistTaps="handled"
             data={filteredOptions}
             keyExtractor={(item, index) => `${item}-${index}`}
             renderItem={({ item }) => (
-              <TouchableOpacity
+              <Pressable
                 onPress={() => {
                   setSearchText(item);
                   onChange(item);
@@ -123,7 +118,7 @@ export default function ComboBox({
                 }}
               >
                 <Text style={styles.dropdownItem}>{item}</Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
           />
         </Animated.View>

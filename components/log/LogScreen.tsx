@@ -45,6 +45,7 @@ export default function LogScreen({ onClose }: LogScreenProps) {
         ref={scrollViewRef}
         horizontal
         pagingEnabled
+        keyboardShouldPersistTaps="handled"
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
         scrollEnabled={!isInputFocused && !isAnimating}
