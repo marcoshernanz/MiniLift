@@ -8,20 +8,17 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
 import Text from "../ui/Text";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
 
-// Add onClose prop to allow parent to close the modal
 interface LogScreenProps {
   onClose: () => void;
 }
 
 export default function LogScreen({ onClose }: LogScreenProps) {
-  const insets = useSafeAreaInsets();
   const scrollViewRef = React.useRef<any>(null);
   const [isInputFocused, setIsInputFocused] = React.useState(false);
   const [isAnimating, setIsAnimating] = React.useState(false);
@@ -56,19 +53,35 @@ export default function LogScreen({ onClose }: LogScreenProps) {
         onMomentumScrollBegin={() => setIsAnimating(true)}
         onMomentumScrollEnd={() => setIsAnimating(false)}
       >
-        <View style={{ width: screenWidth }}>
+        <View style={{ width: screenWidth, position: "relative" }}>
           <LogLift
             onInputFocus={handleInputFocus}
             onInputBlur={handleInputBlur}
             editingEnabled={!isAnimating}
           />
+          <Button
+            variant="ghost"
+            containerStyle={styles.closeButtonContainer}
+            onPress={onClose}
+            pressableStyle={styles.closeButtonPressable}
+          >
+            <XIcon color={getColor("foreground")} />
+          </Button>
         </View>
-        <View style={{ width: screenWidth }}>
+        <View style={{ width: screenWidth, position: "relative" }}>
           <LogBodyweight
             onInputFocus={handleInputFocus}
             onInputBlur={handleInputBlur}
             editingEnabled={!isAnimating}
           />
+          <Button
+            variant="ghost"
+            containerStyle={styles.closeButtonContainer}
+            onPress={onClose}
+            pressableStyle={styles.closeButtonPressable}
+          >
+            <XIcon color={getColor("foreground")} />
+          </Button>
         </View>
       </Animated.ScrollView>
       <View style={styles.container}>
@@ -106,18 +119,6 @@ export default function LogScreen({ onClose }: LogScreenProps) {
           />
         </View>
       </View>
-
-      <Button
-        variant="ghost"
-        containerStyle={[
-          styles.closeButtonContainer,
-          { top: insets.top + 20, right: insets.right + 16 },
-        ]}
-        onPress={onClose}
-        pressableStyle={styles.closeButtonPressable}
-      >
-        <XIcon color={getColor("foreground")} />
-      </Button>
     </SafeArea>
   );
 }
@@ -160,6 +161,8 @@ const styles = StyleSheet.create({
   },
   closeButtonContainer: {
     position: "absolute",
+    top: 20,
+    right: 16,
     borderRadius: 9999,
     zIndex: 10,
   },
