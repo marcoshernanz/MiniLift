@@ -113,7 +113,7 @@ export default function ComboBox({
         >
           <FlatList
             data={filteredOptions}
-            keyExtractor={(item) => item}
+            keyExtractor={(item, index) => `${item}-${index}`}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
