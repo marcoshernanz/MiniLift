@@ -41,6 +41,8 @@ export default function Button({
           color:
             variant === "primary"
               ? getColor("background", 0.25)
+              : variant === "secondary"
+              ? getColor("secondaryForeground", 0.1)
               : getColor("muted"),
         }}
         {...props}
