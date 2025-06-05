@@ -36,7 +36,7 @@ export default function LogBodyweight({
 
 const styles = StyleSheet.create({
   title: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   confirmButtonContainer: {
     marginTop: 20,

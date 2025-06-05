@@ -16,7 +16,7 @@ interface Props {
 export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
   const screenWidth = Dimensions.get("screen").width;
   const primaryColor = getColor("primary");
-  const foregroundColor = getColor("foreground");
+  const mutedForegroundColor = getColor("mutedForeground");
 
   const dumbbellStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollX.value, [0, screenWidth], [1, 0]),
@@ -35,7 +35,11 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
         }
       >
         <View style={styles.iconWrapper}>
-          <DumbbellIcon size={24} strokeWidth={1.5} color={foregroundColor} />
+          <DumbbellIcon
+            size={24}
+            strokeWidth={1.5}
+            color={mutedForegroundColor}
+          />
           <Animated.View style={[StyleSheet.absoluteFill, dumbbellStyle]}>
             <DumbbellIcon size={24} strokeWidth={1.5} color={primaryColor} />
           </Animated.View>
@@ -49,7 +53,11 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
         }
       >
         <View style={styles.iconWrapper}>
-          <WeightIcon size={24} strokeWidth={1.5} color={foregroundColor} />
+          <WeightIcon
+            size={24}
+            strokeWidth={1.5}
+            color={mutedForegroundColor}
+          />
           <Animated.View style={[StyleSheet.absoluteFill, weightStyle]}>
             <WeightIcon size={24} strokeWidth={1.5} color={primaryColor} />
           </Animated.View>

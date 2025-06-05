@@ -87,7 +87,7 @@ export default function LogLift({
 
 const styles = StyleSheet.create({
   title: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   inputsContainer: {
     gap: 16,
