@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import Button from "../ui/Button";
-import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput from "../ui/TextInput";
 import Title from "../ui/Title";
@@ -20,8 +19,7 @@ export default function LogBodyweight({
 
   return (
     <SafeArea>
-      <Title>Log Bodyweight</Title>
-      <Description style={styles.description}>Description</Description>
+      <Title style={styles.title}>Log Bodyweight</Title>
       <TextInput
         placeholder="Bodyweight"
         keyboardType="numeric"
@@ -37,7 +35,7 @@ export default function LogBodyweight({
 }
 
 const styles = StyleSheet.create({
-  description: {
+  title: {
     marginBottom: 20,
   },
   confirmButtonContainer: {

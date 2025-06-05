@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { TextInput as RNTextInput, StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
-import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput from "../ui/TextInput";
 import Title from "../ui/Title";
@@ -39,8 +38,7 @@ export default function LogLift({
 
   return (
     <SafeArea>
-      <Title>Log Lift</Title>
-      <Description style={styles.description}>Description</Description>
+      <Title style={styles.title}>Log Lift</Title>
       <View style={styles.inputsContainer}>
         <ComboBox
           options={exerciseList}
@@ -88,7 +86,7 @@ export default function LogLift({
 }
 
 const styles = StyleSheet.create({
-  description: {
+  title: {
     marginBottom: 20,
   },
   inputsContainer: {
