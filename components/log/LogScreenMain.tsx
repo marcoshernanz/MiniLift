@@ -10,12 +10,12 @@ import Button from "../ui/Button";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
 
-interface LogScreenProps {
+interface Props {
   onClose: () => void;
+  scrollViewRef: React.RefObject<Animated.ScrollView | null>;
 }
 
-export default function LogScreenMain({ onClose }: LogScreenProps) {
-  const scrollViewRef = React.useRef<any>(null);
+export default function LogScreenMain({ onClose, scrollViewRef }: Props) {
   const [isInputFocused, setIsInputFocused] = React.useState(false);
   const [isAnimating, setIsAnimating] = React.useState(false);
   const handleInputFocus = () => setIsInputFocused(true);
