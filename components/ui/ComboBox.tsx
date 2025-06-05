@@ -1,6 +1,14 @@
 import getColor from "@/lib/getColor";
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  TextInput as RNTextInput,
+  StyleSheet,
+  Text,
+  TextInputProps,
+  View,
+} from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -17,6 +25,8 @@ interface ComboBoxProps {
   editable?: boolean;
   onInputFocus?: () => void;
   onInputBlur?: () => void;
+  inputProps?: TextInputProps;
+  inputRef?: React.Ref<RNTextInput>;
 }
 
 export default function ComboBox({
@@ -27,6 +37,8 @@ export default function ComboBox({
   editable = true,
   onInputFocus,
   onInputBlur,
+  inputProps,
+  inputRef,
 }: ComboBoxProps) {
   const [searchText, setSearchText] = useState(value);
   const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
@@ -85,10 +97,12 @@ export default function ComboBox({
   return (
     <View>
       <TextInput
+        {...inputProps}
         placeholder={placeholder}
         value={searchText}
         onChangeText={handleChangeText}
         editable={editable}
+        ref={inputRef}
         onFocus={() => {
           onInputFocus && onInputFocus();
           setShowDropdown(true);

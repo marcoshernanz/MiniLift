@@ -33,6 +33,7 @@ export default function LogLift({
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
   const [exercise, setExercise] = useState("");
+  const exerciseInputRef = useRef<RNTextInput>(null);
   const weightInputRef = useRef<RNTextInput>(null);
   const repsInputRef = useRef<RNTextInput>(null);
 
@@ -47,6 +48,12 @@ export default function LogLift({
           onChange={setExercise}
           placeholder="Exercise"
           editable={editingEnabled}
+          inputRef={exerciseInputRef}
+          inputProps={{
+            returnKeyType: "next",
+            onSubmitEditing: () => weightInputRef.current?.focus(),
+            submitBehavior: "submit",
+          }}
           onInputFocus={onInputFocus}
           onInputBlur={onInputBlur}
         />
