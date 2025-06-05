@@ -112,6 +112,7 @@ export default function ComboBox({
             renderItem={({ item }) => (
               <Pressable
                 style={styles.dropdownItem}
+                android_ripple={{ color: getColor("muted") }}
                 onPress={() => {
                   setSearchText(item);
                   onChange(item);
@@ -141,6 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 1,
     zIndex: 1000,
+    overflow: "hidden",
   },
   dropdownItemText: {
     color: getColor("foreground"),
