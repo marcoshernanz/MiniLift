@@ -3,7 +3,7 @@ import getColor from "@/lib/getColor";
 import { Tabs } from "expo-router";
 import {
   ActivityIcon,
-  BarChartIcon,
+  DumbbellIcon,
   HomeIcon,
   SettingsIcon,
 } from "lucide-react-native";
@@ -62,11 +62,11 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="statistics"
+          name="exercises"
           options={{
-            tabBarLabel: "Statistics",
+            tabBarLabel: "Exercises",
             tabBarIcon: ({ color, size }) => (
-              <BarChartIcon color={color} size={size} />
+              <DumbbellIcon color={color} size={size} />
             ),
           }}
         />
