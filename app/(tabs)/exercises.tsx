@@ -1,29 +1,36 @@
+import ExercisesList from "@/components/exercises/ExercisesList";
 import ExercisesSearchBar from "@/components/exercises/ExercisesSearchBar";
-import SafeArea from "@/components/ui/SafeArea";
 import Title from "@/components/ui/Title";
 import getColor from "@/lib/getColor";
 import { useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { Keyboard, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ExercisesScreen() {
   const [search, setSearch] = useState("");
 
   return (
-    <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
-      <SafeArea>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView
+        style={styles.safeAreaView}
+        edges={["top", "left", "right"]}
+      >
         <Title style={styles.title}>Exercises</Title>
         <ExercisesSearchBar search={search} setSearch={setSearch} />
-      </SafeArea>
-    </ScrollView>
+        <ExercisesList search={search} />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
+  safeAreaView: {
+    paddingTop: 20,
     backgroundColor: getColor("background"),
+    flex: 1,
   },
   title: {
-    marginBottom: 24,
+    marginBottom: 20,
+    paddingHorizontal: 16,
   },
 });

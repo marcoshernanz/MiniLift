@@ -35,15 +35,9 @@ export default function ExercisesSearchBar({ search, setSearch }: Props) {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    backgroundColor: getColor("background"),
-  },
-  title: {
-    marginBottom: 24,
-  },
   textInputContainer: {
     position: "relative",
+    marginHorizontal: 16,
   },
   textInput: {
     paddingLeft: 41,
