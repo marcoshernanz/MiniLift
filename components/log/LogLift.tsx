@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { TextInput as RNTextInput, StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
 import Description from "../ui/Description";
@@ -33,6 +33,8 @@ export default function LogLift({
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
   const [exercise, setExercise] = useState("");
+  const weightInputRef = useRef<RNTextInput>(null);
+  const repsInputRef = useRef<RNTextInput>(null);
 
   return (
     <SafeArea>
@@ -51,6 +53,10 @@ export default function LogLift({
         <TextInput
           placeholder="Weight"
           keyboardType="numeric"
+          submitBehavior="submit"
+          returnKeyType="next"
+          onSubmitEditing={() => repsInputRef.current?.focus()}
+          ref={weightInputRef}
           value={weight}
           onChangeText={setWeight}
           editable={editingEnabled}
@@ -60,6 +66,8 @@ export default function LogLift({
         <TextInput
           placeholder="Repetitions"
           keyboardType="numeric"
+          returnKeyType="done"
+          ref={repsInputRef}
           value={reps}
           onChangeText={setReps}
           editable={editingEnabled}
