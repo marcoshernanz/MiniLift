@@ -3,8 +3,8 @@ import { XIcon } from "lucide-react-native";
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
+  SharedValue,
   useAnimatedScrollHandler,
-  useSharedValue,
 } from "react-native-reanimated";
 import Button from "../ui/Button";
 import LogBodyweight from "./LogBodyweight";
@@ -13,15 +13,19 @@ import LogLift from "./LogLift";
 interface Props {
   onClose: () => void;
   scrollViewRef: React.RefObject<Animated.ScrollView | null>;
+  scrollX: SharedValue<number>;
 }
 
-export default function LogScreenMain({ onClose, scrollViewRef }: Props) {
+export default function LogScreenMain({
+  onClose,
+  scrollViewRef,
+  scrollX,
+}: Props) {
   const [isInputFocused, setIsInputFocused] = React.useState(false);
   const [isAnimating, setIsAnimating] = React.useState(false);
   const handleInputFocus = () => setIsInputFocused(true);
   const handleInputBlur = () => setIsInputFocused(false);
   const screenWidth = Dimensions.get("screen").width;
-  const scrollX = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;

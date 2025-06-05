@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { useSharedValue } from "react-native-reanimated";
 import SafeArea from "../ui/SafeArea";
 import LogScreenMain from "./LogScreenMain";
 import LogScreenSelector from "./LogScreenSelector";
@@ -11,11 +11,16 @@ interface LogScreenProps {
 
 export default function LogScreen({ onClose }: LogScreenProps) {
   const scrollViewRef = React.useRef<Animated.ScrollView>(null);
+  const scrollX = useSharedValue(0);
 
   return (
     <SafeArea style={styles.safeArea}>
-      <LogScreenMain onClose={onClose} scrollViewRef={scrollViewRef} />
-      <LogScreenSelector scrollViewRef={scrollViewRef} />
+      <LogScreenMain
+        onClose={onClose}
+        scrollViewRef={scrollViewRef}
+        scrollX={scrollX}
+      />
+      <LogScreenSelector scrollViewRef={scrollViewRef} scrollX={scrollX} />
     </SafeArea>
   );
 }
