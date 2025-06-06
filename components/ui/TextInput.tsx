@@ -32,7 +32,6 @@ export default function TextInput({
   const internalRef = useRef<RNTextInput>(null);
 
   const error = useSharedValue(0);
-  // Shared value for shake animation
   const shake = useSharedValue(0);
 
   const handleFocus = (e: any) => {
@@ -58,13 +57,14 @@ export default function TextInput({
     if (ref) {
       const handle: TextInputHandle = {
         flashError: () => {
-          // trigger color flash
           error.value = withSequence(
-            withTiming(1, { duration: 250 }),
-            withDelay(1000, withTiming(0, { duration: 250 }))
+            withTiming(1, { duration: 200 }),
+            withDelay(100, withTiming(0, { duration: 200 }))
           );
-          // trigger shake: left-right sequence
+
           shake.value = withSequence(
+            withTiming(8, { duration: 50 }),
+            withTiming(-8, { duration: 50 }),
             withTiming(8, { duration: 50 }),
             withTiming(-8, { duration: 50 }),
             withTiming(8, { duration: 50 }),
@@ -93,7 +93,7 @@ export default function TextInput({
       [0, 1],
       [baseColor, errorColor]
     );
-    // apply shake translateX
+
     return { borderColor, transform: [{ translateX: shake.value }] };
   }, [isFocused]);
 
