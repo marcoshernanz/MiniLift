@@ -55,8 +55,8 @@ export default function LogScreenMain({
         <Button
           variant="ghost"
           containerStyle={styles.closeButtonContainer}
-          onPress={onClose}
           pressableStyle={styles.closeButtonPressable}
+          onPress={onClose}
         >
           <XIcon color={getColor("foreground")} />
         </Button>
@@ -70,8 +70,8 @@ export default function LogScreenMain({
         <Button
           variant="ghost"
           containerStyle={styles.closeButtonContainer}
-          onPress={onClose}
           pressableStyle={styles.closeButtonPressable}
+          onPress={onClose}
         >
           <XIcon color={getColor("foreground")} />
         </Button>

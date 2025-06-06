@@ -1,9 +1,15 @@
+import ExercisesAddButton from "@/components/exercises/ExercisesAddButton";
 import ExercisesList from "@/components/exercises/ExercisesList";
 import ExercisesSearchBar from "@/components/exercises/ExercisesSearchBar";
 import Title from "@/components/ui/Title";
 import getColor from "@/lib/getColor";
 import { useState } from "react";
-import { Keyboard, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ExercisesScreen() {
@@ -15,9 +21,12 @@ export default function ExercisesScreen() {
         style={styles.safeAreaView}
         edges={["top", "left", "right"]}
       >
-        <Title style={styles.title}>Exercises</Title>
-        <ExercisesSearchBar search={search} setSearch={setSearch} />
-        <ExercisesList search={search} />
+        <View style={styles.container}>
+          <Title style={styles.title}>Exercises</Title>
+          <ExercisesSearchBar search={search} setSearch={setSearch} />
+          <ExercisesList search={search} />
+          <ExercisesAddButton />
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -28,6 +37,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: getColor("background"),
     flex: 1,
+  },
+  container: {
+    flex: 1,
+    position: "relative",
   },
   title: {
     marginBottom: 20,
