@@ -2,8 +2,8 @@ import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import SafeArea from "../ui/SafeArea";
-import LogScreenMain from "./LogScreenMain";
-import LogScreenSelector from "./LogScreenSelector";
+import LogModalMain from "./LogModalMain";
+import LogScreenSelector from "./LogModalSelector";
 
 interface LogScreenProps {
   onClose: () => void;
@@ -15,7 +15,7 @@ export default function LogModal({ onClose }: LogScreenProps) {
 
   return (
     <SafeArea style={styles.safeArea}>
-      <LogScreenMain
+      <LogModalMain
         onClose={onClose}
         scrollViewRef={scrollViewRef}
         scrollX={scrollX}

@@ -16,7 +16,7 @@ interface Props {
   scrollX: SharedValue<number>;
 }
 
-export default function LogScreenMain({
+export default function LogModalMain({
   onClose,
   scrollViewRef,
   scrollX,
