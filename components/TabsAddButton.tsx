@@ -2,10 +2,10 @@ import getColor from "@/lib/getColor";
 import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
-import LogScreen from "./log/LogScreen";
+import LogModal from "./log/LogModal";
 
 export default function TabsAddButton() {
-  const [logScreenVisible, setLogScreenVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
@@ -15,20 +15,20 @@ export default function TabsAddButton() {
           color: getColor("background", 0.25),
           radius: 30,
         }}
-        onPress={() => setLogScreenVisible(true)}
+        onPress={() => setModalVisible(true)}
       >
         <PlusIcon color={getColor("primaryForeground")} size={32} />
       </Pressable>
 
-      {logScreenVisible && (
+      {modalVisible && (
         <Modal
           statusBarTranslucent={true}
           transparent={true}
-          visible={logScreenVisible}
-          onRequestClose={() => setLogScreenVisible(false)}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
           animationType="slide"
         >
-          <LogScreen onClose={() => setLogScreenVisible(false)} />
+          <LogModal onClose={() => setModalVisible(false)} />
         </Modal>
       )}
     </>

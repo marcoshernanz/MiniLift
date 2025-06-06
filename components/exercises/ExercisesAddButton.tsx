@@ -1,18 +1,35 @@
 import { PlusIcon } from "lucide-react-native";
-import { StyleSheet } from "react-native";
+import { useState } from "react";
+import { Modal, StyleSheet } from "react-native";
 import getColor from "../../lib/getColor";
 import Button from "../ui/Button";
 
 export default function ExercisesAddButton() {
+  const [logScreenVisible, setLogScreenVisible] = useState(false);
+
   return (
-    <Button
-      variant="ghost"
-      containerStyle={styles.buttonContainer}
-      pressableStyle={styles.buttonPressable}
-      onPress={() => {}}
-    >
-      <PlusIcon color={getColor("foreground")} />
-    </Button>
+    <>
+      <Button
+        variant="ghost"
+        containerStyle={styles.buttonContainer}
+        pressableStyle={styles.buttonPressable}
+        onPress={() => setLogScreenVisible(true)}
+      >
+        <PlusIcon color={getColor("foreground")} />
+      </Button>
+
+      {logScreenVisible && (
+        <Modal
+          statusBarTranslucent={true}
+          transparent={true}
+          visible={logScreenVisible}
+          onRequestClose={() => setLogScreenVisible(false)}
+          animationType="slide"
+        >
+          <LogScreen onClose={() => setLogScreenVisible(false)} />
+        </Modal>
+      )}
+    </>
   );
 }
 

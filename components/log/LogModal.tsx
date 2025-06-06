@@ -9,7 +9,7 @@ interface LogScreenProps {
   onClose: () => void;
 }
 
-export default function LogScreen({ onClose }: LogScreenProps) {
+export default function LogModal({ onClose }: LogScreenProps) {
   const scrollViewRef = React.useRef<Animated.ScrollView>(null);
   const scrollX = useSharedValue(0);
 
