@@ -1,12 +1,12 @@
 import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
 import { XIcon } from "lucide-react-native";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
-import TextInput from "../ui/TextInput";
+import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
 
 interface Props {
@@ -16,15 +16,22 @@ interface Props {
 export default function AddExerciseModal({ onClose }: Props) {
   const { appData, setAppData } = useAppContext();
   const [name, setName] = useState("");
+  const inputRef = useRef<TextInputHandle>(null);
 
   const handleAdd = () => {
     const trimmed = name.trim();
-    if (trimmed.length === 0) return;
+    if (trimmed.length === 0) {
+      inputRef.current?.flashError();
+      return;
+    }
 
     const duplicate = Object.values(appData.exercises).some(
       (ex) => ex.name.toLowerCase() === trimmed.toLowerCase()
     );
-    if (duplicate) return;
+    if (duplicate) {
+      inputRef.current?.flashError();
+      return;
+    }
 
     const id = uuidv4();
     setAppData((prev) => ({
@@ -48,6 +55,7 @@ export default function AddExerciseModal({ onClose }: Props) {
           <Title style={styles.title}>Add Exercise</Title>
 
           <TextInput
+            ref={inputRef}
             placeholder="Exercise Name"
             value={name}
             onChangeText={setName}
