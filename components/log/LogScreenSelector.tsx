@@ -37,11 +37,11 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
         <View style={styles.iconWrapper}>
           <DumbbellIcon
             size={24}
-            strokeWidth={1.5}
+            strokeWidth={1.75}
             color={mutedForegroundColor}
           />
           <Animated.View style={[StyleSheet.absoluteFill, dumbbellStyle]}>
-            <DumbbellIcon size={24} strokeWidth={1.5} color={primaryColor} />
+            <DumbbellIcon size={24} strokeWidth={1.75} color={primaryColor} />
           </Animated.View>
         </View>
       </Pressable>
@@ -55,11 +55,11 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
         <View style={styles.iconWrapper}>
           <WeightIcon
             size={24}
-            strokeWidth={1.5}
+            strokeWidth={1.75}
             color={mutedForegroundColor}
           />
           <Animated.View style={[StyleSheet.absoluteFill, weightStyle]}>
-            <WeightIcon size={24} strokeWidth={1.5} color={primaryColor} />
+            <WeightIcon size={24} strokeWidth={1.75} color={primaryColor} />
           </Animated.View>
         </View>
       </Pressable>

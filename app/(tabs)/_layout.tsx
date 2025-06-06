@@ -40,7 +40,7 @@ export default function TabLayout() {
           options={{
             tabBarLabel: "Home",
             tabBarIcon: ({ color, size }) => (
-              <HomeIcon color={color} size={size} />
+              <HomeIcon color={color} strokeWidth={1.75} size={size} />
             ),
           }}
         />
@@ -49,7 +49,7 @@ export default function TabLayout() {
           options={{
             tabBarLabel: "Activity",
             tabBarIcon: ({ color, size }) => (
-              <ActivityIcon color={color} size={size} />
+              <ActivityIcon color={color} strokeWidth={1.75} size={size} />
             ),
           }}
         />
@@ -66,7 +66,7 @@ export default function TabLayout() {
           options={{
             tabBarLabel: "Exercises",
             tabBarIcon: ({ color, size }) => (
-              <DumbbellIcon color={color} size={size} />
+              <DumbbellIcon color={color} strokeWidth={1.75} size={size} />
             ),
           }}
         />
@@ -75,7 +75,7 @@ export default function TabLayout() {
           options={{
             tabBarLabel: "Settings",
             tabBarIcon: ({ color, size }) => (
-              <SettingsIcon color={color} size={size} />
+              <SettingsIcon color={color} strokeWidth={1.75} size={size} />
             ),
           }}
         />

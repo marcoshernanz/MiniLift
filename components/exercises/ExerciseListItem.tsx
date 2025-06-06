@@ -60,6 +60,7 @@ export default function ExerciseListItem({ item }: Props) {
           >
             <StarIcon
               size={20}
+              strokeWidth={1.75}
               color={
                 item.isFavorite
                   ? getColor("primary")
@@ -73,7 +74,11 @@ export default function ExerciseListItem({ item }: Props) {
             android_ripple={{ color: getColor("muted"), radius: 20 }}
             onPress={() => setDialogVisible(true)}
           >
-            <TrashIcon size={20} color={getColor("mutedForeground")} />
+            <TrashIcon
+              size={20}
+              strokeWidth={1.75}
+              color={getColor("mutedForeground")}
+            />
           </Pressable>
         </View>
       </View>
