@@ -7,3 +7,5 @@ export const ExerciseSchema = z
     isFavorite: z.boolean().default(false),
   })
   .strict();
+
+export type Exercise = z.infer<typeof ExerciseSchema>;
