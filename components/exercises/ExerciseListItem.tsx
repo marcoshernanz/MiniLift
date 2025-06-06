@@ -1,3 +1,4 @@
+import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { StarIcon, TrashIcon } from "lucide-react-native";
@@ -9,6 +10,19 @@ interface Props {
 }
 
 export default function ExerciseListItem({ item }: Props) {
+  const { setAppData } = useAppContext();
+
+  const toggleFavorite = () => {
+    setAppData((prev) => {
+      const exercise = prev.exercises[item.id];
+      const updatedExercise = { ...exercise, isFavorite: !exercise.isFavorite };
+      return {
+        ...prev,
+        exercises: { ...prev.exercises, [item.id]: updatedExercise },
+      };
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.mainPressableWrapper}>
@@ -23,7 +37,7 @@ export default function ExerciseListItem({ item }: Props) {
           <Pressable
             style={styles.favoritePressable}
             android_ripple={{ color: getColor("muted"), radius: 20 }}
-            onPress={() => {}}
+            onPress={toggleFavorite}
           >
             <StarIcon
               size={20}
