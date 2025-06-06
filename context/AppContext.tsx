@@ -1,7 +1,9 @@
 import { appConfig } from "@/config/appConfig";
+import { exercisesConfig } from "@/config/exercisesConfig";
 import { storage } from "@/lib/storage/mmkv";
 import { AppDataSchema, type AppData } from "@/zod/schemas/AppDataSchema";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface AppContextValue {
   appData: AppData;
@@ -28,7 +30,18 @@ export default function AppContextProvider({ children }: Props) {
         storage.delete(appConfig.storageKey);
       }
     }
-    return defaultState;
+
+    const defaultExercises = exercisesConfig.defaultExercises.map((name) => ({
+      id: uuidv4(),
+      name,
+      isFavorite: false,
+    }));
+    const exercisesRecord = defaultExercises.reduce((acc, ex) => {
+      acc[ex.id] = ex;
+      return acc;
+    }, {} as Record<string, (typeof defaultExercises)[number]>);
+
+    return { ...defaultState, exercises: exercisesRecord };
   });
 
   useEffect(() => {
