@@ -4,19 +4,18 @@ import ExercisesSearchBar from "@/components/exercises/ExercisesSearchBar";
 import Title from "@/components/ui/Title";
 import getColor from "@/lib/getColor";
 import { useState } from "react";
-import {
-  Keyboard,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ExercisesScreen() {
   const [search, setSearch] = useState("");
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <Pressable
+      onPress={Keyboard.dismiss}
+      accessible={false}
+      style={styles.pressable}
+    >
       <SafeAreaView
         style={styles.safeAreaView}
         edges={["top", "left", "right"]}
@@ -28,7 +27,7 @@ export default function ExercisesScreen() {
           <ExercisesAddButton />
         </View>
       </SafeAreaView>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 }
 
@@ -45,5 +44,8 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 20,
     paddingHorizontal: 16,
+  },
+  pressable: {
+    flex: 1,
   },
 });
