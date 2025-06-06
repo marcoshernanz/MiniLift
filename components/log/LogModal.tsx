@@ -5,11 +5,11 @@ import SafeArea from "../ui/SafeArea";
 import LogModalMain from "./LogModalMain";
 import LogScreenSelector from "./LogModalSelector";
 
-interface LogScreenProps {
+interface Props {
   onClose: () => void;
 }
 
-export default function LogModal({ onClose }: LogScreenProps) {
+export default function LogModal({ onClose }: Props) {
   const scrollViewRef = React.useRef<Animated.ScrollView>(null);
   const scrollX = useSharedValue(0);
 

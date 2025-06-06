@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Modal, StyleSheet } from "react-native";
 import getColor from "../../lib/getColor";
 import Button from "../ui/Button";
+import AddExerciseModal from "./AddExerciseModal";
 
 export default function ExercisesAddButton() {
   const [logScreenVisible, setLogScreenVisible] = useState(false);
@@ -26,7 +27,7 @@ export default function ExercisesAddButton() {
           onRequestClose={() => setLogScreenVisible(false)}
           animationType="slide"
         >
-          <LogScreen onClose={() => setLogScreenVisible(false)} />
+          <AddExerciseModal onClose={() => setLogScreenVisible(false)} />
         </Modal>
       )}
     </>
