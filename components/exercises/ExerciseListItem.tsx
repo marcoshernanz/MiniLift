@@ -32,7 +32,14 @@ export default function ExerciseListItem({ item }: Props) {
 
   const handleDelete = () => {
     setDialogVisible(false);
-    // Add delete logic here
+    setAppData((prev) => {
+      const { [item.id]: removed, ...restExercises } = prev.exercises;
+      return {
+        ...prev,
+        exercises: restExercises,
+        liftLogs: prev.liftLogs.filter((log) => log.exercise.id !== item.id),
+      };
+    });
   };
 
   return (
