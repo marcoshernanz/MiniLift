@@ -1,8 +1,12 @@
+import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
 import { XIcon } from "lucide-react-native";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
+import TextInput from "../ui/TextInput";
 import Title from "../ui/Title";
 
 interface Props {
@@ -10,10 +14,40 @@ interface Props {
 }
 
 export default function AddExerciseModal({ onClose }: Props) {
+  const { setAppData } = useAppContext();
+  const [name, setName] = useState("");
+
+  const handleAdd = () => {
+    if (name.trim().length === 0) {
+      return;
+    }
+    const id = uuidv4();
+    setAppData((prev) => ({
+      ...prev,
+      exercises: {
+        ...prev.exercises,
+        [id]: { id, name: name.trim(), isFavorite: false },
+      },
+    }));
+    onClose();
+  };
+
   return (
     <SafeArea>
       <View style={styles.container}>
-        <Title>Add Exercise</Title>
+        <Title style={styles.title}>Add Exercise</Title>
+
+        <TextInput
+          placeholder="Exercise Name"
+          value={name}
+          onChangeText={setName}
+        />
+        <Button
+          containerStyle={styles.confirmButtonContainer}
+          onPress={handleAdd}
+        >
+          Add
+        </Button>
 
         <Button
           variant="ghost"
@@ -45,5 +79,11 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 38,
     width: 38,
+  },
+  title: {
+    marginBottom: 24,
+  },
+  confirmButtonContainer: {
+    marginTop: 20,
   },
 });
