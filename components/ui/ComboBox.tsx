@@ -1,4 +1,5 @@
 import getColor from "@/lib/getColor";
+import searchItems from "@/lib/searchItems";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -53,8 +54,13 @@ export default function ComboBox({
     setSearchText(text);
     onChange(text);
     setFilteredOptions(
-      options.filter((item) => item.toLowerCase().includes(text.toLowerCase()))
+      searchItems({
+        items: options,
+        query: text,
+        getText: (item) => item,
+      })
     );
+    setShowDropdown(true);
   };
 
   const opacity = useSharedValue(0);
