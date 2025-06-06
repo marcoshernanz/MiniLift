@@ -14,19 +14,24 @@ interface Props {
 }
 
 export default function AddExerciseModal({ onClose }: Props) {
-  const { setAppData } = useAppContext();
+  const { appData, setAppData } = useAppContext();
   const [name, setName] = useState("");
 
   const handleAdd = () => {
-    if (name.trim().length === 0) {
-      return;
-    }
+    const trimmed = name.trim();
+    if (trimmed.length === 0) return;
+
+    const duplicate = Object.values(appData.exercises).some(
+      (ex) => ex.name.toLowerCase() === trimmed.toLowerCase()
+    );
+    if (duplicate) return;
+
     const id = uuidv4();
     setAppData((prev) => ({
       ...prev,
       exercises: {
         ...prev.exercises,
-        [id]: { id, name: name.trim(), isFavorite: false },
+        [id]: { id, name: trimmed, isFavorite: false },
       },
     }));
     onClose();
