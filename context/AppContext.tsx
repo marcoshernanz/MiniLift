@@ -11,10 +11,7 @@ interface AppContextValue {
 }
 
 const defaultState = AppDataSchema.parse(undefined);
-const AppContext = createContext<AppContextValue>({
-  appData: defaultState,
-  setAppData: () => {},
-});
+const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 interface Props {
   children: React.ReactNode;
@@ -56,5 +53,9 @@ export default function AppContextProvider({ children }: Props) {
 }
 
 export function useAppContext() {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error("useAppContext must be used within an AppContextProvider");
+  }
+  return context;
 }
