@@ -2,7 +2,7 @@ import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
 import { XIcon } from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
@@ -38,32 +38,38 @@ export default function AddExerciseModal({ onClose }: Props) {
   };
 
   return (
-    <SafeArea>
-      <View style={styles.container}>
-        <Title style={styles.title}>Add Exercise</Title>
+    <Pressable
+      onPress={Keyboard.dismiss}
+      accessible={false}
+      style={styles.pressable}
+    >
+      <SafeArea>
+        <View style={styles.container}>
+          <Title style={styles.title}>Add Exercise</Title>
 
-        <TextInput
-          placeholder="Exercise Name"
-          value={name}
-          onChangeText={setName}
-        />
-        <Button
-          containerStyle={styles.confirmButtonContainer}
-          onPress={handleAdd}
-        >
-          Add
-        </Button>
+          <TextInput
+            placeholder="Exercise Name"
+            value={name}
+            onChangeText={setName}
+          />
+          <Button
+            containerStyle={styles.confirmButtonContainer}
+            onPress={handleAdd}
+          >
+            Add
+          </Button>
 
-        <Button
-          variant="ghost"
-          containerStyle={styles.closeButtonContainer}
-          pressableStyle={styles.closeButtonPressable}
-          onPress={onClose}
-        >
-          <XIcon color={getColor("foreground")} />
-        </Button>
-      </View>
-    </SafeArea>
+          <Button
+            variant="ghost"
+            containerStyle={styles.closeButtonContainer}
+            pressableStyle={styles.closeButtonPressable}
+            onPress={onClose}
+          >
+            <XIcon color={getColor("foreground")} />
+          </Button>
+        </View>
+      </SafeArea>
+    </Pressable>
   );
 }
 
@@ -90,5 +96,8 @@ const styles = StyleSheet.create({
   },
   confirmButtonContainer: {
     marginTop: 20,
+  },
+  pressable: {
+    flex: 1,
   },
 });
