@@ -1,4 +1,5 @@
 import { useAppContext } from "@/context/AppContext";
+import searchExercises from "@/lib/searchExercises";
 import { FlatList, StyleSheet } from "react-native";
 import ExerciseListItem from "./ExerciseListItem";
 
@@ -11,13 +12,16 @@ export default function ExercisesList({ search }: Props) {
     appData: { exercises },
   } = useAppContext();
 
-  const formattedExercises = Object.values(exercises).filter((exercise) => ({
-    ...exercise,
-  }));
+  const allExercises = Object.values(exercises);
+
+  const filteredExercises = searchExercises({
+    exercises: allExercises,
+    query: search,
+  });
 
   return (
     <FlatList
-      data={formattedExercises}
+      data={filteredExercises}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ExerciseListItem item={item} />}
       contentContainerStyle={{ paddingBottom: 16 }}
