@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
-import { TextInput as RNTextInput, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
 import SafeArea from "../ui/SafeArea";
-import TextInput from "../ui/TextInput";
+import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
 
 // Dummy exercise list
@@ -32,9 +32,9 @@ export default function LogLift({
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
   const [exercise, setExercise] = useState("");
-  const exerciseInputRef = useRef<RNTextInput>(null);
-  const weightInputRef = useRef<RNTextInput>(null);
-  const repsInputRef = useRef<RNTextInput>(null);
+  const exerciseInputRef = useRef<TextInputHandle>(null);
+  const weightInputRef = useRef<TextInputHandle>(null);
+  const repsInputRef = useRef<TextInputHandle>(null);
 
   return (
     <SafeArea>

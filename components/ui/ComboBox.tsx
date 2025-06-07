@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Pressable,
-  TextInput as RNTextInput,
   StyleSheet,
   Text,
   TextInputProps,
@@ -16,7 +15,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import TextInput from "./TextInput";
+import TextInput, { TextInputHandle } from "./TextInput";
 
 interface ComboBoxProps {
   options: string[];
@@ -27,7 +26,7 @@ interface ComboBoxProps {
   onInputFocus?: () => void;
   onInputBlur?: () => void;
   inputProps?: TextInputProps;
-  inputRef?: React.Ref<RNTextInput>;
+  inputRef?: React.Ref<TextInputHandle>;
 }
 
 export default function ComboBox({

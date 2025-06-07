@@ -18,6 +18,7 @@ import Animated, {
 const AnimatedTextInput = Animated.createAnimatedComponent(RNTextInput);
 
 export type TextInputHandle = {
+  focus: () => void;
   flashError: () => void;
 };
 
@@ -56,6 +57,9 @@ export default function TextInput({
 
     if (ref) {
       const handle: TextInputHandle = {
+        focus: () => {
+          internalRef.current?.focus();
+        },
         flashError: () => {
           error.value = withSequence(
             withTiming(1, { duration: 200 }),
