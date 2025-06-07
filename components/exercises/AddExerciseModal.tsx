@@ -8,6 +8,7 @@ import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
+import { Toast } from "../ui/Toast";
 
 interface Props {
   onClose: () => void;
@@ -41,6 +42,8 @@ export default function AddExerciseModal({ onClose }: Props) {
         [id]: { id, name: trimmed, isFavorite: false },
       },
     }));
+
+    Toast.show({ text: `${trimmed} added`, type: "success" });
     onClose();
   };
 
@@ -74,6 +77,14 @@ export default function AddExerciseModal({ onClose }: Props) {
             onPress={onClose}
           >
             <XIcon color={getColor("foreground")} />
+          </Button>
+
+          <Button
+            onPress={() =>
+              Toast.show({ text: "This is a test", type: "success" })
+            }
+          >
+            Show Toast
           </Button>
         </View>
       </SafeArea>
