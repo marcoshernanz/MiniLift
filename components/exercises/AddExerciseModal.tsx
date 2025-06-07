@@ -43,7 +43,7 @@ export default function AddExerciseModal({ onClose }: Props) {
       },
     }));
 
-    Toast.show({ text: `${trimmed} added`, type: "success" });
+    Toast.show({ text: `${trimmed} added`, variant: "success" });
     onClose();
   };
 
@@ -77,14 +77,6 @@ export default function AddExerciseModal({ onClose }: Props) {
             onPress={onClose}
           >
             <XIcon color={getColor("foreground")} />
-          </Button>
-
-          <Button
-            onPress={() =>
-              Toast.show({ text: "This is a test", type: "success" })
-            }
-          >
-            Show Toast
           </Button>
         </View>
       </SafeArea>

@@ -1,13 +1,16 @@
+import getColor from "@/lib/getColor";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { v4 as uuidv4 } from "uuid";
+import Text from "./Text";
 
 export type ToastOptions = {
   text: string;
-  type?: "success" | "error" | "info";
-  duration?: number;
+  variant?: "default" | "primary" | "success" | "error";
 };
 
-type ToastItemType = ToastOptions & { id: number };
+type ToastItemType = ToastOptions & { id: string };
 
 class ToastEmitter {
   private handlers: ((options: ToastOptions) => void)[] = [];
@@ -34,99 +37,68 @@ export const Toast = {
 
 export default function ToastProvider() {
   const [toasts, setToasts] = useState<ToastItemType[]>([]);
+  const { top } = useSafeAreaInsets();
 
   useEffect(() => {
     const unsubscribe = emitter.on((options: ToastOptions) => {
-      const id = Date.now();
+      const id = uuidv4();
       const toast: ToastItemType = { id, ...options };
       setToasts((current) => [...current, toast]);
-      const duration = options.duration ?? 3000;
+
+      const duration = 2500;
       setTimeout(
         () => setToasts((current) => current.filter((t) => t.id !== id)),
         duration
       );
     });
+
     return unsubscribe;
   }, []);
 
   return (
-    // <View style={styles.container}>
-    <View
-      style={{
-        position: "absolute",
-        height: 100,
-        width: 100,
-        zIndex: 999999,
-        elevation: 999999,
-        backgroundColor: "red",
-      }}
-    >
-      {/* {toasts.map((toast) => (
+    <View style={[styles.container, { paddingTop: top + 16 }]}>
+      {toasts.map((toast) => (
         <ToastItem key={toast.id} {...toast} />
-      ))} */}
+      ))}
     </View>
   );
 }
 
-function ToastItem({ text, type, duration }: ToastItemType) {
+function ToastItem({ text, variant = "default" }: ToastItemType) {
+  const colorMap = {
+    default: "border",
+    primary: "primary",
+    success: "green",
+    error: "red",
+  } as const;
+
+  const borderColor = getColor(colorMap[variant]);
+
   return (
-    <View
-      style={{ position: "fixed", height: 100, width: 100, zIndex: 9999 }}
-    ></View>
+    <View style={[styles.toast, { borderColor }]}>
+      <Text style={styles.text}>{text}</Text>
+    </View>
   );
-
-  // const translateY = useRef(new Animated.Value(-100)).current;
-
-  // useEffect(() => {
-  //   Animated.sequence([
-  //     Animated.timing(translateY, {
-  //       toValue: 0,
-  //       duration: 300,
-  //       useNativeDriver: true,
-  //     }),
-  //     Animated.delay((duration ?? 3000) - 600),
-  //     Animated.timing(translateY, {
-  //       toValue: -100,
-  //       duration: 300,
-  //       useNativeDriver: true,
-  //     }),
-  //   ]).start();
-  // }, [duration, translateY]);
-
-  // const backgroundColor =
-  //   type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#333";
-
-  // return (
-  //   <Animated.View
-  //     style={[styles.toast, { backgroundColor, transform: [{ translateY }] }]}
-  //   >
-  //     <Text style={styles.text}>{text}</Text>
-  //   </Animated.View>
-  // );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: "fixed",
-    top: 50,
+    position: "absolute",
+    top: 0,
     left: 0,
     right: 0,
+    gap: 8,
     alignItems: "center",
   },
   toast: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    width: Dimensions.get("window").width - 32,
+    padding: 12,
+    backgroundColor: getColor("background"),
+    borderWidth: 1,
     borderRadius: 8,
-    marginVertical: 4,
-    minWidth: "60%",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
     elevation: 4,
   },
   text: {
-    color: "#fff",
     textAlign: "center",
   },
 });
