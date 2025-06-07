@@ -29,7 +29,7 @@ export default function AlertDialog({
       onRequestClose={onCancel}
     >
       <Pressable style={styles.overlay} onPress={onCancel}>
-        <View style={styles.dialog}>
+        <View style={styles.dialog} onStartShouldSetResponder={() => true}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.message}>{content}</Text>
           <View style={styles.buttons}>
