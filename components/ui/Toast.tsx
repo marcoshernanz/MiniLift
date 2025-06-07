@@ -1,6 +1,11 @@
 import getColor from "@/lib/getColor";
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
+import Animated, {
+  LinearTransition,
+  SlideInUp,
+  SlideOutUp,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { v4 as uuidv4 } from "uuid";
 import Text from "./Text";
@@ -75,9 +80,14 @@ function ToastItem({ text, variant = "default" }: ToastItemType) {
   const borderColor = getColor(colorMap[variant]);
 
   return (
-    <View style={[styles.toast, { borderColor }]}>
+    <Animated.View
+      entering={SlideInUp.springify().damping(15).stiffness(150)}
+      exiting={SlideOutUp.springify().damping(15).stiffness(150)}
+      layout={LinearTransition.springify()}
+      style={[styles.toast, { borderColor }]}
+    >
       <Text style={styles.text}>{text}</Text>
-    </View>
+    </Animated.View>
   );
 }
 
