@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 import Text from "@/components/ui/Text";
 import getColor from "@/lib/getColor";
 import React from "react";
-import { Modal, Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, Modal, Pressable, StyleSheet, View } from "react-native";
 
 interface AlertDialogProps {
   visible: boolean;
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dialog: {
-    width: "80%",
+    width: Dimensions.get("window").width - 32,
     backgroundColor: getColor("background"),
     borderRadius: 8,
     padding: 20,
