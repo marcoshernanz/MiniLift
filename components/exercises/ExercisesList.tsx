@@ -20,9 +20,15 @@ export default function ExercisesList({ search }: Props) {
     getText: (exercise) => exercise.name,
   });
 
+  const sortedExercises = [...filteredExercises].sort((a, b) => {
+    if (a.isFavorite && !b.isFavorite) return -1;
+    if (!a.isFavorite && b.isFavorite) return 1;
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <FlatList
-      data={filteredExercises}
+      data={sortedExercises}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ExerciseListItem item={item} />}
       contentContainerStyle={{ paddingBottom: 16 }}
