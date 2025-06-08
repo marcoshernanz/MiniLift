@@ -60,7 +60,7 @@ export default function ToastProvider() {
       const toast: ToastItemType = { id, ...options };
       setToasts((current) => [...current, toast]);
 
-      const duration = 2500;
+      const duration = 3000;
       setTimeout(
         () => setToasts((current) => current.filter((t) => t.id !== id)),
         duration
