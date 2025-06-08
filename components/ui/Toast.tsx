@@ -1,10 +1,20 @@
 import getColor from "@/lib/getColor";
 import React, { useEffect, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import Animated, {
+  interpolate,
   LinearTransition,
+  runOnJS,
   SlideInUp,
   SlideOutUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { v4 as uuidv4 } from "uuid";
@@ -61,15 +71,27 @@ export default function ToastProvider() {
   }, []);
 
   return (
-    <View style={[styles.container, { paddingTop: top + 16 }]}>
+    <GestureHandlerRootView
+      style={[styles.container, { paddingTop: top + 16 }]}
+    >
       {toasts.map((toast) => (
-        <ToastItem key={toast.id} {...toast} />
+        <ToastItem
+          key={toast.id}
+          {...toast}
+          onDismiss={() =>
+            setToasts((current) => current.filter((t) => t.id !== toast.id))
+          }
+        />
       ))}
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
-function ToastItem({ text, variant = "default" }: ToastItemType) {
+function ToastItem({
+  text,
+  variant = "default",
+  onDismiss,
+}: ToastItemType & { onDismiss: () => void }) {
   const colorMap = {
     default: "border",
     primary: "primary",
@@ -79,15 +101,34 @@ function ToastItem({ text, variant = "default" }: ToastItemType) {
 
   const borderColor = getColor(colorMap[variant]);
 
+  const translateY = useSharedValue(0);
+  const panGesture = Gesture.Pan()
+    .onUpdate((event) => {
+      translateY.value = event.translationY;
+    })
+    .onEnd((event) => {
+      if (event.translationY < -20) {
+        runOnJS(onDismiss)();
+      } else {
+        translateY.value = withSpring(0, { damping: 15, stiffness: 150 });
+      }
+    });
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+    opacity: interpolate(translateY.value, [-100, 0], [0.5, 1]),
+  }));
+
   return (
-    <Animated.View
-      entering={SlideInUp.springify().damping(15).stiffness(150)}
-      exiting={SlideOutUp.springify().damping(15).stiffness(150)}
-      layout={LinearTransition.springify()}
-      style={[styles.toast, { borderColor }]}
-    >
-      <Text style={styles.text}>{text}</Text>
-    </Animated.View>
+    <GestureDetector gesture={panGesture}>
+      <Animated.View
+        entering={SlideInUp.springify().damping(22).stiffness(200)}
+        exiting={SlideOutUp.springify().damping(22).stiffness(200)}
+        layout={LinearTransition.springify()}
+        style={[styles.toast, { borderColor }, animatedStyle]}
+      >
+        <Text style={styles.text}>{text}</Text>
+      </Animated.View>
+    </GestureDetector>
   );
 }
 
