@@ -1,7 +1,7 @@
 import getColor from "@/lib/getColor";
 import { ActivityEntry } from "@/lib/hooks/useActivity";
 import { format } from "date-fns";
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import Description from "../ui/Description";
 import Text from "../ui/Text";
 import ActivityLogItem from "./ActivityLogItem";
@@ -31,11 +31,12 @@ export default function ActivityItem({ item }: Props) {
       )}
 
       {logs.length > 0 && (
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          {logs.map((log) => (
-            <ActivityLogItem key={log.id} log={log} />
-          ))}
-        </ScrollView>
+        <FlatList
+          data={logs}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ActivityLogItem log={item} />}
+          contentContainerStyle={styles.scrollView}
+        />
       )}
     </View>
   );
