@@ -1,7 +1,7 @@
 import getColor from "@/lib/getColor";
 import { ActivityEntry } from "@/lib/hooks/useActivity";
 import { format } from "date-fns";
-import { DumbbellIcon } from "lucide-react-native";
+import { DumbbellIcon, WeightIcon } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
 
@@ -10,6 +10,8 @@ interface Props {
 }
 
 export default function ActivityLogItem({ log }: Props) {
+  const Icon = log.kind === "lift" ? DumbbellIcon : WeightIcon;
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -17,11 +19,7 @@ export default function ActivityLogItem({ log }: Props) {
         android_ripple={{ color: getColor("muted") }}
       >
         <View style={styles.iconContainer}>
-          <DumbbellIcon
-            size={24}
-            strokeWidth={1.75}
-            color={getColor("primary")}
-          />
+          <Icon size={24} strokeWidth={1.75} color={getColor("primary")} />
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.primaryText}>
