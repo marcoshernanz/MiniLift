@@ -2,7 +2,7 @@ import { AppData } from "@/zod/schemas/AppDataSchema";
 import { subDays } from "date-fns";
 
 type LiftEntry = AppData["liftLogs"][number] & { kind: "lift" };
-type WeightEntry = AppData["weightLogs"][number] & { kind: "weight" };
+type WeightEntry = AppData["bodyweightLogs"][number] & { kind: "bodyweight" };
 type CombinedEntry = LiftEntry | WeightEntry;
 
 export type ActivityEntry = {
@@ -23,10 +23,10 @@ const dummyData: ActivityEntry[] = [
         reps: 10,
       },
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "2",
         date: subDays(new Date(), 9),
-        weight: 75,
+        bodyweight: 75,
       },
     ],
   },
@@ -42,10 +42,10 @@ const dummyData: ActivityEntry[] = [
         reps: 8,
       },
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "4",
         date: subDays(new Date(), 8),
-        weight: 76,
+        bodyweight: 76,
       },
     ],
   },
@@ -66,10 +66,10 @@ const dummyData: ActivityEntry[] = [
     date: subDays(new Date(), 6),
     logs: [
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "6",
         date: subDays(new Date(), 6),
-        weight: 74,
+        bodyweight: 74,
       },
     ],
   },
@@ -93,10 +93,10 @@ const dummyData: ActivityEntry[] = [
         reps: 6,
       },
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "9",
         date: subDays(new Date(), 5),
-        weight: 75.5,
+        bodyweight: 75.5,
       },
     ],
   },
@@ -104,10 +104,10 @@ const dummyData: ActivityEntry[] = [
     date: subDays(new Date(), 4),
     logs: [
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "10",
         date: subDays(new Date(), 4),
-        weight: 75,
+        bodyweight: 75,
       },
     ],
   },
@@ -123,10 +123,10 @@ const dummyData: ActivityEntry[] = [
         reps: 4,
       },
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "12",
         date: subDays(new Date(), 3),
-        weight: 74.5,
+        bodyweight: 74.5,
       },
     ],
   },
@@ -158,10 +158,10 @@ const dummyData: ActivityEntry[] = [
         reps: 8,
       },
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "20",
         date: subDays(new Date(), 2),
-        weight: 80,
+        bodyweight: 80,
       },
       {
         kind: "lift",
@@ -249,10 +249,10 @@ const dummyData: ActivityEntry[] = [
     date: subDays(new Date(), 1),
     logs: [
       {
-        kind: "weight",
+        kind: "bodyweight",
         id: "14",
         date: subDays(new Date(), 1),
-        weight: 75,
+        bodyweight: 75,
       },
     ],
   },
@@ -268,10 +268,10 @@ const dummyData: ActivityEntry[] = [
       //   reps: 5,
       // },
       // {
-      //   kind: "weight",
+      //   kind: "bodyweight",
       //   id: "16",
       //   date: new Date(),
-      //   weight: 75.2,
+      //body   weight: 75.2,
       // },
     ],
   },
@@ -284,7 +284,7 @@ export function useActivity(): ActivityEntry[] {
   // return useMemo(() => {
   //   const allLogs: CombinedEntry[] = [
   //     ...appData.liftLogs.map((log) => ({ ...log, kind: "lift" as const })),
-  //     ...appData.weightLogs.map((log) => ({ ...log, kind: "weight" as const })),
+  //     ...appData.bodyweightLogs.map((log) => ({ ...log, kind: "bodyweight" as const })),
   //   ];
 
   //   if (allLogs.length === 0) {
@@ -318,5 +318,5 @@ export function useActivity(): ActivityEntry[] {
   //     const key = formatISO(day, { representation: "date" });
   //     return { date: day, logs: byDate[key] ?? [] };
   //   });
-  // }, [appData.liftLogs, appData.weightLogs]);
+  // }, [appData.liftLogs, appData.bodyweightLogs]);
 }

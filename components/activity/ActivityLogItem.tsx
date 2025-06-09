@@ -15,7 +15,7 @@ export default function ActivityLogItem({ log }: Props) {
   const secondaryText =
     log.kind === "lift"
       ? `${log.weight} kg x ${log.reps} reps`
-      : `${log.weight} kg`;
+      : `${log.bodyweight} kg`;
 
   return (
     <View style={styles.container}>

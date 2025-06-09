@@ -34,11 +34,15 @@ export default function LogBodyweight({
       return;
     }
 
-    const weightNum = parseFloat(bodyweight);
-    const newLog = { id: uuidv4(), date: new Date(), weight: weightNum };
+    const bodyweightNum = parseFloat(bodyweight);
+    const newLog = {
+      id: uuidv4(),
+      date: new Date(),
+      bodyweight: bodyweightNum,
+    };
     setAppData((prev) => ({
       ...prev,
-      weightLogs: [...prev.weightLogs, newLog],
+      bodyweightLogs: [...prev.bodyweightLogs, newLog],
     }));
 
     Toast.show({ text: `${bodyweight}kg`, variant: "success" });

@@ -1,21 +1,21 @@
 import { z } from "zod";
+import { BodyweightSchema } from "./BodyweightSchema";
 import { ExerciseSchema } from "./ExerciseSchema";
 import { LiftLogSchema } from "./LiftLogSchema";
-import { WeightSchema } from "./WeightSchema";
 
 export const AppDataSchema = z
   .object({
     hasCompletedOnboarding: z.boolean().default(false),
     exercises: z.record(ExerciseSchema).default({}),
     liftLogs: z.array(LiftLogSchema).default([]),
-    weightLogs: z.array(WeightSchema).default([]),
+    bodyweightLogs: z.array(BodyweightSchema).default([]),
   })
   .strict()
   .default({
     hasCompletedOnboarding: false,
     exercises: {},
     liftLogs: [],
-    weightLogs: [],
+    bodyweightLogs: [],
   });
 
 export type AppData = z.infer<typeof AppDataSchema>;
