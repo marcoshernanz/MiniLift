@@ -42,10 +42,16 @@ export default function ActivityLogItem({ log }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    overflow: "hidden",
+    borderRadius: 8,
+    marginHorizontal: 8,
+  },
   pressable: {
     flexDirection: "row",
     alignItems: "center",
+    padding: 8,
+    borderRadius: 8,
   },
   iconContainer: {
     height: 50,
@@ -68,6 +74,7 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     marginLeft: "auto",
+    paddingRight: 4,
   },
   timeText: {
     color: getColor("mutedForeground"),

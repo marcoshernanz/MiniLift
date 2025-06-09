@@ -14,12 +14,7 @@ export default function ActivityItem({ item }: Props) {
   const { logs, date } = item;
 
   return (
-    <View
-      style={{
-        width: Dimensions.get("window").width,
-        paddingHorizontal: 16,
-      }}
-    >
+    <View style={styles.container}>
       <Description style={styles.description}>
         {format(date, "MMMM dd, yyyy")}
       </Description>
@@ -35,7 +30,6 @@ export default function ActivityItem({ item }: Props) {
           data={logs}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <ActivityLogItem log={item} />}
-          contentContainerStyle={styles.scrollView}
         />
       )}
     </View>
@@ -43,8 +37,12 @@ export default function ActivityItem({ item }: Props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: Dimensions.get("window").width,
+  },
   description: {
     marginBottom: 20,
+    paddingHorizontal: 16,
   },
   noActivityView: {
     flex: 1,
@@ -55,9 +53,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: getColor("mutedForeground"),
     marginTop: -50,
-  },
-  scrollView: {
-    flex: 1,
-    gap: 16,
   },
 });
