@@ -11,6 +11,11 @@ interface Props {
 
 export default function ActivityLogItem({ log }: Props) {
   const Icon = log.kind === "lift" ? DumbbellIcon : WeightIcon;
+  const primaryText = log.kind === "lift" ? log.exercise.name : "Bodyweight";
+  const secondaryText =
+    log.kind === "lift"
+      ? `${log.weight} kg x ${log.reps} reps`
+      : `${log.weight} kg`;
 
   return (
     <View style={styles.container}>
@@ -22,14 +27,8 @@ export default function ActivityLogItem({ log }: Props) {
           <Icon size={24} strokeWidth={1.75} color={getColor("primary")} />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.primaryText}>
-            {log.kind === "lift" ? log.exercise.name : "Bodyweight"}
-          </Text>
-          <Text style={styles.secondaryText}>
-            {log.kind === "lift"
-              ? `${log.weight} kg x ${log.reps} reps`
-              : `${log.weight} kg`}
-          </Text>
+          <Text style={styles.primaryText}>{primaryText}</Text>
+          <Text style={styles.secondaryText}>{secondaryText}</Text>
         </View>
         <View style={styles.timeContainer}>
           <Text style={styles.timeText}>{format(log.date, "HH:mm")}</Text>
