@@ -31,14 +31,14 @@ export default function ExercisesList({ search }: Props) {
       data={sortedExercises}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ExerciseListItem item={item} />}
-      contentContainerStyle={{ paddingBottom: 16 }}
-      style={styles.flatList}
+      contentContainerStyle={styles.flatList}
     />
   );
 }
 
 const styles = StyleSheet.create({
   flatList: {
-    flex: 1,
+    paddingBottom: 16,
+    paddingTop: 12,
   },
 });
