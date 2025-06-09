@@ -51,6 +51,7 @@ export default function LogModalMain({
           onInputFocus={handleInputFocus}
           onInputBlur={handleInputBlur}
           editingEnabled={!isAnimating}
+          onClose={onClose}
         />
         <Button
           variant="ghost"
