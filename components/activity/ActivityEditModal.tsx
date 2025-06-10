@@ -24,7 +24,16 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
     >
       <SafeArea style={styles.safeArea}>
         <View style={styles.container}>
-          {log.kind === "lift" && <LogLift onClose={onClose} />}
+          {log.kind === "lift" && (
+            <LogLift
+              startingValues={{
+                exercise: log.exercise.name,
+                weight: log.weight.toString(),
+                reps: log.reps.toString(),
+              }}
+              onClose={onClose}
+            />
+          )}
           {log.kind === "bodyweight" && <LogBodyweight onClose={onClose} />}
 
           <Button

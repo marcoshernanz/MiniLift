@@ -1,12 +1,16 @@
+import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
+import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { XIcon } from "lucide-react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   SharedValue,
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
+import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
+import { Toast } from "../ui/Toast";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
 
@@ -21,16 +25,47 @@ export default function LogScreenMain({
   scrollViewRef,
   scrollX,
 }: Props) {
-  const [isInputFocused, setIsInputFocused] = React.useState(false);
-  const [isAnimating, setIsAnimating] = React.useState(false);
+  const { setAppData } = useAppContext();
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const screenWidth = Dimensions.get("screen").width;
+
   const handleInputFocus = () => setIsInputFocused(true);
   const handleInputBlur = () => setIsInputFocused(false);
-  const screenWidth = Dimensions.get("screen").width;
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
     },
   });
+
+  const handleLogLift = ({
+    exercise,
+    weight,
+    reps,
+  }: {
+    exercise: Exercise;
+    weight: number;
+    reps: number;
+  }) => {
+    const newLog = {
+      id: uuidv4(),
+      date: new Date(),
+      exercise,
+      weight,
+      reps,
+    };
+
+    setAppData((prev) => ({
+      ...prev,
+      liftLogs: [...prev.liftLogs, newLog],
+    }));
+
+    Toast.show({
+      text: `${exercise}: ${weight}kg x ${Math.floor(reps)}`,
+      variant: "success",
+    });
+  };
 
   return (
     <Animated.ScrollView
@@ -51,6 +86,7 @@ export default function LogScreenMain({
           onInputFocus={handleInputFocus}
           onInputBlur={handleInputBlur}
           editingEnabled={!isAnimating}
+          handleLog={handleLogLift}
           onClose={onClose}
         />
         <Button
