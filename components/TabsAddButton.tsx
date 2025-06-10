@@ -20,17 +20,15 @@ export default function TabsAddButton() {
         <PlusIcon color={getColor("primaryForeground")} size={32} />
       </Pressable>
 
-      {modalVisible && (
-        <Modal
-          statusBarTranslucent={true}
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-          animationType="slide"
-        >
-          <LogModal onClose={() => setModalVisible(false)} />
-        </Modal>
-      )}
+      <Modal
+        statusBarTranslucent={true}
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        animationType="slide"
+      >
+        <LogModal onClose={() => setModalVisible(false)} />
+      </Modal>
     </>
   );
 }
