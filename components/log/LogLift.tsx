@@ -17,7 +17,6 @@ interface LogLiftProps {
     weight?: string;
     reps?: string;
   };
-  onClose: () => void;
   handleLog: ({
     exercise,
     weight,
@@ -27,15 +26,16 @@ interface LogLiftProps {
     weight: number;
     reps: number;
   }) => void;
+  onClose: () => void;
 }
 
 export default function LogLift({
   onInputFocus,
   onInputBlur,
   editingEnabled = true,
-  onClose,
   startingValues,
   handleLog,
+  onClose,
 }: LogLiftProps) {
   const { appData } = useAppContext();
 
