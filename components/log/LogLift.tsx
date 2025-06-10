@@ -1,4 +1,5 @@
 import { useAppContext } from "@/context/AppContext";
+import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
@@ -22,7 +23,7 @@ interface LogLiftProps {
     weight,
     reps,
   }: {
-    exercise: string;
+    exercise: Exercise;
     weight: number;
     reps: number;
   }) => void;
@@ -90,7 +91,7 @@ export default function LogLift({
     }
 
     handleLog({
-      exercise: trimmedExercise,
+      exercise: exerciseEntry,
       weight: weightNum,
       reps: Math.floor(repsNumRaw),
     });
