@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
+import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
@@ -12,6 +13,8 @@ interface LogBodyweightProps {
   startingValues?: { bodyweight: string };
   handleLog: ({ bodyweight }: { bodyweight: number }) => void;
   onClose: () => void;
+  title?: string;
+  description?: string;
 }
 export default function LogBodyweight({
   onInputFocus,
@@ -20,8 +23,12 @@ export default function LogBodyweight({
   startingValues,
   handleLog,
   onClose,
+  title = "Log Bodyweight",
+  description,
 }: LogBodyweightProps) {
-  const [bodyweight, setBodyweight] = useState("");
+  const [bodyweight, setBodyweight] = useState(
+    startingValues?.bodyweight || ""
+  );
   const inputRef = useRef<TextInputHandle>(null);
 
   const handleSubmit = () => {
@@ -42,7 +49,10 @@ export default function LogBodyweight({
 
   return (
     <SafeArea>
-      <Title style={styles.title}>Log Bodyweight</Title>
+      <View style={{ marginBottom: 24 }}>
+        <Title>{title}</Title>
+        {description && <Description>{description}</Description>}
+      </View>
       <TextInput
         ref={inputRef}
         placeholder="Bodyweight"

@@ -68,6 +68,8 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
               startingValues={{ bodyweight: log.bodyweight.toString() }}
               handleLog={handleLogBodyweight}
               onClose={onClose}
+              title="Edit Bodyweight Log"
+              description={format(log.date, "MMMM dd, yyyy")}
             />
           )}
 
