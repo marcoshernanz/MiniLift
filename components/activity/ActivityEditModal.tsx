@@ -110,6 +110,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
 
       <AlertDialog
         visible={dialogVisible}
+        buttonVariant="destructive"
         title="Delete Exercise"
         content={"Are you sure you want to delete this log?"}
         confirmText="Delete"
