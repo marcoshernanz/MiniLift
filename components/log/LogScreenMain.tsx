@@ -22,6 +22,7 @@ interface Props {
   logLiftDescription?: string;
   logBodyweightTitle?: string;
   logBodyweightDescription?: string;
+  logDate?: Date;
 }
 
 export default function LogScreenMain({
@@ -32,6 +33,7 @@ export default function LogScreenMain({
   logLiftDescription,
   logBodyweightTitle,
   logBodyweightDescription,
+  logDate = new Date(),
 }: Props) {
   const { setAppData } = useAppContext();
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -58,7 +60,7 @@ export default function LogScreenMain({
   }) => {
     const newLog = {
       id: uuidv4(),
-      date: new Date(),
+      date: logDate,
       exercise,
       weight,
       reps,
@@ -78,7 +80,7 @@ export default function LogScreenMain({
   const handleLogBodyweight = ({ bodyweight }: { bodyweight: number }) => {
     const newLog = {
       id: uuidv4(),
-      date: new Date(),
+      date: logDate,
       bodyweight,
     };
     setAppData((prev) => ({
