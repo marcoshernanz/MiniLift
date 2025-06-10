@@ -46,7 +46,12 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
   };
 
   const handleLogBodyweight = ({ bodyweight }: { bodyweight: number }) => {
-    // TODO: Edit the log
+    setAppData((prev) => ({
+      ...prev,
+      bodyweightLogs: prev.bodyweightLogs.map((l) =>
+        l.id === log.id ? { ...l, bodyweight } : l
+      ),
+    }));
 
     Toast.show({ text: `${bodyweight}kg`, variant: "success" });
   };
