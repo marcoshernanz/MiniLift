@@ -67,6 +67,20 @@ export default function LogScreenMain({
     });
   };
 
+  const handleLogBodyweight = ({ bodyweight }: { bodyweight: number }) => {
+    const newLog = {
+      id: uuidv4(),
+      date: new Date(),
+      bodyweight,
+    };
+    setAppData((prev) => ({
+      ...prev,
+      bodyweightLogs: [...prev.bodyweightLogs, newLog],
+    }));
+
+    Toast.show({ text: `${bodyweight}kg`, variant: "success" });
+  };
+
   return (
     <Animated.ScrollView
       ref={scrollViewRef}
@@ -103,6 +117,7 @@ export default function LogScreenMain({
           onInputFocus={handleInputFocus}
           onInputBlur={handleInputBlur}
           editingEnabled={!isAnimating}
+          handleLog={handleLogBodyweight}
           onClose={onClose}
         />
         <Button

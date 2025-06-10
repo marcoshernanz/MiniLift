@@ -1,30 +1,30 @@
-import { useAppContext } from "@/context/AppContext";
 import React, { useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
-import { Toast } from "../ui/Toast";
 
 interface LogBodyweightProps {
   onInputFocus?: () => void;
   onInputBlur?: () => void;
   editingEnabled?: boolean;
+  startingValues?: { bodyweight: string };
+  handleLog: ({ bodyweight }: { bodyweight: number }) => void;
   onClose: () => void;
 }
 export default function LogBodyweight({
   onInputFocus,
   onInputBlur,
   editingEnabled = true,
+  startingValues,
+  handleLog,
   onClose,
 }: LogBodyweightProps) {
-  const { setAppData } = useAppContext();
   const [bodyweight, setBodyweight] = useState("");
   const inputRef = useRef<TextInputHandle>(null);
 
-  const handleLog = () => {
+  const handleSubmit = () => {
     if (
       bodyweight.trim().length === 0 ||
       isNaN(Number(bodyweight)) ||
@@ -35,17 +35,8 @@ export default function LogBodyweight({
     }
 
     const bodyweightNum = parseFloat(bodyweight);
-    const newLog = {
-      id: uuidv4(),
-      date: new Date(),
-      bodyweight: bodyweightNum,
-    };
-    setAppData((prev) => ({
-      ...prev,
-      bodyweightLogs: [...prev.bodyweightLogs, newLog],
-    }));
 
-    Toast.show({ text: `${bodyweight}kg`, variant: "success" });
+    handleLog({ bodyweight: bodyweightNum });
     onClose();
   };
 
@@ -64,7 +55,7 @@ export default function LogBodyweight({
       />
       <Button
         containerStyle={styles.confirmButtonContainer}
-        onPress={handleLog}
+        onPress={handleSubmit}
       >
         Log
       </Button>
