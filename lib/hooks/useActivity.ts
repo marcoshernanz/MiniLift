@@ -10,6 +10,8 @@ export type ActivityEntry = {
   logs: CombinedEntry[];
 };
 
+export type LogType = CombinedEntry;
+
 const dummyData: ActivityEntry[] = [
   {
     date: subDays(new Date(), 9),
