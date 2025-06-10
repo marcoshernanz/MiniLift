@@ -3,9 +3,11 @@ import { LogType } from "@/lib/hooks/useActivity";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { format } from "date-fns";
 import { XIcon } from "lucide-react-native";
+import { useState } from "react";
 import { Dimensions, Modal, StyleSheet, View } from "react-native";
 import LogBodyweight from "../log/LogBodyweight";
 import LogLift from "../log/LogLift";
+import AlertDialog from "../ui/AlertDialog";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
 import { Toast } from "../ui/Toast";
@@ -17,6 +19,8 @@ interface Props {
 }
 
 export default function ActivityEditModal({ log, visible, onClose }: Props) {
+  const [dialogVisible, setDialogVisible] = useState(false);
+
   const handleLogLift = ({
     exercise,
     weight,
@@ -38,6 +42,19 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
     // TODO: Edit the log
 
     Toast.show({ text: `${bodyweight}kg`, variant: "success" });
+  };
+
+  const handleDelete = () => {
+    setDialogVisible(false);
+
+    // TODO: Delete the log
+
+    Toast.show({
+      text: `${
+        log.kind === "lift" ? log.exercise.name : "Bodyweight"
+      } has been deleted.`,
+      variant: "success",
+    });
   };
 
   return (
@@ -89,6 +106,15 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
           Delete
         </Button>
       </SafeArea>
+
+      <AlertDialog
+        visible={dialogVisible}
+        title="Delete Exercise"
+        content={"Are you sure you want to delete this log?"}
+        confirmText="Delete"
+        onCancel={() => setDialogVisible(false)}
+        onConfirm={handleDelete}
+      />
     </Modal>
   );
 }
