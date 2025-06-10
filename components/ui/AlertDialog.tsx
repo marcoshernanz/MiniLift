@@ -11,6 +11,7 @@ interface AlertDialogProps {
   confirmText?: string;
   onCancel: () => void;
   onConfirm: () => void;
+  buttonVariant?: "primary" | "destructive";
 }
 
 export default function AlertDialog({
@@ -20,6 +21,7 @@ export default function AlertDialog({
   confirmText = "OK",
   onCancel,
   onConfirm,
+  buttonVariant = "primary",
 }: AlertDialogProps) {
   return (
     <Modal
@@ -41,7 +43,7 @@ export default function AlertDialog({
               Cancel
             </Button>
             <Button
-              variant="primary"
+              variant={buttonVariant}
               pressableStyle={styles.pressable}
               onPress={onConfirm}
             >
