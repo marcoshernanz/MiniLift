@@ -2,7 +2,7 @@ import getColor from "@/lib/getColor";
 import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
-import LogModal from "./log/LogModal";
+import LogModal from "./log/LogScreen";
 
 export default function TabsAddButton() {
   const [modalVisible, setModalVisible] = useState(false);

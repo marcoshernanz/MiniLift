@@ -13,7 +13,7 @@ interface Props {
   scrollX: SharedValue<number>;
 }
 
-export default function LogModalSelector({ scrollViewRef, scrollX }: Props) {
+export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
   const screenWidth = Dimensions.get("screen").width;
   const primaryColor = getColor("primary");
   const mutedForegroundColor = getColor("mutedForeground");
