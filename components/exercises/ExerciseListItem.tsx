@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import AlertDialog from "../ui/AlertDialog";
 import Text from "../ui/Text";
+import { Toast } from "../ui/Toast";
 
 interface Props {
   item: Exercise;
@@ -40,6 +41,8 @@ export default function ExerciseListItem({ item }: Props) {
         liftLogs: prev.liftLogs.filter((log) => log.exercise.id !== item.id),
       };
     });
+
+    Toast.show({ text: `${item.name} has been deleted.`, variant: "success" });
   };
 
   return (
