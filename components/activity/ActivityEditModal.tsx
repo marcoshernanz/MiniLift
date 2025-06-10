@@ -102,6 +102,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
         <Button
           variant="destructive"
           containerStyle={styles.deleteButtonContainer}
+          onPress={() => setDialogVisible(true)}
         >
           Delete
         </Button>
