@@ -7,9 +7,19 @@ import LogScreenSelector from "./LogScreenSelector";
 
 interface Props {
   onClose: () => void;
+  logLiftTitle?: string;
+  logLiftDescription?: string;
+  logBodyweightTitle?: string;
+  logBodyweightDescription?: string;
 }
 
-export default function LogScreen({ onClose }: Props) {
+export default function LogScreen({
+  onClose,
+  logLiftTitle,
+  logLiftDescription,
+  logBodyweightTitle,
+  logBodyweightDescription,
+}: Props) {
   const scrollViewRef = React.useRef<Animated.ScrollView>(null);
   const scrollX = useSharedValue(0);
 
@@ -19,6 +29,10 @@ export default function LogScreen({ onClose }: Props) {
         onClose={onClose}
         scrollViewRef={scrollViewRef}
         scrollX={scrollX}
+        logLiftTitle={logLiftTitle}
+        logLiftDescription={logLiftDescription}
+        logBodyweightTitle={logBodyweightTitle}
+        logBodyweightDescription={logBodyweightDescription}
       />
       <LogScreenSelector scrollViewRef={scrollViewRef} scrollX={scrollX} />
     </SafeArea>

@@ -18,12 +18,20 @@ interface Props {
   onClose: () => void;
   scrollViewRef: React.RefObject<Animated.ScrollView | null>;
   scrollX: SharedValue<number>;
+  logLiftTitle?: string;
+  logLiftDescription?: string;
+  logBodyweightTitle?: string;
+  logBodyweightDescription?: string;
 }
 
 export default function LogScreenMain({
   onClose,
   scrollViewRef,
   scrollX,
+  logLiftTitle,
+  logLiftDescription,
+  logBodyweightTitle,
+  logBodyweightDescription,
 }: Props) {
   const { setAppData } = useAppContext();
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -100,6 +108,8 @@ export default function LogScreenMain({
           onInputFocus={handleInputFocus}
           onInputBlur={handleInputBlur}
           editingEnabled={!isAnimating}
+          title={logLiftTitle}
+          description={logLiftDescription}
           handleLog={handleLogLift}
           onClose={onClose}
         />
@@ -117,6 +127,8 @@ export default function LogScreenMain({
           onInputFocus={handleInputFocus}
           onInputBlur={handleInputBlur}
           editingEnabled={!isAnimating}
+          title={logBodyweightTitle}
+          description={logBodyweightDescription}
           handleLog={handleLogBodyweight}
           onClose={onClose}
         />

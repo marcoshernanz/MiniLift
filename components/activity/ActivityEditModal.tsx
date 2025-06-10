@@ -99,7 +99,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
               }}
               handleLog={handleLogLift}
               onClose={onClose}
-              title="Edit Lift Log"
+              title="Edit Lift"
               description={format(log.date, "MMMM dd, yyyy")}
             />
           )}
@@ -108,7 +108,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
               startingValues={{ bodyweight: log.bodyweight.toString() }}
               handleLog={handleLogBodyweight}
               onClose={onClose}
-              title="Edit Bodyweight Log"
+              title="Edit Bodyweight"
               description={format(log.date, "MMMM dd, yyyy")}
             />
           )}
