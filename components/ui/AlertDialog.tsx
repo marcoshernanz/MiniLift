@@ -6,22 +6,22 @@ import { Dimensions, Modal, Pressable, StyleSheet, View } from "react-native";
 
 interface AlertDialogProps {
   visible: boolean;
+  buttonVariant?: "primary" | "destructive";
   title: string;
   content: string;
   confirmText?: string;
   onCancel: () => void;
   onConfirm: () => void;
-  buttonVariant?: "primary" | "destructive";
 }
 
 export default function AlertDialog({
   visible,
+  buttonVariant = "primary",
   title,
   content,
   confirmText = "OK",
   onCancel,
   onConfirm,
-  buttonVariant = "primary",
 }: AlertDialogProps) {
   return (
     <Modal
