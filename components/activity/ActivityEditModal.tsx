@@ -59,7 +59,18 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
   const handleDelete = () => {
     setDialogVisible(false);
 
-    // TODO: Delete the log
+    setAppData((prev) => ({
+      ...prev,
+      liftLogs:
+        log.kind === "lift"
+          ? prev.liftLogs.filter((l) => l.id !== log.id)
+          : prev.liftLogs,
+      bodyweightLogs:
+        log.kind === "bodyweight"
+          ? prev.bodyweightLogs.filter((l) => l.id !== log.id)
+          : prev.bodyweightLogs,
+    }));
+    onClose();
 
     Toast.show({
       text: `${
