@@ -62,7 +62,7 @@ export default function LogScreenMain({
     }));
 
     Toast.show({
-      text: `${exercise}: ${weight}kg x ${Math.floor(reps)}`,
+      text: `${exercise.name}: ${weight}kg x ${Math.floor(reps)}`,
       variant: "success",
     });
   };
