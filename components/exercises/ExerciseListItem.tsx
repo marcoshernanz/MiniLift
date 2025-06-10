@@ -87,6 +87,7 @@ export default function ExerciseListItem({ item }: Props) {
       </View>
       <AlertDialog
         visible={dialogVisible}
+        buttonVariant="destructive"
         title="Delete Exercise"
         content={
           logsCount > 0
