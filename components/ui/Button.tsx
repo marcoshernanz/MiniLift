@@ -11,7 +11,12 @@ import {
   ViewStyle,
 } from "react-native";
 
-type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "ghost"
+  | "destructive";
 
 interface ButtonProps extends Omit<PressableProps, "style"> {
   variant?: ButtonVariant;
@@ -29,6 +34,15 @@ export default function Button({
   textStyle,
   ...props
 }: ButtonProps) {
+  const rippleColor =
+    variant === "primary"
+      ? getColor("background", 0.25)
+      : variant === "secondary"
+      ? getColor("secondaryForeground", 0.1)
+      : variant === "destructive"
+      ? getColor("background", 0.25)
+      : getColor("muted");
+
   return (
     <View style={[styles.wrapperView, containerStyle]}>
       <Pressable
@@ -37,14 +51,7 @@ export default function Button({
           styles[`${variant}Button`],
           pressableStyle,
         ]}
-        android_ripple={{
-          color:
-            variant === "primary"
-              ? getColor("background", 0.25)
-              : variant === "secondary"
-              ? getColor("secondaryForeground", 0.1)
-              : getColor("muted"),
-        }}
+        android_ripple={{ color: rippleColor }}
         {...props}
       >
         <Text style={[styles.baseText, styles[`${variant}Text`], textStyle]}>
@@ -80,6 +87,10 @@ const styles = StyleSheet.create({
   ghostButton: {
     backgroundColor: "transparent",
   },
+  destructiveButton: {
+    backgroundColor: getColor("destructive"),
+  },
+
   baseText: {
     textAlign: "center",
     fontWeight: 600,
@@ -95,5 +106,8 @@ const styles = StyleSheet.create({
   },
   ghostText: {
     color: getColor("foreground"),
+  },
+  destructiveText: {
+    color: getColor("destructiveForeground"),
   },
 });
