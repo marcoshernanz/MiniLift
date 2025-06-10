@@ -2,6 +2,7 @@ import { useAppContext } from "@/context/AppContext";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { z } from "zod";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
 import Description from "../ui/Description";
@@ -54,52 +55,38 @@ export default function LogLift({
 
   const exerciseList = Object.values(appData.exercises).map((e) => e.name);
 
+  const LogLiftForm = z.object({
+    exercise: z
+      .string()
+      .trim()
+      .nonempty()
+      .refine((name) => exerciseList.includes(name)),
+    weight: z.preprocess((v) => parseFloat(v as string), z.number().positive()),
+    reps: z.preprocess((v) => parseFloat(v as string), z.number().int().min(1)),
+  });
+
   const handleSubmit = () => {
-    const trimmedExercise = exercise.trim();
-    let hasError = false;
-
-    if (
-      trimmedExercise.length === 0 ||
-      !exerciseList.includes(trimmedExercise)
-    ) {
-      exerciseInputRef.current?.flashError();
-      hasError = true;
-    }
-
-    const weightTrimmed = weight.trim();
-    const weightNum = parseFloat(weight);
-    if (weightTrimmed.length === 0 || isNaN(weightNum) || weightNum < 0) {
-      weightInputRef.current?.flashError();
-      hasError = true;
-    }
-
-    const repsTrimmed = reps.trim();
-    const repsNumRaw = parseFloat(reps);
-    if (
-      repsTrimmed.length === 0 ||
-      isNaN(repsNumRaw) ||
-      repsNumRaw < 0 ||
-      !Number.isInteger(repsNumRaw)
-    ) {
-      repsInputRef.current?.flashError();
-      hasError = true;
-    }
-
-    if (hasError) return;
-
-    const exerciseEntry = Object.values(appData.exercises).find(
-      (e) => e.name === trimmedExercise
-    );
-    if (!exerciseEntry) {
-      exerciseInputRef.current?.flashError();
+    const result = LogLiftForm.safeParse({ exercise, weight, reps });
+    if (!result.success) {
+      result.error.errors.forEach((err) => {
+        const field = err.path[0];
+        if (field === "exercise") {
+          exerciseInputRef.current?.flashError();
+        } else if (field === "weight") {
+          weightInputRef.current?.flashError();
+        } else if (field === "reps") {
+          repsInputRef.current?.flashError();
+        }
+      });
       return;
     }
 
-    handleLog({
-      exercise: exerciseEntry,
-      weight: weightNum,
-      reps: Math.floor(repsNumRaw),
-    });
+    const { exercise: exName, weight: wt, reps: rp } = result.data;
+    const exerciseEntry = Object.values(appData.exercises).find(
+      (e) => e.name === exName
+    )!;
+
+    handleLog({ exercise: exerciseEntry, weight: wt, reps: rp });
     onClose();
   };
 

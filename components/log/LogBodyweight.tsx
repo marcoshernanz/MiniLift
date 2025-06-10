@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { z } from "zod";
 import Button from "../ui/Button";
 import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
@@ -31,19 +32,25 @@ export default function LogBodyweight({
   );
   const inputRef = useRef<TextInputHandle>(null);
 
+  const LogBodyweightForm = z.object({
+    bodyweight: z.preprocess(
+      (v) => parseFloat(v as string),
+      z.number().positive()
+    ),
+  });
+
   const handleSubmit = () => {
-    if (
-      bodyweight.trim().length === 0 ||
-      isNaN(Number(bodyweight)) ||
-      Number(bodyweight) <= 0
-    ) {
-      inputRef.current?.flashError();
+    const result = LogBodyweightForm.safeParse({ bodyweight });
+    if (!result.success) {
+      result.error.errors.forEach((err) => {
+        if (err.path[0] === "bodyweight") {
+          inputRef.current?.flashError();
+        }
+      });
       return;
     }
-
-    const bodyweightNum = parseFloat(bodyweight);
-
-    handleLog({ bodyweight: bodyweightNum });
+    const { bodyweight: bw } = result.data;
+    handleLog({ bodyweight: bw });
     onClose();
   };
 

@@ -4,6 +4,7 @@ import { XIcon } from "lucide-react-native";
 import React, { useRef, useState } from "react";
 import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
@@ -19,31 +20,39 @@ export default function AddExerciseModal({ onClose }: Props) {
   const [name, setName] = useState("");
   const inputRef = useRef<TextInputHandle>(null);
 
-  const handleAdd = () => {
-    const trimmed = name.trim();
-    if (trimmed.length === 0) {
-      inputRef.current?.flashError();
-      return;
-    }
+  const duplicateNames = Object.values(appData.exercises).map((ex) =>
+    ex.name.toLowerCase()
+  );
+  const AddExerciseForm = z.object({
+    name: z
+      .string()
+      .trim()
+      .nonempty()
+      .refine((n) => !duplicateNames.includes(n.toLowerCase())),
+  });
 
-    const duplicate = Object.values(appData.exercises).some(
-      (ex) => ex.name.toLowerCase() === trimmed.toLowerCase()
-    );
-    if (duplicate) {
-      inputRef.current?.flashError();
+  const handleAdd = () => {
+    const result = AddExerciseForm.safeParse({ name });
+    if (!result.success) {
+      result.error.errors.forEach((err) => {
+        if (err.path[0] === "name") {
+          inputRef.current?.flashError();
+        }
+      });
       return;
     }
+    const nameTrimmed = result.data.name;
 
     const id = uuidv4();
     setAppData((prev) => ({
       ...prev,
       exercises: {
         ...prev.exercises,
-        [id]: { id, name: trimmed, isFavorite: false },
+        [id]: { id, name: nameTrimmed, isFavorite: false },
       },
     }));
 
-    Toast.show({ text: `${trimmed} added`, variant: "success" });
+    Toast.show({ text: `${nameTrimmed} added`, variant: "success" });
     onClose();
   };
 
