@@ -1,3 +1,4 @@
+import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
 import { LogType } from "@/lib/hooks/useActivity";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
@@ -20,6 +21,7 @@ interface Props {
 
 export default function ActivityEditModal({ log, visible, onClose }: Props) {
   const [dialogVisible, setDialogVisible] = useState(false);
+  const { setAppData } = useAppContext();
 
   const handleLogLift = ({
     exercise,
@@ -30,7 +32,12 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
     weight: number;
     reps: number;
   }) => {
-    // TODO: Edit the log
+    setAppData((prev) => ({
+      ...prev,
+      liftLogs: prev.liftLogs.map((l) =>
+        l.id === log.id ? { ...l, exercise, weight, reps } : l
+      ),
+    }));
 
     Toast.show({
       text: `${exercise.name}: ${weight}kg x ${Math.floor(reps)}`,
