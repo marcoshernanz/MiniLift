@@ -1,19 +1,31 @@
 import { useAppContext } from "@/context/AppContext";
 import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
-import { Toast } from "../ui/Toast";
 
 interface LogLiftProps {
   onInputFocus?: () => void;
   onInputBlur?: () => void;
   editingEnabled?: boolean;
+  startingValues?: {
+    exercise?: string;
+    weight?: string;
+    reps?: string;
+  };
   onClose: () => void;
+  handleLog: ({
+    exercise,
+    weight,
+    reps,
+  }: {
+    exercise: string;
+    weight: number;
+    reps: number;
+  }) => void;
 }
 
 export default function LogLift({
@@ -21,17 +33,22 @@ export default function LogLift({
   onInputBlur,
   editingEnabled = true,
   onClose,
+  startingValues,
+  handleLog,
 }: LogLiftProps) {
-  const { appData, setAppData } = useAppContext();
-  const exerciseList = Object.values(appData.exercises).map((e) => e.name);
-  const [weight, setWeight] = useState("");
-  const [reps, setReps] = useState("");
-  const [exercise, setExercise] = useState("");
+  const { appData } = useAppContext();
+
+  const [exercise, setExercise] = useState(startingValues?.exercise || "");
+  const [weight, setWeight] = useState(startingValues?.weight || "");
+  const [reps, setReps] = useState(startingValues?.reps || "");
+
   const exerciseInputRef = useRef<TextInputHandle>(null);
   const weightInputRef = useRef<TextInputHandle>(null);
   const repsInputRef = useRef<TextInputHandle>(null);
 
-  const handleLog = () => {
+  const exerciseList = Object.values(appData.exercises).map((e) => e.name);
+
+  const handleSubmit = () => {
     const trimmedExercise = exercise.trim();
     let hasError = false;
 
@@ -72,21 +89,10 @@ export default function LogLift({
       return;
     }
 
-    const newLog = {
-      id: uuidv4(),
-      date: new Date(),
-      exercise: exerciseEntry,
+    handleLog({
+      exercise: trimmedExercise,
       weight: weightNum,
-      reps: repsNumRaw,
-    };
-    setAppData((prev) => ({
-      ...prev,
-      liftLogs: [...prev.liftLogs, newLog],
-    }));
-
-    Toast.show({
-      text: `${trimmedExercise}: ${weightNum}kg x ${Math.floor(repsNumRaw)}`,
-      variant: "success",
+      reps: Math.floor(repsNumRaw),
     });
     onClose();
   };
@@ -137,7 +143,7 @@ export default function LogLift({
       </View>
       <Button
         containerStyle={styles.confirmButtonContainer}
-        onPress={handleLog}
+        onPress={handleSubmit}
       >
         Log
       </Button>
