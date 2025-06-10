@@ -1,6 +1,7 @@
 import getColor from "@/lib/getColor";
 import { LogType } from "@/lib/hooks/useActivity";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
+import { format } from "date-fns";
 import { XIcon } from "lucide-react-native";
 import { Dimensions, Modal, StyleSheet, View } from "react-native";
 import LogBodyweight from "../log/LogBodyweight";
@@ -58,6 +59,8 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
               }}
               handleLog={handleLogLift}
               onClose={onClose}
+              title="Edit Lift Log"
+              description={format(log.date, "MMMM dd, yyyy")}
             />
           )}
           {log.kind === "bodyweight" && (

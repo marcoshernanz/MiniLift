@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
+import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
@@ -27,6 +28,8 @@ interface LogLiftProps {
     reps: number;
   }) => void;
   onClose: () => void;
+  title?: string;
+  description?: string;
 }
 
 export default function LogLift({
@@ -36,6 +39,8 @@ export default function LogLift({
   startingValues,
   handleLog,
   onClose,
+  title = "Log Lift",
+  description,
 }: LogLiftProps) {
   const { appData } = useAppContext();
 
@@ -100,7 +105,10 @@ export default function LogLift({
 
   return (
     <SafeArea>
-      <Title style={styles.title}>Log Lift</Title>
+      <View style={{ marginBottom: 24 }}>
+        <Title>{title}</Title>
+        {description && <Description>{description}</Description>}
+      </View>
       <View style={styles.inputsContainer}>
         <ComboBox
           options={exerciseList}
@@ -153,9 +161,6 @@ export default function LogLift({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: 24,
-  },
   inputsContainer: {
     gap: 16,
   },
