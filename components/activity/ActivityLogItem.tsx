@@ -1,15 +1,19 @@
 import getColor from "@/lib/getColor";
-import { ActivityEntry } from "@/lib/hooks/useActivity";
+import { LogType } from "@/lib/hooks/useActivity";
 import { format } from "date-fns";
 import { DumbbellIcon, WeightIcon } from "lucide-react-native";
+import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
+import ActivityEditModal from "./ActivityEditModal";
 
 interface Props {
-  log: ActivityEntry["logs"][number];
+  log: LogType;
 }
 
 export default function ActivityLogItem({ log }: Props) {
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
   const Icon = log.kind === "lift" ? DumbbellIcon : WeightIcon;
   const primaryText = log.kind === "lift" ? log.exercise.name : "Bodyweight";
   const secondaryText =
@@ -22,6 +26,7 @@ export default function ActivityLogItem({ log }: Props) {
       <Pressable
         style={styles.pressable}
         android_ripple={{ color: getColor("muted") }}
+        onPress={() => setEditModalVisible(true)}
       >
         <View style={styles.iconContainer}>
           <Icon size={24} strokeWidth={1.75} color={getColor("primary")} />
@@ -34,6 +39,12 @@ export default function ActivityLogItem({ log }: Props) {
           <Text style={styles.timeText}>{format(log.date, "HH:mm")}</Text>
         </View>
       </Pressable>
+
+      <ActivityEditModal
+        log={log}
+        visible={editModalVisible}
+        onClose={() => setEditModalVisible(false)}
+      />
     </View>
   );
 }
