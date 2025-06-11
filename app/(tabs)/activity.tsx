@@ -15,10 +15,11 @@ export default function ActivityScreen() {
 
   return (
     <SafeArea style={styles.safeArea} edges={["top"]}>
-      <View style={{ position: "relative" }}>
+      <View style={{ position: "relative", flex: 1 }}>
         <Title style={styles.title}>Activity</Title>
         <FlatList
           data={data}
+          style={{ flex: 1 }}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}

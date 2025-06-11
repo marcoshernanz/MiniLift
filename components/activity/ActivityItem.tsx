@@ -29,6 +29,7 @@ export default function ActivityItem({ item }: Props) {
         <FlatList
           data={logs}
           keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 16 }}
           renderItem={({ item }) => <ActivityLogItem log={item} />}
         />
       )}
