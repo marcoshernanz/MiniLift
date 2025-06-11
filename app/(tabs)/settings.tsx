@@ -29,7 +29,7 @@ export default function SettingsScreen() {
       bodyweightLogs.push({
         id: uuidv4(),
         date: new Date(date),
-        bodyweight: Math.random() * 30 + 50,
+        bodyweight: Math.round(Math.random() * 30 + 50),
       });
       const day = date.getDay(); // 0=Sun,6=Sat
       if (day >= 1 && day <= 5) {
@@ -42,7 +42,7 @@ export default function SettingsScreen() {
             date: new Date(date),
             exercise,
             reps: Math.floor(Math.random() * 10) + 1,
-            weight: Math.random() * 80 + 20,
+            weight: Math.round(Math.random() * 80 + 20),
           });
         }
       }
