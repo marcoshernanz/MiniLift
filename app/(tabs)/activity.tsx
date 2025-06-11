@@ -22,6 +22,7 @@ export default function ActivityScreen() {
           style={{ flex: 1 }}
           horizontal
           pagingEnabled
+          directionalLockEnabled
           showsHorizontalScrollIndicator={false}
           keyExtractor={({ date }) => date.toDateString()}
           initialScrollIndex={data.length - 1}
