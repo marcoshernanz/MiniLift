@@ -51,7 +51,7 @@ export function useActivity(): ActivityEntry[] {
     const end = new Date();
     end.setHours(0, 0, 0, 0);
 
-    const days = eachDayOfInterval({ start, end }).reverse();
+    const days = eachDayOfInterval({ start, end });
 
     return days.map((day: Date) => {
       const key = formatISO(day, { representation: "date" });
