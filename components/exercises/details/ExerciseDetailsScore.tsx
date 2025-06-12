@@ -70,5 +70,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "400",
     color: getColor("mutedForeground"),
+    paddingBottom: 20,
   },
 });

@@ -6,7 +6,10 @@ import {
   Skia,
   vec,
 } from "@shopify/react-native-skia";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import { View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from "react-native-reanimated";
 
 interface Props {
   data: Record<string, number>;
@@ -17,12 +20,12 @@ interface Props {
 export default function SimpleChart({ data, width, height }: Props) {
   const strokeWidth = 2;
   const bottomPadding = 0.25;
+  const [pressX, setPressX] = useState<number | null>(null);
 
-  const { linePath, areaPath } = useMemo(() => {
+  const { linePath, areaPath, points } = useMemo(() => {
     const linePath = Skia.Path.Make();
     const areaPath = Skia.Path.Make();
     const entries = Object.entries(data) as [string, number][];
-
     const chartHeight = height * (1 - bottomPadding);
     const max = Math.max(...entries.map(([, v]) => v));
     const min = Math.min(...entries.map(([, v]) => v));
@@ -53,28 +56,80 @@ export default function SimpleChart({ data, width, height }: Props) {
       areaPath.lineTo(0, height);
       areaPath.close();
     }
-    return { linePath, areaPath };
+    return { linePath, areaPath, points };
   }, [data, width, height]);
+
+  const xs = useMemo(() => points.map((p) => p.x), [points]);
+
+  const indicatorPath = useMemo(() => {
+    const p = Skia.Path.Make();
+    if (pressX != null) {
+      p.moveTo(pressX, 0);
+      p.lineTo(pressX, height);
+    }
+    return p;
+  }, [pressX, height]);
+
+  const longPress = Gesture.LongPress()
+    .minDuration(200)
+    .onStart((e) => {
+      const target = xs.reduce(
+        (prev, curr) =>
+          Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+        xs[0]
+      );
+      runOnJS(setPressX)(target);
+    })
+    .onEnd(() => {
+      runOnJS(setPressX)(null);
+    });
+  const pan = Gesture.Pan()
+    .onUpdate((e) => {
+      if (pressX !== null) {
+        const target = xs.reduce(
+          (prev, curr) =>
+            Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+          xs[0]
+        );
+        runOnJS(setPressX)(target);
+      }
+    })
+    .onEnd(() => {
+      runOnJS(setPressX)(null);
+    });
+  const gesture = Gesture.Simultaneous(longPress, pan);
 
   const strokeColor = getColor("primary");
   const gradientStart = getColor("primary", 0.5);
   const gradientEnd = getColor("primary", 0);
 
   return (
-    <Canvas style={{ width, height }}>
-      <Path path={areaPath} style="fill">
-        <LinearGradient
-          start={vec(0, 0)}
-          end={vec(0, height)}
-          colors={[gradientStart, gradientEnd]}
-        />
-      </Path>
-      <Path
-        path={linePath}
-        color={strokeColor}
-        style="stroke"
-        strokeWidth={strokeWidth}
-      />
-    </Canvas>
+    <GestureDetector gesture={gesture}>
+      <View style={{ width, height }}>
+        <Canvas style={{ flex: 1 }}>
+          <Path path={areaPath} style="fill">
+            <LinearGradient
+              start={vec(0, 0)}
+              end={vec(0, height)}
+              colors={[gradientStart, gradientEnd]}
+            />
+          </Path>
+          <Path
+            path={linePath}
+            color={strokeColor}
+            style="stroke"
+            strokeWidth={strokeWidth}
+          />
+          {pressX != null && (
+            <Path
+              path={indicatorPath}
+              color={getColor("primary")}
+              style="stroke"
+              strokeWidth={1}
+            />
+          )}
+        </Canvas>
+      </View>
+    </GestureDetector>
   );
 }
