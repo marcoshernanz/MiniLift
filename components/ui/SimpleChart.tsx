@@ -40,29 +40,12 @@ export default function SimpleChart({ data, width, height }: Props) {
       linePath.moveTo(points[0].x, points[0].y);
       areaPath.moveTo(points[0].x, points[0].y);
 
-      // bumpX smoothing: port D3 Curve bumpX
-      let x0 = points[0].x;
-      let y0 = points[0].y;
-      let pointState = 0;
-      for (const { x, y } of points) {
-        switch (pointState) {
-          case 0:
-            // first point: already moved above
-            pointState = 1;
-            break;
-          case 1:
-            // second point: set state and fall through to default smoothing
-            pointState = 2;
-          default:
-            // apply bumpX: control points at midpoint X between x0 and x
-            const mx = (x0 + x) / 2;
-            linePath.cubicTo(mx, y0, mx, y, x, y);
-            areaPath.cubicTo(mx, y0, mx, y, x, y);
-            break;
-        }
-        // update previous coordinates
-        x0 = x;
-        y0 = y;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const cx = (prev.x + curr.x) / 2;
+        linePath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
+        areaPath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
       }
 
       const last = points[points.length - 1];
