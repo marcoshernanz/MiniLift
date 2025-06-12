@@ -54,6 +54,10 @@ export default function LogLift({
   const repsInputRef = useRef<TextInputHandle>(null);
 
   const exerciseList = Object.values(appData.exercises).map((e) => e.name);
+  // Get favorite exercise names to pass to ComboBox for sorting and highlighting
+  const favoriteExercises = Object.values(appData.exercises)
+    .filter((e) => e.isFavorite)
+    .map((e) => e.name);
 
   const LogLiftForm = z.object({
     exercise: z
@@ -99,6 +103,7 @@ export default function LogLift({
       <View style={styles.inputsContainer}>
         <ComboBox
           options={exerciseList}
+          favorites={favoriteExercises}
           value={exercise}
           onChange={setExercise}
           placeholder="Exercise"

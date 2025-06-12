@@ -1,5 +1,6 @@
 import getColor from "@/lib/getColor";
 import searchItems from "@/lib/searchItems";
+import { StarIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -27,6 +28,8 @@ interface ComboBoxProps {
   onInputBlur?: () => void;
   inputProps?: TextInputProps;
   inputRef?: React.Ref<TextInputHandle>;
+  /** Optional list of favorite option values to highlight and sort first */
+  favorites?: string[];
 }
 
 export default function ComboBox({
@@ -39,6 +42,7 @@ export default function ComboBox({
   onInputBlur,
   inputProps,
   inputRef,
+  favorites = [],
 }: ComboBoxProps) {
   const [searchText, setSearchText] = useState(value);
   const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
@@ -48,6 +52,15 @@ export default function ComboBox({
   useEffect(() => {
     setSearchText(value);
   }, [value]);
+
+  // Prepare a set of favorites for quick lookup
+  const favoritesSet = new Set(favorites);
+  // Sort filtered options: favorites first
+  const sortedOptions = favorites.length
+    ? [...filteredOptions].sort(
+        (a, b) => (favoritesSet.has(b) ? 1 : 0) - (favoritesSet.has(a) ? 1 : 0)
+      )
+    : filteredOptions;
 
   const handleChangeText = (text: string) => {
     setSearchText(text);
@@ -126,7 +139,7 @@ export default function ComboBox({
         >
           <FlatList
             keyboardShouldPersistTaps="handled"
-            data={filteredOptions}
+            data={sortedOptions}
             keyExtractor={(item, index) => `${item}-${index}`}
             renderItem={({ item }) => (
               <Pressable
@@ -139,6 +152,16 @@ export default function ComboBox({
                 }}
               >
                 <Text style={styles.dropdownItemText}>{item}</Text>
+                {favoritesSet.has(item) && (
+                  <View style={styles.starIconContainer}>
+                    <StarIcon
+                      size={18}
+                      color={getColor("primary")}
+                      fill={getColor("primary")}
+                      strokeWidth={1.75}
+                    />
+                  </View>
+                )}
               </Pressable>
             )}
           />
@@ -170,5 +193,14 @@ const styles = StyleSheet.create({
     padding: 12,
     borderBottomWidth: 1,
     borderBottomColor: getColor("border"),
+  },
+  starIconContainer: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
