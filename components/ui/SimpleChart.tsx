@@ -1,6 +1,7 @@
 import getColor from "@/lib/getColor";
 import {
   Canvas,
+  Circle,
   LinearGradient,
   Path,
   Skia,
@@ -102,6 +103,8 @@ export default function SimpleChart({ data, width, height }: Props) {
   const strokeColor = getColor("primary");
   const gradientStart = getColor("primary", 0.5);
   const gradientEnd = getColor("primary", 0);
+  // determine which data index is selected (matching snapped X)
+  const selectedIndex = pressX != null ? xs.findIndex((x) => x === pressX) : -1;
 
   return (
     <GestureDetector gesture={gesture}>
@@ -126,6 +129,14 @@ export default function SimpleChart({ data, width, height }: Props) {
               color={getColor("primary")}
               style="stroke"
               strokeWidth={1}
+            />
+          )}
+          {pressX != null && selectedIndex >= 0 && (
+            <Circle
+              cx={pressX}
+              cy={points[selectedIndex].y}
+              r={4}
+              color={strokeColor}
             />
           )}
         </Canvas>
