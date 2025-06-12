@@ -40,13 +40,29 @@ export default function SimpleChart({ data, width, height }: Props) {
       linePath.moveTo(points[0].x, points[0].y);
       areaPath.moveTo(points[0].x, points[0].y);
 
-      for (let i = 1; i < points.length; i++) {
-        const prev = points[i - 1];
-        const curr = points[i];
-        const midX = (prev.x + curr.x) / 2;
-        const midY = (prev.y + curr.y) / 2;
-        linePath.quadTo(prev.x, prev.y, midX, midY);
-        areaPath.quadTo(prev.x, prev.y, midX, midY);
+      // bumpX smoothing: port D3 Curve bumpX
+      let x0 = points[0].x;
+      let y0 = points[0].y;
+      let pointState = 0;
+      for (const { x, y } of points) {
+        switch (pointState) {
+          case 0:
+            // first point: already moved above
+            pointState = 1;
+            break;
+          case 1:
+            // second point: set state and fall through to default smoothing
+            pointState = 2;
+          default:
+            // apply bumpX: control points at midpoint X between x0 and x
+            const mx = (x0 + x) / 2;
+            linePath.cubicTo(mx, y0, mx, y, x, y);
+            areaPath.cubicTo(mx, y0, mx, y, x, y);
+            break;
+        }
+        // update previous coordinates
+        x0 = x;
+        y0 = y;
       }
 
       const last = points[points.length - 1];
@@ -103,7 +119,6 @@ export default function SimpleChart({ data, width, height }: Props) {
   const strokeColor = getColor("primary");
   const gradientStart = getColor("primary", 0.5);
   const gradientEnd = getColor("primary", 0);
-  // determine which data index is selected (matching snapped X)
   const selectedIndex = pressX != null ? xs.findIndex((x) => x === pressX) : -1;
 
   return (
