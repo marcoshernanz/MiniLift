@@ -53,9 +53,7 @@ export default function ExerciseListItem({ item }: Props) {
         <Pressable
           style={styles.mainPressable}
           android_ripple={{ color: getColor("muted") }}
-          onPress={() =>
-            router.push({ pathname: "/exercise/[id]", params: { id: item.id } })
-          }
+          onPress={() => router.push(`/exercise/${item.id}`)}
         >
           <Text style={styles.mainText}>{item.name}</Text>
         </Pressable>
