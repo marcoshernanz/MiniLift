@@ -55,7 +55,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
       <Chart
         data={dummyData}
         width={Dimensions.get("window").width - 32}
-        height={300}
+        height={250}
       />
     </View>
   );

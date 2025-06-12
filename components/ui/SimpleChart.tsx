@@ -16,19 +16,19 @@ interface Props {
 
 export default function SimpleChart({ data, width, height }: Props) {
   const strokeWidth = 2;
+  const bottomPadding = 0.25;
 
   const { linePath, areaPath } = useMemo(() => {
     const linePath = Skia.Path.Make();
     const areaPath = Skia.Path.Make();
     const entries = Object.entries(data) as [string, number][];
+
+    const chartHeight = height * (1 - bottomPadding);
+    const max = Math.max(...entries.map(([, v]) => v));
+    const min = Math.min(...entries.map(([, v]) => v));
     const points = entries.map(([, value], index) => {
       const x = (index / (entries.length - 1 || 1)) * width;
-      const y =
-        height -
-        ((value - Math.min(...entries.map(([, v]) => v))) /
-          (Math.max(...entries.map(([, v]) => v)) -
-            Math.min(...entries.map(([, v]) => v)) || 1)) *
-          height;
+      const y = ((max - value) / (max - min || 1)) * chartHeight;
       return { x, y };
     });
 
