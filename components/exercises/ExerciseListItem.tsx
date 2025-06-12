@@ -1,6 +1,7 @@
 import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
+import { useRouter } from "expo-router";
 import { StarIcon, TrashIcon } from "lucide-react-native";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function ExerciseListItem({ item }: Props) {
+  const router = useRouter();
   const { appData, setAppData } = useAppContext();
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -51,7 +53,9 @@ export default function ExerciseListItem({ item }: Props) {
         <Pressable
           style={styles.mainPressable}
           android_ripple={{ color: getColor("muted") }}
-          onPress={() => {}}
+          onPress={() =>
+            router.push({ pathname: "/exercise/[id]", params: { id: item.id } })
+          }
         >
           <Text style={styles.mainText}>{item.name}</Text>
         </Pressable>
