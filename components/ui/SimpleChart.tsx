@@ -8,13 +8,13 @@ import {
 } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 
-interface ChartProps {
+interface Props {
   data: Record<string, number>;
   width: number;
   height: number;
 }
 
-export default function Chart({ data, width, height }: ChartProps) {
+export default function SimpleChart({ data, width, height }: Props) {
   const strokeWidth = 2;
 
   const { linePath, areaPath } = useMemo(() => {

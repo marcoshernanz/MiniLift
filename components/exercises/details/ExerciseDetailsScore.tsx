@@ -1,4 +1,4 @@
-import Chart from "@/components/ui/Chart";
+import Chart from "@/components/ui/SimpleChart";
 import Text from "@/components/ui/Text";
 import getColor from "@/lib/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
