@@ -51,8 +51,8 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     position: "relative",
+    paddingBottom: 20,
   },
   buttonContainer: {
     position: "absolute",

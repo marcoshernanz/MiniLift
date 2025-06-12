@@ -1,4 +1,5 @@
 import ExerciseDetailsHeader from "@/components/exercises/details/ExerciseDetailsHeader";
+import ExerciseDetailsScore from "@/components/exercises/details/ExerciseDetailsScore";
 import SafeArea from "@/components/ui/SafeArea";
 import { useAppContext } from "@/context/AppContext";
 import { useLocalSearchParams } from "expo-router";
@@ -22,6 +23,7 @@ export default function ExerciseDetailScreen() {
   return (
     <SafeArea>
       <ExerciseDetailsHeader exercise={exercise} />
+      <ExerciseDetailsScore exercise={exercise} />
     </SafeArea>
   );
 }
