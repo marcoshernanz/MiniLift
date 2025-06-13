@@ -28,6 +28,13 @@ const dummyData = {
   "Jan 21": 110,
   "Jan 22": 115,
   "Jan 23": 120,
+  "Jan 24": 125,
+  "Jan 25": 110,
+  "Jan 26": 115,
+  "Jan 27": 100,
+  "Jan 28": 105,
+  "Jan 29": 120,
+  "Jan 30": 115,
 };
 
 interface Props {
@@ -56,6 +63,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         data={dummyData}
         width={Dimensions.get("window").width - 32}
         height={250}
+        labelCount={4}
       />
     </View>
   );

@@ -19,6 +19,7 @@ interface Props {
   height: number;
   tooltipHeight?: number;
   tooltipWidth?: number;
+  labelCount?: number;
 }
 
 const bottomPadding = 0.1;
@@ -30,9 +31,9 @@ export default function SimpleChart({
   height,
   tooltipHeight = 32,
   tooltipWidth = 92,
+  labelCount,
 }: Props) {
   const chartTop = tooltipHeight + tooltipMargin;
-
   const [pressX, setPressX] = useState<number | null>(null);
 
   const { linePath, areaPath, points } = useMemo(() => {
@@ -173,6 +174,22 @@ export default function SimpleChart({
             </Text>
           </View>
         )}
+        {points.length > 0 && labelCount && (
+          <View style={styles.labelsContainer}>
+            {Array.from({ length: labelCount }, (_, i) => {
+              const idx = Math.round(
+                ((i + 1) * points.length) / (labelCount + 1) - 1
+              );
+              const text = points[idx].key;
+
+              return (
+                <Text key={idx} style={styles.labelText}>
+                  {text}
+                </Text>
+              );
+            })}
+          </View>
+        )}
       </View>
     </GestureDetector>
   );
@@ -194,5 +211,17 @@ const styles = StyleSheet.create({
   },
   tooltipKeyText: {
     fontWeight: 500,
+  },
+  labelsContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  labelText: {
+    fontSize: 12,
+    textAlign: "center",
+    color: getColor("mutedForeground"),
   },
 });
