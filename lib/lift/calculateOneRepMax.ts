@@ -3,7 +3,7 @@ interface Params {
   reps: number;
 }
 
-export default function calculate1RM({ weight, reps }: Params): number {
+export default function calculateOneRepMax({ weight, reps }: Params): number {
   reps = Math.min(reps, 20);
 
   const epley = weight * (1 + reps / 30);
