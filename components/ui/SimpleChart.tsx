@@ -17,14 +17,20 @@ interface Props {
   data: Record<string, number>;
   width: number;
   height: number;
+  tooltipHeight?: number;
+  tooltipWidth?: number;
 }
 
 const bottomPadding = 0.1;
-const tooltipHeight = 32;
-const tooltipWidth = 92;
 const tooltipMargin = 12;
 
-export default function SimpleChart({ data, width, height }: Props) {
+export default function SimpleChart({
+  data,
+  width,
+  height,
+  tooltipHeight = 32,
+  tooltipWidth = 92,
+}: Props) {
   const chartTop = tooltipHeight + tooltipMargin;
 
   const [pressX, setPressX] = useState<number | null>(null);
@@ -71,12 +77,11 @@ export default function SimpleChart({ data, width, height }: Props) {
   const indicatorPath = useMemo(() => {
     const p = Skia.Path.Make();
     if (pressX != null) {
-      // start indicator at bottom of tooltip box
       p.moveTo(pressX, tooltipHeight);
       p.lineTo(pressX, height);
     }
     return p;
-  }, [pressX, height]);
+  }, [pressX, height, tooltipHeight]);
 
   const longPress = Gesture.LongPress()
     .minDuration(200)
@@ -153,7 +158,12 @@ export default function SimpleChart({ data, width, height }: Props) {
           )}
         </Canvas>
         {pressX != null && selectedIndex >= 0 && (
-          <View style={[{ left: tooltipLeft }, styles.tooltipContainer]}>
+          <View
+            style={[
+              { left: tooltipLeft, width: tooltipWidth, height: tooltipHeight },
+              styles.tooltipContainer,
+            ]}
+          >
             <Text style={styles.tooltipText}>
               <Text style={styles.tooltipKeyText}>
                 {points[selectedIndex].key}
@@ -172,8 +182,6 @@ const styles = StyleSheet.create({
   tooltipContainer: {
     position: "absolute",
     top: 0,
-    width: tooltipWidth,
-    height: tooltipHeight,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
