@@ -1,11 +1,13 @@
-import ExerciseDetailsActivity from "@/components/exercises/details/ExerciseDetailsActivity";
+import { FlatList, StyleSheet } from "react-native";
+
+import ActivityLogItem from "@/components/activity/ActivityLogItem";
 import ExerciseDetailsHeader from "@/components/exercises/details/ExerciseDetailsHeader";
 import ExerciseDetailsScore from "@/components/exercises/details/ExerciseDetailsScore";
 import SafeArea from "@/components/ui/SafeArea";
+import Text from "@/components/ui/Text";
 import { useAppContext } from "@/context/AppContext";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -15,21 +17,36 @@ export default function ExerciseDetailScreen() {
 
   if (!exercise) return null;
 
-  // const logs = appData.liftLogs
-  //   .filter((log) => log.exercise.id === id)
-  //   .sort((a, b) => b.date.getTime() - a.date.getTime());
-
-  // const mostRecent = logs[0];
+  const logs = appData.liftLogs
+    .filter((log) => log.exercise.id === exercise.id)
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+    .map((log) => ({ ...log, type: "lift" as const }));
 
   return (
-    <SafeArea style={{ paddingHorizontal: 0 }}>
+    <SafeArea style={{ flex: 1, paddingHorizontal: 0 }}>
       <ExerciseDetailsHeader exercise={exercise} />
-      <ScrollView contentContainerStyle={{ gap: 32 }}>
-        <ExerciseDetailsScore exercise={exercise} />
-        <ExerciseDetailsActivity exercise={exercise} />
-      </ScrollView>
+
+      <FlatList
+        data={logs}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={() => (
+          <>
+            <ExerciseDetailsScore exercise={exercise} />
+            <Text style={styles.activityTitle}>Activity</Text>
+          </>
+        )}
+        renderItem={({ item }) => <ActivityLogItem log={item} showDate />}
+        contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 0 }}
+      />
     </SafeArea>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  activityTitle: {
+    fontSize: 24,
+    fontWeight: "600",
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+  },
+});

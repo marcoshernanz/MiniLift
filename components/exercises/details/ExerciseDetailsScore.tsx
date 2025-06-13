@@ -45,7 +45,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
   const change = 0.1;
 
   return (
-    <View style={{ paddingHorizontal: 16 }}>
+    <View style={styles.container}>
       <Text style={styles.title}>Score</Text>
       <Text style={styles.description}>
         Last 30 days{" "}
@@ -70,6 +70,10 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+  },
   title: {
     fontSize: 24,
     fontWeight: 600,
