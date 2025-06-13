@@ -24,6 +24,7 @@ interface Props {
 
 const bottomPadding = 0.1;
 const tooltipMargin = 12;
+const labelHeight = 24;
 
 export default function SimpleChart({
   data,
@@ -34,6 +35,7 @@ export default function SimpleChart({
   labelCount,
 }: Props) {
   const chartTop = tooltipHeight + tooltipMargin;
+  const canvasHeight = height - (labelCount ? labelHeight : 0);
   const [pressX, setPressX] = useState<number | null>(null);
 
   const { linePath, areaPath, points } = useMemo(() => {
@@ -41,7 +43,8 @@ export default function SimpleChart({
     const areaPath = Skia.Path.Make();
     const entries = Object.entries(data) as [string, number][];
 
-    const chartHeight = height - chartTop - height * bottomPadding;
+    const chartAreaHeight = height - chartTop - labelHeight;
+    const chartHeight = chartAreaHeight * (1 - bottomPadding);
     const max = Math.max(...entries.map(([, v]) => v));
     const min = Math.min(...entries.map(([, v]) => v));
     const points = entries.map(([key, value], index) => {
@@ -70,7 +73,9 @@ export default function SimpleChart({
       areaPath.lineTo(0, height);
       areaPath.close();
     }
-    return { linePath, areaPath, points };
+
+    const minY = Math.min(...points.map((p) => p.y));
+    return { linePath, areaPath, points, minY };
   }, [data, width, height, chartTop]);
 
   const xs = useMemo(() => points.map((p) => p.x), [points]);
@@ -125,66 +130,81 @@ export default function SimpleChart({
 
   return (
     <GestureDetector gesture={gesture}>
-      <View style={{ width, height, position: "relative" }}>
-        <Canvas style={{ flex: 1 }}>
-          <Path path={areaPath} style="fill">
-            <LinearGradient
-              start={vec(0, 0)}
-              end={vec(0, height)}
-              colors={[gradientStart, gradientEnd]}
+      <View style={{ width, height, flexDirection: "column" }}>
+        <View
+          style={{
+            width,
+            height: height - (labelCount ? labelHeight : 0),
+            position: "relative",
+          }}
+        >
+          <Canvas style={{ flex: 1 }}>
+            <Path path={areaPath} style="fill">
+              <LinearGradient
+                start={vec(0, chartTop)}
+                end={vec(0, canvasHeight)}
+                colors={[gradientStart, gradientEnd]}
+              />
+            </Path>
+            <Path
+              path={linePath}
+              color={strokeColor}
+              style="stroke"
+              strokeWidth={2}
             />
-          </Path>
-          <Path
-            path={linePath}
-            color={strokeColor}
-            style="stroke"
-            strokeWidth={2}
-          />
+            {pressX != null && (
+              <>
+                <Path
+                  path={indicatorPath}
+                  color={getColor("primary")}
+                  style="stroke"
+                  strokeWidth={1}
+                />
+
+                <Circle
+                  cx={pressX}
+                  cy={points[selectedIndex].y}
+                  r={4}
+                  color={strokeColor}
+                />
+              </>
+            )}
+          </Canvas>
           {pressX != null && (
             <>
-              <Path
-                path={indicatorPath}
-                color={getColor("primary")}
-                style="stroke"
-                strokeWidth={1}
-              />
-
-              <Circle
-                cx={pressX}
-                cy={points[selectedIndex].y}
-                r={4}
-                color={strokeColor}
-              />
+              {pressX != null && selectedIndex >= 0 && (
+                <View
+                  style={[
+                    {
+                      left: tooltipLeft,
+                      width: tooltipWidth,
+                      height: tooltipHeight,
+                    },
+                    styles.tooltipContainer,
+                  ]}
+                >
+                  <Text style={styles.tooltipText}>
+                    <Text style={styles.tooltipKeyText}>
+                      {points[selectedIndex].key}
+                    </Text>
+                    <Text> &bull; </Text>
+                    <Text>{points[selectedIndex].value}</Text>
+                  </Text>
+                </View>
+              )}
             </>
           )}
-        </Canvas>
-        {pressX != null && selectedIndex >= 0 && (
-          <View
-            style={[
-              { left: tooltipLeft, width: tooltipWidth, height: tooltipHeight },
-              styles.tooltipContainer,
-            ]}
-          >
-            <Text style={styles.tooltipText}>
-              <Text style={styles.tooltipKeyText}>
-                {points[selectedIndex].key}
-              </Text>
-              <Text> &bull; </Text>
-              <Text>{points[selectedIndex].value}</Text>
-            </Text>
-          </View>
-        )}
+        </View>
+
         {points.length > 0 && labelCount && (
-          <View style={styles.labelsContainer}>
+          <View style={[styles.labelsContainer, { height: labelHeight }]}>
             {Array.from({ length: labelCount }, (_, i) => {
               const idx = Math.round(
                 ((i + 1) * points.length) / (labelCount + 1) - 1
               );
-              const text = points[idx].key;
-
               return (
                 <Text key={idx} style={styles.labelText}>
-                  {text}
+                  {points[idx].key}
                 </Text>
               );
             })}
@@ -213,8 +233,8 @@ const styles = StyleSheet.create({
     fontWeight: 500,
   },
   labelsContainer: {
-    position: "absolute",
-    bottom: 0,
+    alignItems: "center",
+    height: labelHeight,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
