@@ -23,7 +23,7 @@ export default function ExerciseDetailsActivity({ exercise }: Props) {
         data={logs}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 16 }}
-        renderItem={({ item }) => <ActivityLogItem log={item} />}
+        renderItem={({ item }) => <ActivityLogItem log={item} showDate />}
       />
     </View>
   );

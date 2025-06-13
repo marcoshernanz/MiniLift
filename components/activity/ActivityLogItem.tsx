@@ -9,9 +9,10 @@ import ActivityEditModal from "./ActivityEditModal";
 
 interface Props {
   log: LogType;
+  showDate?: boolean;
 }
 
-export default function ActivityLogItem({ log }: Props) {
+export default function ActivityLogItem({ log, showDate = false }: Props) {
   const [editModalVisible, setEditModalVisible] = useState(false);
 
   const Icon = log.type === "lift" ? DumbbellIcon : WeightIcon;
@@ -20,6 +21,9 @@ export default function ActivityLogItem({ log }: Props) {
     log.type === "lift"
       ? `${log.weight} kg x ${log.reps} reps`
       : `${log.bodyweight} kg`;
+  const date = showDate
+    ? format(log.date, "MMM dd")
+    : format(log.date, "HH:mm");
 
   return (
     <View style={styles.container}>
@@ -36,7 +40,7 @@ export default function ActivityLogItem({ log }: Props) {
           <Text style={styles.secondaryText}>{secondaryText}</Text>
         </View>
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>{format(log.date, "HH:mm")}</Text>
+          <Text style={styles.timeText}>{date}</Text>
         </View>
       </Pressable>
 
