@@ -1,6 +1,7 @@
 import { useAppContext } from "@/context/AppContext";
 import searchItems from "@/lib/searchItems";
-import { FlatList, StyleSheet } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+import { StyleSheet } from "react-native";
 import ExerciseListItem from "./ExerciseListItem";
 
 interface Props {
@@ -27,7 +28,8 @@ export default function ExercisesList({ search }: Props) {
   });
 
   return (
-    <FlatList
+    <FlashList
+      estimatedItemSize={60}
       data={sortedExercises}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ExerciseListItem item={item} />}

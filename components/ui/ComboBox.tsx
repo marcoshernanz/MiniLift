@@ -1,9 +1,9 @@
 import getColor from "@/lib/getColor";
 import searchItems from "@/lib/searchItems";
+import { FlashList } from "@shopify/flash-list";
 import { StarIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
-  FlatList,
   Pressable,
   StyleSheet,
   Text,
@@ -137,7 +137,7 @@ export default function ComboBox({
             dropdownHeight.value = e.nativeEvent.layout.height;
           }}
         >
-          <FlatList
+          <FlashList
             keyboardShouldPersistTaps="handled"
             data={sortedOptions}
             keyExtractor={(item, index) => `${item}-${index}`}

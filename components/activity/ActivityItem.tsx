@@ -1,7 +1,8 @@
 import getColor from "@/lib/getColor";
 import { ActivityEntry } from "@/lib/hooks/useActivity";
+import { FlashList } from "@shopify/flash-list";
 import { format } from "date-fns";
-import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Description from "../ui/Description";
 import Text from "../ui/Text";
 import ActivityLogItem from "./ActivityLogItem";
@@ -26,8 +27,9 @@ export default function ActivityItem({ item }: Props) {
       )}
 
       {logs.length > 0 && (
-        <FlatList
+        <FlashList
           data={logs}
+          estimatedItemSize={100}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 16 }}
           renderItem={({ item }) => <ActivityLogItem log={item} />}
