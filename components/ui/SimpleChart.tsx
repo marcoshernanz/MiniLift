@@ -89,8 +89,8 @@ export default function SimpleChart({
     return p;
   }, [pressX, height, tooltipHeight]);
 
-  const longPress = Gesture.LongPress()
-    .minDuration(200)
+  const gesture = Gesture.Pan()
+    .activateAfterLongPress(200)
     .onStart((e) => {
       const target = xs.reduce(
         (prev, curr) =>
@@ -99,24 +99,15 @@ export default function SimpleChart({
       );
       runOnJS(setPressX)(target);
     })
-    .onEnd(() => {
-      runOnJS(setPressX)(null);
-    });
-  const pan = Gesture.Pan()
     .onUpdate((e) => {
-      if (pressX !== null) {
-        const target = xs.reduce(
-          (prev, curr) =>
-            Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-          xs[0]
-        );
-        runOnJS(setPressX)(target);
-      }
+      const target = xs.reduce(
+        (prev, curr) =>
+          Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+        xs[0]
+      );
+      runOnJS(setPressX)(target);
     })
-    .onEnd(() => {
-      runOnJS(setPressX)(null);
-    });
-  const gesture = Gesture.Simultaneous(longPress, pan);
+    .onEnd(() => runOnJS(setPressX)(null));
 
   const strokeColor = getColor("primary");
   const gradientStart = getColor("primary", 0.5);
