@@ -23,7 +23,7 @@ export default function ExerciseDetailScreen() {
     .map((log) => ({ ...log, type: "lift" as const }));
 
   return (
-    <SafeArea style={{ flex: 1, paddingHorizontal: 0 }}>
+    <SafeArea style={{ paddingHorizontal: 0 }} edges={["top", "left", "right"]}>
       <ExerciseDetailsHeader exercise={exercise} />
 
       <FlatList
@@ -36,7 +36,7 @@ export default function ExerciseDetailScreen() {
           </>
         )}
         renderItem={({ item }) => <ActivityLogItem log={item} showDate />}
-        contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 0 }}
+        contentContainerStyle={{ paddingHorizontal: 0, paddingBottom: 24 }}
       />
     </SafeArea>
   );
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 24,
     fontWeight: "600",
-    paddingBottom: 16,
+    paddingBottom: 12,
     paddingHorizontal: 16,
   },
 });
