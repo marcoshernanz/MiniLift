@@ -1,10 +1,11 @@
+import ExerciseDetailsActivity from "@/components/exercises/details/ExerciseDetailsActivity";
 import ExerciseDetailsHeader from "@/components/exercises/details/ExerciseDetailsHeader";
 import ExerciseDetailsScore from "@/components/exercises/details/ExerciseDetailsScore";
 import SafeArea from "@/components/ui/SafeArea";
 import { useAppContext } from "@/context/AppContext";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -23,7 +24,10 @@ export default function ExerciseDetailScreen() {
   return (
     <SafeArea>
       <ExerciseDetailsHeader exercise={exercise} />
-      <ExerciseDetailsScore exercise={exercise} />
+      <ScrollView contentContainerStyle={{ gap: 32 }}>
+        <ExerciseDetailsScore exercise={exercise} />
+        <ExerciseDetailsActivity exercise={exercise} />
+      </ScrollView>
     </SafeArea>
   );
 }
