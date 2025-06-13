@@ -45,7 +45,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
   const change = 0.1;
 
   return (
-    <View>
+    <View style={{ paddingHorizontal: 16 }}>
       <Text style={styles.title}>Score</Text>
       <Text style={styles.description}>
         Last 30 days{" "}

@@ -14,7 +14,7 @@ export default function ExerciseDetailsActivity({ exercise }: Props) {
   const logs = appData.liftLogs
     .filter((log) => log.exercise.id === exercise.id)
     .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .map((log) => ({ type: "lift", ...log }));
+    .map((log) => ({ ...log, type: "lift" as const }));
 
   return (
     <View style={{ position: "relative" }}>
@@ -22,7 +22,7 @@ export default function ExerciseDetailsActivity({ exercise }: Props) {
       <FlatList
         data={logs}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 16, marginHorizontal: -16 }}
+        contentContainerStyle={{ paddingBottom: 16 }}
         renderItem={({ item }) => <ActivityLogItem log={item} />}
       />
     </View>
@@ -34,5 +34,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 600,
     paddingBottom: 16,
+    paddingHorizontal: 16,
   },
 });

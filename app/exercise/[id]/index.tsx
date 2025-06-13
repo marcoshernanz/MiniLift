@@ -22,7 +22,7 @@ export default function ExerciseDetailScreen() {
   // const mostRecent = logs[0];
 
   return (
-    <SafeArea>
+    <SafeArea style={{ paddingHorizontal: 0 }}>
       <ExerciseDetailsHeader exercise={exercise} />
       <ScrollView contentContainerStyle={{ gap: 32 }}>
         <ExerciseDetailsScore exercise={exercise} />
