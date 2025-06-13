@@ -3,8 +3,8 @@ import { AppData } from "@/zod/schemas/AppDataSchema";
 import { eachDayOfInterval, formatISO } from "date-fns";
 import { useMemo } from "react";
 
-type LiftEntry = AppData["liftLogs"][number] & { kind: "lift" };
-type WeightEntry = AppData["bodyweightLogs"][number] & { kind: "bodyweight" };
+type LiftEntry = AppData["liftLogs"][number] & { type: "lift" };
+type WeightEntry = AppData["bodyweightLogs"][number] & { type: "bodyweight" };
 type CombinedEntry = LiftEntry | WeightEntry;
 
 export type ActivityEntry = {
@@ -19,10 +19,10 @@ export function useActivity(): ActivityEntry[] {
 
   return useMemo(() => {
     const allLogs: CombinedEntry[] = [
-      ...appData.liftLogs.map((log) => ({ ...log, kind: "lift" as const })),
+      ...appData.liftLogs.map((log) => ({ ...log, type: "lift" as const })),
       ...appData.bodyweightLogs.map((log) => ({
         ...log,
-        kind: "bodyweight" as const,
+        type: "bodyweight" as const,
       })),
     ];
 

@@ -62,11 +62,11 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
     setAppData((prev) => ({
       ...prev,
       liftLogs:
-        log.kind === "lift"
+        log.type === "lift"
           ? prev.liftLogs.filter((l) => l.id !== log.id)
           : prev.liftLogs,
       bodyweightLogs:
-        log.kind === "bodyweight"
+        log.type === "bodyweight"
           ? prev.bodyweightLogs.filter((l) => l.id !== log.id)
           : prev.bodyweightLogs,
     }));
@@ -74,7 +74,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
 
     Toast.show({
       text: `${
-        log.kind === "lift" ? log.exercise.name : "Bodyweight"
+        log.type === "lift" ? log.exercise.name : "Bodyweight"
       } has been deleted.`,
       variant: "success",
     });
@@ -90,7 +90,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
     >
       <SafeArea style={styles.safeArea}>
         <View style={styles.container}>
-          {log.kind === "lift" && (
+          {log.type === "lift" && (
             <LogLift
               startingValues={{
                 exercise: log.exercise.name,
@@ -103,7 +103,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
               description={format(log.date, "MMMM dd, yyyy")}
             />
           )}
-          {log.kind === "bodyweight" && (
+          {log.type === "bodyweight" && (
             <LogBodyweight
               startingValues={{ bodyweight: log.bodyweight.toString() }}
               handleLog={handleLogBodyweight}

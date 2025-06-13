@@ -14,10 +14,10 @@ interface Props {
 export default function ActivityLogItem({ log }: Props) {
   const [editModalVisible, setEditModalVisible] = useState(false);
 
-  const Icon = log.kind === "lift" ? DumbbellIcon : WeightIcon;
-  const primaryText = log.kind === "lift" ? log.exercise.name : "Bodyweight";
+  const Icon = log.type === "lift" ? DumbbellIcon : WeightIcon;
+  const primaryText = log.type === "lift" ? log.exercise.name : "Bodyweight";
   const secondaryText =
-    log.kind === "lift"
+    log.type === "lift"
       ? `${log.weight} kg x ${log.reps} reps`
       : `${log.bodyweight} kg`;
 

@@ -14,7 +14,7 @@ export default function ExerciseDetailsActivity({ exercise }: Props) {
   const logs = appData.liftLogs
     .filter((log) => log.exercise.id === exercise.id)
     .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .map((log) => ({ kind: "lift", ...log }));
+    .map((log) => ({ type: "lift", ...log }));
 
   return (
     <View style={{ position: "relative" }}>
