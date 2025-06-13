@@ -1,2 +1,4 @@
 # TODO
-- If exercise is too long, crop the name
+- Handle exercises with long name
+- FlashList
+- Custom way of calculating 1RM with ai
