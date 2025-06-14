@@ -4,7 +4,7 @@ import Text from "@/components/ui/Text";
 import getColor from "@/lib/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { useRouter } from "expo-router";
-import { Maximize } from "lucide-react-native";
+import { MaximizeIcon } from "lucide-react-native";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 const dummyData = {
@@ -75,7 +75,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         containerStyle={styles.maximizeButtonContainer}
         onPress={() => router.push(`/exercise/${exercise.id}/chart`)}
       >
-        <Maximize color={getColor("foreground")} />
+        <MaximizeIcon color={getColor("foreground")} />
       </Button>
     </View>
   );
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
   maximizeButtonContainer: {
     position: "absolute",
     right: 16,
-    height: 48,
-    width: 48,
+    height: 46,
+    width: 46,
     borderRadius: 999,
   },
   maximizeButton: {
