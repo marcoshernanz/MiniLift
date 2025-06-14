@@ -1,7 +1,7 @@
 import StatisticsTimeFrameSelector from "@/components/statistics/StatisticsTimeFrameSelector";
 import StatisticsTypeSelector from "@/components/statistics/StatisticsTypeSelector";
+import Chart from "@/components/ui/Chart";
 import SafeArea from "@/components/ui/SafeArea";
-import Chart from "@/components/ui/SimpleChart";
 import Title from "@/components/ui/Title";
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -68,6 +68,7 @@ export default function StatisticsScreen() {
             width={width}
             height={chartHeight}
             labelCount={6}
+            numPointsVisible={7}
           />
         )}
       </View>
