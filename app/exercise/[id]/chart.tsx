@@ -1,9 +1,9 @@
 import Button from "@/components/ui/Button";
 import SafeArea from "@/components/ui/SafeArea";
 import Chart from "@/components/ui/SimpleChart";
-import Text from "@/components/ui/Text";
+import Title from "@/components/ui/Title";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 const dummyData = {
@@ -39,19 +39,33 @@ const dummyData = {
   "Jan 30": 115,
 };
 
+const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
+
 export default function FullscreenChartScreen() {
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
+
   const router = useRouter();
   const { width, height } = Dimensions.get("window");
 
   return (
     <SafeArea style={styles.container}>
-      <View style={styles.header}>
-        <Button variant="ghost" onPress={() => router.back()}>
-          Close
-        </Button>
-        <Text style={styles.title}>Last 30 Days</Text>
-        <View style={{ width: 60 }} />
+      <View style={styles.headerContainer}>
+        <Title style={styles.title}>Statistics</Title>
+        <View style={styles.timeFramesContainer}>
+          {timeFrames.map((option) => (
+            <Button
+              key={option}
+              variant={selectedTimeFrame === option ? "primary" : "secondary"}
+              onPress={() => setSelectedTimeFrame(option)}
+              containerStyle={styles.timeFrameButtonContainer}
+              pressableStyle={styles.timeFrameButton}
+            >
+              {option}
+            </Button>
+          ))}
+        </View>
       </View>
+
       <Chart
         data={dummyData}
         width={width}
@@ -64,18 +78,24 @@ export default function FullscreenChartScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    paddingHorizontal: 0,
   },
-  header: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
+  headerContainer: {
+    paddingHorizontal: 16,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "600",
+    marginBottom: 12,
+  },
+  timeFramesContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 6,
+  },
+  timeFrameButtonContainer: {
+    flex: 1,
+  },
+  timeFrameButton: {
+    paddingVertical: 4,
+    flex: 1,
   },
 });
