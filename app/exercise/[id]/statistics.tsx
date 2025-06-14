@@ -1,11 +1,10 @@
 import StatisticsTimeFrameSelector from "@/components/statistics/StatisticsTimeFrameSelector";
+import StatisticsTypeSelector from "@/components/statistics/StatisticsTypeSelector";
 import SafeArea from "@/components/ui/SafeArea";
 import Chart from "@/components/ui/SimpleChart";
 import Title from "@/components/ui/Title";
-import getColor from "@/lib/getColor";
-import { DumbbellIcon } from "lucide-react-native";
 import React, { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 
 const dummyData = {
   "Jan 01": 90,
@@ -44,6 +43,7 @@ export const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
 
 export default function StatisticsScreen() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
+  const [selectedType, setSelectedType] = useState("score");
 
   const { width, height } = Dimensions.get("window");
 
@@ -60,36 +60,14 @@ export default function StatisticsScreen() {
       <Chart
         data={dummyData}
         width={width}
-        height={height - 100}
+        height={height - 400}
         labelCount={6}
       />
 
-      <View style={styles.container}>
-        <Pressable
-          style={styles.pressable}
-          android_ripple={{ color: getColor("muted"), borderless: true }}
-        >
-          <View style={styles.iconWrapper}>
-            <DumbbellIcon
-              size={24}
-              strokeWidth={1.75}
-              color={getColor("mutedForeground")}
-            />
-          </View>
-        </Pressable>
-        <Pressable
-          style={styles.pressable}
-          android_ripple={{ color: getColor("muted"), borderless: true }}
-        >
-          <View style={styles.iconWrapper}>
-            <WeightIcon
-              size={24}
-              strokeWidth={1.75}
-              color={mutedForegroundColor}
-            />
-          </View>
-        </Pressable>
-      </View>
+      <StatisticsTypeSelector
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+      />
     </SafeArea>
   );
 }
@@ -97,6 +75,7 @@ export default function StatisticsScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
+    justifyContent: "space-between",
   },
   headerContainer: {
     paddingHorizontal: 16,
