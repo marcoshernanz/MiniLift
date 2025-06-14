@@ -83,6 +83,7 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
   return (
     <Modal
       statusBarTranslucent={true}
+      navigationBarTranslucent={true}
       transparent={true}
       visible={visible}
       onRequestClose={onClose}

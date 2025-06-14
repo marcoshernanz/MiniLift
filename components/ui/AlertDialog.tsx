@@ -26,6 +26,7 @@ export default function AlertDialog({
   return (
     <Modal
       statusBarTranslucent={true}
+      navigationBarTranslucent={true}
       transparent={true}
       visible={visible}
       animationType="fade"

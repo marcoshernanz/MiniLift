@@ -27,6 +27,7 @@ export default function ActivityAdd({ date }: Props) {
       {modalVisible && (
         <Modal
           statusBarTranslucent={true}
+          navigationBarTranslucent={true}
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}

@@ -22,6 +22,7 @@ export default function TabsAddButton() {
 
       <Modal
         statusBarTranslucent={true}
+        navigationBarTranslucent={true}
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}

@@ -1,10 +1,12 @@
 import Button from "@/components/ui/Button";
 import Chart from "@/components/ui/SimpleChart";
+import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
 import getColor from "@/lib/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { useRouter } from "expo-router";
-import { MaximizeIcon } from "lucide-react-native";
+import { CircleHelpIcon, MaximizeIcon } from "lucide-react-native";
+import { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 const dummyData = {
@@ -45,12 +47,26 @@ interface Props {
 }
 
 export default function ExerciseDetailsScore({ exercise }: Props) {
+  const [helpVisible, setHelpVisible] = useState(false);
+
   const change = 0.1;
   const router = useRouter();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Score</Text>
+
+      <Button onPress={() => setHelpVisible(true)}>
+        <CircleHelpIcon />
+      </Button>
+
+      <SimpleDialog
+        title="Score"
+        content="Your score shows how strong you are for your body weight. It’s your max lift divided by your body weight, shown as a percent."
+        visible={helpVisible}
+        onClose={() => setHelpVisible(false)}
+      />
+
       <Text style={styles.description}>
         Last 30 days{" "}
         <Text
@@ -63,12 +79,14 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
           {change * 100}%
         </Text>
       </Text>
+
       <Chart
         data={dummyData}
         width={Dimensions.get("window").width - 32}
         height={250}
         labelCount={4}
       />
+
       <Button
         variant="ghost"
         pressableStyle={styles.maximizeButton}

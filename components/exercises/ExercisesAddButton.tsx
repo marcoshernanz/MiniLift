@@ -22,6 +22,7 @@ export default function ExercisesAddButton() {
       {logScreenVisible && (
         <Modal
           statusBarTranslucent={true}
+          navigationBarTranslucent={true}
           transparent={true}
           visible={logScreenVisible}
           onRequestClose={() => setLogScreenVisible(false)}
