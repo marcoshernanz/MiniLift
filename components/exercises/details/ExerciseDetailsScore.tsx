@@ -103,7 +103,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         variant="ghost"
         pressableStyle={styles.maximizeButton}
         containerStyle={styles.maximizeButtonContainer}
-        onPress={() => router.push(`/exercise/${exercise.id}/chart`)}
+        onPress={() => router.push(`/exercise/${exercise.id}/statistics`)}
       >
         <MaximizeIcon color={getColor("foreground")} />
       </Button>
