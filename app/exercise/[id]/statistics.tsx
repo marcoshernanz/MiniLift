@@ -44,8 +44,9 @@ export const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
 export default function StatisticsScreen() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
   const [selectedType, setSelectedType] = useState("score");
+  const [chartHeight, setChartHeight] = useState<number>(0);
 
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
 
   return (
     <SafeArea style={styles.container}>
@@ -57,12 +58,19 @@ export default function StatisticsScreen() {
         />
       </View>
 
-      <Chart
-        data={dummyData}
-        width={width}
-        height={height - 400}
-        labelCount={6}
-      />
+      <View
+        style={{ flex: 1 }}
+        onLayout={(e) => setChartHeight(e.nativeEvent.layout.height)}
+      >
+        {chartHeight > 0 && (
+          <Chart
+            data={dummyData}
+            width={width}
+            height={chartHeight}
+            labelCount={6}
+          />
+        )}
+      </View>
 
       <StatisticsTypeSelector
         selectedType={selectedType}
