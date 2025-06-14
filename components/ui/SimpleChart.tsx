@@ -1,3 +1,4 @@
+import { ChartPoint, computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
 import {
   Canvas,
@@ -38,47 +39,20 @@ export default function SimpleChart({
   const canvasHeight = height - (labelCount ? labelHeight : 0);
   const [pressX, setPressX] = useState<number | null>(null);
 
-  const { linePath, areaPath, points } = useMemo(() => {
-    const linePath = Skia.Path.Make();
-    const areaPath = Skia.Path.Make();
-    const entries = Object.entries(data) as [string, number][];
-
-    const chartAreaHeight = height - chartTop - labelHeight;
-    const chartHeight = chartAreaHeight * (1 - bottomPadding);
-    const max = Math.max(...entries.map(([, v]) => v));
-    const min = Math.min(...entries.map(([, v]) => v));
-    const points = entries.map(([key, value], index) => {
-      const x = (index / (entries.length - 1 || 1)) * width;
-      const y = chartTop + ((max - value) / (max - min || 1)) * chartHeight;
-      return { x, y, key, value };
-    });
-
-    if (points.length > 0) {
-      linePath.moveTo(points[0].x, points[0].y);
-      areaPath.moveTo(points[0].x, points[0].y);
-
-      for (let i = 1; i < points.length; i++) {
-        const prev = points[i - 1];
-        const curr = points[i];
-        const cx = (prev.x + curr.x) / 2;
-        linePath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
-        areaPath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
-      }
-
-      const last = points[points.length - 1];
-      linePath.lineTo(last.x, last.y);
-      areaPath.lineTo(last.x, last.y);
-
-      areaPath.lineTo(width, height);
-      areaPath.lineTo(0, height);
-      areaPath.close();
-    }
-
-    const minY = Math.min(...points.map((p) => p.y));
-    return { linePath, areaPath, points, minY };
-  }, [data, width, height, chartTop]);
-
-  const xs = useMemo(() => points.map((p) => p.x), [points]);
+  // compute paths and points using shared utility
+  const { linePath, areaPath, points } = useMemo(
+    () =>
+      computeChartPaths({
+        data,
+        width,
+        height,
+        chartTop,
+        bottomPadding,
+        labelHeight,
+      }),
+    [data, width, height, chartTop]
+  );
+  const xs = useMemo(() => points.map((p: ChartPoint) => p.x), [points]);
 
   const indicatorPath = useMemo(() => {
     const p = Skia.Path.Make();
@@ -93,7 +67,7 @@ export default function SimpleChart({
     .activateAfterLongPress(200)
     .onStart((e) => {
       const target = xs.reduce(
-        (prev, curr) =>
+        (prev: number, curr: number) =>
           Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
         xs[0]
       );
@@ -101,7 +75,7 @@ export default function SimpleChart({
     })
     .onUpdate((e) => {
       const target = xs.reduce(
-        (prev, curr) =>
+        (prev: number, curr: number) =>
           Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
         xs[0]
       );
@@ -112,7 +86,8 @@ export default function SimpleChart({
   const strokeColor = getColor("primary");
   const gradientStart = getColor("primary", 0.5);
   const gradientEnd = getColor("primary", 0);
-  const selectedIndex = pressX != null ? xs.findIndex((x) => x === pressX) : -1;
+  const selectedIndex =
+    pressX != null ? xs.findIndex((x: number) => x === pressX) : -1;
 
   const tooltipLeft =
     pressX != null
