@@ -1,0 +1,44 @@
+import { timeFrames } from "@/app/exercise/[id]/statistics";
+import { StyleSheet, View } from "react-native";
+import Button from "../ui/Button";
+
+interface Props {
+  selectedTimeFrame: string;
+  setSelectedTimeFrame: (timeFrame: string) => void;
+}
+
+export default function StatisticsTimeFrameSelector({
+  selectedTimeFrame,
+  setSelectedTimeFrame,
+}: Props) {
+  return (
+    <View style={styles.container}>
+      {timeFrames.map((option) => (
+        <Button
+          key={option}
+          variant={selectedTimeFrame === option ? "primary" : "secondary"}
+          onPress={() => setSelectedTimeFrame(option)}
+          containerStyle={styles.buttonContainer}
+          pressableStyle={styles.button}
+        >
+          {option}
+        </Button>
+      ))}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 6,
+  },
+  buttonContainer: {
+    flex: 1,
+  },
+  button: {
+    paddingVertical: 4,
+    flex: 1,
+  },
+});

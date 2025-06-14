@@ -1,10 +1,11 @@
-import Button from "@/components/ui/Button";
+import StatisticsTimeFrameSelector from "@/components/statistics/StatisticsTimeFrameSelector";
 import SafeArea from "@/components/ui/SafeArea";
 import Chart from "@/components/ui/SimpleChart";
 import Title from "@/components/ui/Title";
-import { useRouter } from "expo-router";
+import getColor from "@/lib/getColor";
+import { DumbbellIcon } from "lucide-react-native";
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 
 const dummyData = {
   "Jan 01": 90,
@@ -39,7 +40,7 @@ const dummyData = {
   "Jan 30": 115,
 };
 
-const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
+export const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
 
 export default function StatisticsScreen() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
@@ -50,19 +51,10 @@ export default function StatisticsScreen() {
     <SafeArea style={styles.container}>
       <View style={styles.headerContainer}>
         <Title style={styles.title}>Statistics</Title>
-        <View style={styles.timeFramesContainer}>
-          {timeFrames.map((option) => (
-            <Button
-              key={option}
-              variant={selectedTimeFrame === option ? "primary" : "secondary"}
-              onPress={() => setSelectedTimeFrame(option)}
-              containerStyle={styles.timeFrameButtonContainer}
-              pressableStyle={styles.timeFrameButton}
-            >
-              {option}
-            </Button>
-          ))}
-        </View>
+        <StatisticsTimeFrameSelector
+          selectedTimeFrame={selectedTimeFrame}
+          setSelectedTimeFrame={setSelectedTimeFrame}
+        />
       </View>
 
       <Chart
@@ -71,6 +63,33 @@ export default function StatisticsScreen() {
         height={height - 100}
         labelCount={6}
       />
+
+      <View style={styles.container}>
+        <Pressable
+          style={styles.pressable}
+          android_ripple={{ color: getColor("muted"), borderless: true }}
+        >
+          <View style={styles.iconWrapper}>
+            <DumbbellIcon
+              size={24}
+              strokeWidth={1.75}
+              color={getColor("mutedForeground")}
+            />
+          </View>
+        </Pressable>
+        <Pressable
+          style={styles.pressable}
+          android_ripple={{ color: getColor("muted"), borderless: true }}
+        >
+          <View style={styles.iconWrapper}>
+            <WeightIcon
+              size={24}
+              strokeWidth={1.75}
+              color={mutedForegroundColor}
+            />
+          </View>
+        </Pressable>
+      </View>
     </SafeArea>
   );
 }
@@ -84,17 +103,5 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 12,
-  },
-  timeFramesContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 6,
-  },
-  timeFrameButtonContainer: {
-    flex: 1,
-  },
-  timeFrameButton: {
-    paddingVertical: 4,
-    flex: 1,
   },
 });
