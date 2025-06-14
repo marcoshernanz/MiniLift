@@ -39,6 +39,5 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 4,
-    flex: 1,
   },
 });
