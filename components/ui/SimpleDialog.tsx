@@ -21,6 +21,7 @@ export default function SimpleDialog({
   return (
     <Modal
       transparent={true}
+      statusBarTranslucent={true}
       visible={visible}
       animationType="fade"
       onRequestClose={onClose}

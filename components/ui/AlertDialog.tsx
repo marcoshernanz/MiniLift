@@ -25,6 +25,7 @@ export default function AlertDialog({
 }: Props) {
   return (
     <Modal
+      statusBarTranslucent={true}
       transparent={true}
       visible={visible}
       animationType="fade"
