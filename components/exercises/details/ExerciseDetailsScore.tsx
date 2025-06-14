@@ -1,7 +1,10 @@
+import Button from "@/components/ui/Button";
 import Chart from "@/components/ui/SimpleChart";
 import Text from "@/components/ui/Text";
 import getColor from "@/lib/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
+import { useRouter } from "expo-router";
+import { Maximize } from "lucide-react-native";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 const dummyData = {
@@ -43,6 +46,7 @@ interface Props {
 
 export default function ExerciseDetailsScore({ exercise }: Props) {
   const change = 0.1;
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -65,6 +69,14 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         height={250}
         labelCount={4}
       />
+      <Button
+        variant="ghost"
+        pressableStyle={styles.maximizeButton}
+        containerStyle={styles.maximizeButtonContainer}
+        onPress={() => router.push(`/exercise/${exercise.id}/chart`)}
+      >
+        <Maximize color={getColor("foreground")} />
+      </Button>
     </View>
   );
 }
@@ -83,5 +95,15 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     color: getColor("mutedForeground"),
     paddingBottom: 16,
+  },
+  maximizeButtonContainer: {
+    position: "absolute",
+    right: 16,
+    height: 48,
+    width: 48,
+    borderRadius: 999,
+  },
+  maximizeButton: {
+    padding: 12,
   },
 });
