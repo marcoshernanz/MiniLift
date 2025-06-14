@@ -4,7 +4,7 @@ import getColor from "@/lib/getColor";
 import React from "react";
 import { Dimensions, Modal, Pressable, StyleSheet, View } from "react-native";
 
-interface AlertDialogProps {
+interface Props {
   visible: boolean;
   buttonVariant?: "primary" | "destructive";
   title: string;
@@ -22,7 +22,7 @@ export default function AlertDialog({
   confirmText = "OK",
   onCancel,
   onConfirm,
-}: AlertDialogProps) {
+}: Props) {
   return (
     <Modal
       transparent={true}
