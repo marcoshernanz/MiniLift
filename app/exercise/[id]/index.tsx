@@ -1,5 +1,4 @@
-import { FlashList } from "@shopify/flash-list";
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 
 import ActivityLogItem from "@/components/activity/ActivityLogItem";
 import ExerciseDetailsHeader from "@/components/exercises/details/ExerciseDetailsHeader";
@@ -27,10 +26,9 @@ export default function ExerciseDetailScreen() {
     <SafeArea style={{ paddingHorizontal: 0 }} edges={["top", "left", "right"]}>
       <ExerciseDetailsHeader exercise={exercise} />
 
-      <FlashList
+      <FlatList
         data={logs}
         keyExtractor={(item) => item.id}
-        estimatedItemSize={100}
         ListHeaderComponent={() => (
           <>
             <ExerciseDetailsScore exercise={exercise} />
