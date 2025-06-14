@@ -54,11 +54,23 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Score</Text>
-
-      <Button onPress={() => setHelpVisible(true)}>
-        <CircleHelpIcon />
-      </Button>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Score</Text>
+        <Button
+          variant="ghost"
+          containerStyle={{
+            marginTop: 2.5,
+            marginLeft: 2,
+            height: 32,
+            width: 32,
+            borderRadius: 999,
+          }}
+          pressableStyle={{ padding: 8 }}
+          onPress={() => setHelpVisible(true)}
+        >
+          <CircleHelpIcon color={getColor("mutedForeground")} />
+        </Button>
+      </View>
 
       <SimpleDialog
         title="Score"
@@ -103,6 +115,11 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingBottom: 32,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   title: {
     fontSize: 24,
