@@ -41,10 +41,9 @@ const dummyData = {
 
 const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
 
-export default function FullscreenChartScreen() {
+export default function StatisticsScreen() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
 
-  const router = useRouter();
   const { width, height } = Dimensions.get("window");
 
   return (
