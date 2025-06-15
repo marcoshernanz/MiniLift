@@ -187,7 +187,7 @@ export default function Chart({
               marginTop: chartTop,
             }}
           >
-            <Path path={areaPath} style="fill">
+            <Path path={areaPath} style="fill" dither>
               <LinearGradient
                 start={vec(0, chartTop)}
                 end={vec(0, chartHeight - chartTop)}
