@@ -39,8 +39,6 @@ const dummyData = {
   "Jan 30": 115,
 };
 
-export const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
-
 export default function StatisticsScreen() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
   const [selectedType, setSelectedType] = useState("score");
