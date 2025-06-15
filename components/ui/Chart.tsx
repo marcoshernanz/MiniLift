@@ -45,7 +45,7 @@ export default function Chart({
   const chartTop = tooltipHeight + tooltipMargin;
   const widthPerPoint = width / (numPointsVisible - 1);
   const dataLength = Object.keys(data).length;
-  const chartWidth = width * (dataLength / numPointsVisible);
+  const chartWidth = width * ((dataLength - 1) / (numPointsVisible - 1));
 
   const { linePath, areaPath, points } = useMemo(
     () =>
@@ -82,8 +82,10 @@ export default function Chart({
       showTooltip.value = false;
     });
 
-  const startingPanX = useSharedValue(chartWidth);
-  const panX = useSharedValue(chartWidth);
+  const minPanX = -(chartWidth - (numPointsVisible - 1) * widthPerPoint);
+
+  const startingPanX = useSharedValue(minPanX);
+  const panX = useSharedValue(minPanX);
 
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
@@ -101,7 +103,7 @@ export default function Chart({
       if (currentValue !== previousValue) {
         const translate =
           Math.round(panX.value / widthPerPoint) * widthPerPoint;
-        const fixedTranslate = Math.min(0, Math.max(-chartWidth, translate));
+        const fixedTranslate = Math.min(0, Math.max(minPanX, translate));
 
         panX.value = withTiming(fixedTranslate);
         startingPanX.value = withTiming(fixedTranslate);
