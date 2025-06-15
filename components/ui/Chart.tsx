@@ -190,7 +190,7 @@ export default function Chart({
             <Path path={areaPath} style="fill">
               <LinearGradient
                 start={vec(0, chartTop)}
-                end={vec(0, chartHeight)}
+                end={vec(0, chartHeight - chartTop)}
                 colors={[getColor("primary", 0.5), getColor("primary", 0)]}
               />
             </Path>
