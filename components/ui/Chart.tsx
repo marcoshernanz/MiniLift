@@ -7,9 +7,11 @@ import AnimateableText from "react-native-animateable-text";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedProps,
+  useAnimatedReaction,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 import Text from "./Text";
 
@@ -43,16 +45,17 @@ export default function Chart({
   const chartTop = tooltipHeight + tooltipMargin;
   const widthPerPoint = width / (numPointsVisible - 1);
   const dataLength = Object.keys(data).length;
+  const chartWidth = width * (dataLength / numPointsVisible);
 
   const { linePath, areaPath, points } = useMemo(
     () =>
       computeChartPaths({
         data,
-        width: width * (dataLength / numPointsVisible),
+        width: chartWidth,
         height: chartHeight,
         bottomPadding,
       }),
-    [data, width, dataLength, numPointsVisible, chartHeight]
+    [data, chartWidth, chartHeight]
   );
 
   const pressX = useSharedValue<number>(0);
@@ -79,8 +82,8 @@ export default function Chart({
       showTooltip.value = false;
     });
 
-  const startingPanX = useSharedValue(0);
-  const panX = useSharedValue(0);
+  const startingPanX = useSharedValue(chartWidth);
+  const panX = useSharedValue(chartWidth);
 
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
@@ -92,12 +95,26 @@ export default function Chart({
 
   const gesture = Gesture.Race(tooltipGesture, panGesture);
 
+  useAnimatedReaction(
+    () => startingPanX.value,
+    (currentValue, previousValue) => {
+      if (currentValue !== previousValue) {
+        const translate =
+          Math.round(panX.value / widthPerPoint) * widthPerPoint;
+        const fixedTranslate = Math.min(0, Math.max(-chartWidth, translate));
+
+        panX.value = withTiming(fixedTranslate);
+        startingPanX.value = withTiming(fixedTranslate);
+      }
+    }
+  );
+
   const animatedStyles = {
     chartContainer: useAnimatedStyle(() => ({
       flex: 1,
       height: chartHeight,
       marginTop: chartTop,
-      width: width * (dataLength / numPointsVisible),
+      width: chartWidth,
       transform: [{ translateX: panX.value }],
     })),
     tooltipContainer: useAnimatedStyle(() => ({
