@@ -3,9 +3,12 @@ import getColor from "@/lib/getColor";
 import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
+import AnimateableText from "react-native-animateable-text";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+  useAnimatedProps,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 import Text from "./Text";
@@ -38,23 +41,30 @@ export default function SimpleChart({
   const chartTop = tooltipHeight + tooltipMargin;
   const widthPerPoint = width / (Object.keys(data).length - 1 || 1);
 
-  const pressX = useSharedValue<number>(0);
-  const showTooltip = useSharedValue<boolean>(false);
-
   const { linePath, areaPath, points } = useMemo(
     () =>
       computeChartPaths({ data, width, height: chartHeight, bottomPadding }),
     [data, width, chartHeight]
   );
 
+  const pressX = useSharedValue<number>(0);
+  const showTooltip = useSharedValue<boolean>(false);
+  const selectedPoint = useDerivedValue(() => {
+    const target = Math.round(pressX.value / widthPerPoint);
+    const index = Math.min(points.length - 1, Math.max(0, target));
+    return points[index];
+  }, [pressX]);
+
   const gesture = Gesture.Pan()
     .activateAfterLongPress(200)
     .onStart((e) => {
-      pressX.value = Math.round(e.x / widthPerPoint) * widthPerPoint;
+      const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
+      pressX.value = Math.max(0, Math.min(target, width));
       showTooltip.value = true;
     })
     .onUpdate((e) => {
-      pressX.value = Math.round(e.x / widthPerPoint) * widthPerPoint;
+      const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
+      pressX.value = Math.max(0, Math.min(target, width));
       showTooltip.value = true;
     })
     .onEnd(() => {
@@ -68,50 +78,47 @@ export default function SimpleChart({
     })),
     tooltipLine: useAnimatedStyle(() => ({
       position: "absolute",
-      width: 1,
-      height: chartHeight + tooltipMargin,
       left: pressX.value - lineWidth / 2,
       top: tooltipHeight,
+      width: 1,
+      height: chartHeight + tooltipMargin,
       backgroundColor: getColor("primary"),
+    })),
+    tooltipCircle: useAnimatedStyle(() => ({
+      position: "absolute",
+      left: pressX.value - circleRadius,
+      top: selectedPoint.value.y - circleRadius + chartTop,
+      width: circleRadius * 2,
+      height: circleRadius * 2,
+      borderRadius: 999,
+      backgroundColor: getColor("primary"),
+    })),
+    tooltipBox: useAnimatedStyle(() => ({
+      position: "absolute",
+      left: Math.min(
+        Math.max(pressX.value - tooltipWidth / 2, 0),
+        width - tooltipWidth
+      ),
+      top: 0,
+      width: tooltipWidth,
+      height: tooltipHeight,
+      justifyContent: "center",
+      alignItems: "center",
+      borderWidth: 1,
+      borderColor: getColor("primary"),
+      backgroundColor: getColor("primary", 0.1),
+      borderRadius: 4,
     })),
   };
 
-  // const indicatorY = useDerivedValue(() => {
-  //   const idx =
-  //     pressX.value != null ? xs.findIndex((x) => x === pressX.value) : -1;
-  //   return idx >= 0 ? points[idx].y : -9999;
-  // });
-  // const canvasHeight = height - (labelCount ? labelHeight : 0);
-
-  // const circleStyleAnim = useAnimatedStyle(() => ({
-  //   left: pressX.value - circleRadius,
-  //   top: indicatorY.value - circleRadius,
-  // }));
-
-  // const strokeColor = getColor("primary");
-  // const gradientStart = getColor("primary", 0.5);
-  // const gradientEnd = getColor("primary", 0);
-
-  // const [selectedIndex, setSelectedIndex] = React.useState(-1);
-
-  // useAnimatedReaction(
-  //   () => {
-  //     const idx =
-  //       pressX.value != null ? xs.findIndex((x) => x === pressX.value) : -1;
-  //     return { idx };
-  //   },
-  //   (res) => {
-  //     runOnJS(setSelectedIndex)(res.idx);
-  //   },
-  //   [xs]
-  // );
-
-  // const tooltipStyle = useAnimatedStyle(() => ({
-  //   left: Math.min(
-  //     Math.max(pressX.value - tooltipWidth / 2, 0),
-  //     width - tooltipWidth
-  //   ),
-  // }));
+  const animatedProps = {
+    selectedPointKey: useAnimatedProps(() => ({
+      text: selectedPoint.value.key,
+    })),
+    selectedPointValue: useAnimatedProps(() => ({
+      text: selectedPoint.value.y.toString(),
+    })),
+  };
 
   return (
     <GestureDetector gesture={gesture}>
@@ -139,41 +146,22 @@ export default function SimpleChart({
         </Canvas>
 
         <Animated.View style={[animatedStyles.tooltipContainer]}>
-          <Animated.View
-            style={[styles.indicatorLine, animatedStyles.tooltipLine]}
-          />
+          <Animated.View style={[animatedStyles.tooltipLine]} />
 
-          {/* <Animated.View
-                style={[
-                  styles.indicatorCircle,
-                  {
-                    width: circleRadius * 2,
-                    height: circleRadius * 2,
-                    borderRadius: circleRadius,
-                    backgroundColor: strokeColor,
-                  },
-                  circleStyleAnim,
-                ]}
+          <Animated.View style={[animatedStyles.tooltipCircle]} />
+
+          <Animated.View style={[animatedStyles.tooltipBox]}>
+            <Text style={styles.tooltipText}>
+              <AnimateableText
+                style={styles.tooltipKeyText}
+                animatedProps={animatedProps.selectedPointKey}
               />
-
-              <Animated.View
-                style={[
-                  styles.tooltipContainer,
-                  {
-                    width: tooltipWidth,
-                    height: tooltipHeight,
-                  },
-                  tooltipStyle,
-                ]}
-              >
-                <Text style={styles.tooltipText}>
-                  <Text style={styles.tooltipKeyText}>
-                    {points[selectedIndex]?.key}
-                  </Text>
-                  <Text> &bull; </Text>
-                  <Text>{points[selectedIndex]?.value}</Text>
-                </Text>
-              </Animated.View> */}
+              <Text> &bull; </Text>
+              <AnimateableText
+                animatedProps={animatedProps.selectedPointValue}
+              />
+            </Text>
+          </Animated.View>
         </Animated.View>
 
         {points.length > 0 && labelCount && (
@@ -196,16 +184,6 @@ export default function SimpleChart({
 }
 
 const styles = StyleSheet.create({
-  tooltipContainer: {
-    position: "absolute",
-    top: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: getColor("primary"),
-    backgroundColor: getColor("primary", 0.1),
-    borderRadius: 3,
-  },
   tooltipText: {
     fontSize: 12,
   },
@@ -214,7 +192,6 @@ const styles = StyleSheet.create({
   },
   labelsContainer: {
     alignItems: "center",
-    // height: labelHeight,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -223,13 +200,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
     color: getColor("mutedForeground"),
-  },
-  indicatorLine: {
-    position: "absolute",
-    width: 1,
-    backgroundColor: getColor("primary"),
-  },
-  indicatorCircle: {
-    position: "absolute",
   },
 });
