@@ -1,10 +1,5 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import {
-  Inter_400Regular,
-  Inter_500Medium,
-  useFonts,
-} from "@expo-google-fonts/inter";
 import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
@@ -41,7 +36,6 @@ export default function SimpleChart({
   tooltipWidth = 92,
   labelCount,
 }: Props) {
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium });
   const labelHeight = labelCount ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
@@ -127,11 +121,6 @@ export default function SimpleChart({
     })),
   };
 
-  // wait for fonts to load before rendering chart labels
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
@@ -157,12 +146,12 @@ export default function SimpleChart({
           />
         </Canvas>
 
-        <Animated.View style={[animatedStyles.tooltipContainer]}>
-          <Animated.View style={[animatedStyles.tooltipLine]} />
+        <Animated.View style={animatedStyles.tooltipContainer}>
+          <Animated.View style={animatedStyles.tooltipLine} />
 
-          <Animated.View style={[animatedStyles.tooltipCircle]} />
+          <Animated.View style={animatedStyles.tooltipCircle} />
 
-          <Animated.View style={[animatedStyles.tooltipBox]}>
+          <Animated.View style={animatedStyles.tooltipBox}>
             <AnimateableText
               animatedProps={animatedProps.selectedPointKey}
               style={[
