@@ -65,7 +65,7 @@ export default function StatisticsScreen() {
             data={dummyData}
             width={width}
             height={chartHeight}
-            labelCount={6}
+            labelCount={4}
             numPointsVisible={7}
           />
         )}

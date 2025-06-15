@@ -37,7 +37,7 @@ export default function Chart({
   height,
   tooltipHeight = 32,
   tooltipWidth = 92,
-  labelCount,
+  labelCount = 0,
   numPointsVisible = Object.keys(data).length,
 }: Props) {
   const labelHeight = labelCount ? baseLabelHeight : 0;
@@ -46,6 +46,8 @@ export default function Chart({
   const widthPerPoint = width / (numPointsVisible - 1);
   const dataLength = Object.keys(data).length;
   const chartWidth = width * ((dataLength - 1) / (numPointsVisible - 1));
+  const numTotalLabels =
+    labelCount * Math.round((dataLength - 1) / (numPointsVisible - 1));
 
   const { linePath, areaPath, points } = useMemo(
     () =>
@@ -216,11 +218,11 @@ export default function Chart({
             </Animated.View>
           </Animated.View>
 
-          {points.length > 0 && labelCount && (
+          {points.length > 0 && numTotalLabels && (
             <View style={[styles.labelsContainer, { height: labelHeight }]}>
-              {Array.from({ length: labelCount }, (_, i) => {
+              {Array.from({ length: numTotalLabels }, (_, i) => {
                 const idx = Math.round(
-                  ((i + 1) * points.length) / (labelCount + 1) - 1
+                  ((i + 1) * points.length) / (numTotalLabels + 1) - 1
                 );
                 return (
                   <Text key={idx} style={styles.labelText}>
