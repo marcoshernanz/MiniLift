@@ -13,18 +13,14 @@ interface Params {
   data: Record<string, number>;
   width: number;
   height: number;
-  chartTop: number;
   bottomPadding: number;
-  labelHeight: number;
 }
 
 export function computeChartPaths({
   data,
   width,
   height,
-  chartTop,
   bottomPadding,
-  labelHeight,
 }: Params): {
   linePath: SkPath;
   areaPath: SkPath;
@@ -35,14 +31,14 @@ export function computeChartPaths({
   const areaPath = Skia.Path.Make();
   const entries = Object.entries(data) as [string, number][];
 
-  const chartAreaHeight = height - chartTop - labelHeight;
+  const chartAreaHeight = height;
   const chartHeight = chartAreaHeight * (1 - bottomPadding);
   const values = entries.map(([, v]) => v);
   const max = Math.max(...values);
   const min = Math.min(...values);
   const points: ChartPoint[] = entries.map(([key, value], index) => {
     const x = (index / (entries.length - 1 || 1)) * width;
-    const y = chartTop + ((max - value) / (max - min || 1)) * chartHeight;
+    const y = ((max - value) / (max - min || 1)) * chartHeight;
     return { x, y, key, value };
   });
 

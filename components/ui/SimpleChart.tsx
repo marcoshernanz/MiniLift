@@ -1,17 +1,13 @@
-import { ChartPoint, computeChartPaths } from "@/lib/chart/computeChartPaths";
+import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import {
-  Canvas,
-  Circle,
-  LinearGradient,
-  Path,
-  Skia,
-  vec,
-} from "@shopify/react-native-skia";
-import React, { useMemo, useState } from "react";
+import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
+import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { runOnJS } from "react-native-reanimated";
+import { GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 import Text from "./Text";
 
 interface Props {
@@ -25,7 +21,9 @@ interface Props {
 
 const bottomPadding = 0.1;
 const tooltipMargin = 12;
-const labelHeight = 24;
+const baseLabelHeight = 24;
+const circleRadius = 4;
+const lineWidth = 1;
 
 export default function SimpleChart({
   data,
@@ -35,64 +33,83 @@ export default function SimpleChart({
   tooltipWidth = 92,
   labelCount,
 }: Props) {
-  const chartTop = tooltipHeight + tooltipMargin;
-  const canvasHeight = height - (labelCount ? labelHeight : 0);
-  const [pressX, setPressX] = useState<number | null>(null);
+  const labelHeight = labelCount ? baseLabelHeight : 0;
+  const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
+  // const chartTop = tooltipHeight + tooltipMargin;
 
-  // compute paths and points using shared utility
+  const pressX = useSharedValue<number>(-1);
+
   const { linePath, areaPath, points } = useMemo(
     () =>
-      computeChartPaths({
-        data,
-        width,
-        height,
-        chartTop,
-        bottomPadding,
-        labelHeight,
-      }),
-    [data, width, height, chartTop]
+      computeChartPaths({ data, width, height: chartHeight, bottomPadding }),
+    [data, width, chartHeight]
   );
-  const xs = useMemo(() => points.map((p: ChartPoint) => p.x), [points]);
+  // const xs = useMemo(() => points.map((p: ChartPoint) => p.x), [points]);
 
-  const indicatorPath = useMemo(() => {
-    const p = Skia.Path.Make();
-    if (pressX != null) {
-      p.moveTo(pressX, tooltipHeight);
-      p.lineTo(pressX, height);
-    }
-    return p;
-  }, [pressX, height, tooltipHeight]);
+  // const indicatorY = useDerivedValue(() => {
+  //   const idx =
+  //     pressX.value != null ? xs.findIndex((x) => x === pressX.value) : -1;
+  //   return idx >= 0 ? points[idx].y : -9999;
+  // });
+  // const canvasHeight = height - (labelCount ? labelHeight : 0);
 
-  const gesture = Gesture.Pan()
-    .activateAfterLongPress(200)
-    .onStart((e) => {
-      const target = xs.reduce(
-        (prev: number, curr: number) =>
-          Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-        xs[0]
-      );
-      runOnJS(setPressX)(target);
-    })
-    .onUpdate((e) => {
-      const target = xs.reduce(
-        (prev: number, curr: number) =>
-          Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-        xs[0]
-      );
-      runOnJS(setPressX)(target);
-    })
-    .onEnd(() => runOnJS(setPressX)(null));
+  // const lineStyleAnim = useAnimatedStyle(() => ({
+  //   left: pressX.value - lineWidth / 2,
+  //   top: tooltipHeight,
+  //   height: canvasHeight,
+  // }));
+  // const circleStyleAnim = useAnimatedStyle(() => ({
+  //   left: pressX.value - circleRadius,
+  //   top: indicatorY.value - circleRadius,
+  // }));
 
-  const strokeColor = getColor("primary");
-  const gradientStart = getColor("primary", 0.5);
-  const gradientEnd = getColor("primary", 0);
-  const selectedIndex =
-    pressX != null ? xs.findIndex((x: number) => x === pressX) : -1;
+  // const gesture = Gesture.Pan()
+  //   .activateAfterLongPress(200)
+  //   .onStart((e) => {
+  //     const target = xs.reduce(
+  //       (prev: number, curr: number) =>
+  //         Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+  //       xs[0]
+  //     );
+  //     pressX.value = target;
+  //   })
+  //   .onUpdate((e) => {
+  //     const target = xs.reduce(
+  //       (prev: number, curr: number) =>
+  //         Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+  //       xs[0]
+  //     );
+  //     pressX.value = target;
+  //   })
+  //   .onEnd(() => (pressX.value = -1));
 
-  const tooltipLeft =
-    pressX != null
-      ? Math.min(Math.max(pressX - tooltipWidth / 2, 0), width - tooltipWidth)
-      : 0;
+  // const strokeColor = getColor("primary");
+  // const gradientStart = getColor("primary", 0.5);
+  // const gradientEnd = getColor("primary", 0);
+
+  // const [selectedIndex, setSelectedIndex] = React.useState(-1);
+
+  // useAnimatedReaction(
+  //   () => {
+  //     const idx =
+  //       pressX.value != null ? xs.findIndex((x) => x === pressX.value) : -1;
+  //     return { idx };
+  //   },
+  //   (res) => {
+  //     runOnJS(setSelectedIndex)(res.idx);
+  //   },
+  //   [xs]
+  // );
+
+  // const tooltipStyle = useAnimatedStyle(() => ({
+  //   left: Math.min(
+  //     Math.max(pressX.value - tooltipWidth / 2, 0),
+  //     width - tooltipWidth
+  //   ),
+  // }));
+  const tooltipContainerStyle = useAnimatedStyle(() => ({
+    display: pressX.value === -1 ? "none" : "flex",
+  }));
 
   return (
     <GestureDetector gesture={gesture}>
@@ -104,7 +121,7 @@ export default function SimpleChart({
             position: "relative",
           }}
         >
-          <Canvas style={{ flex: 1 }}>
+          <Canvas style={{ flex: 1, backgroundColor: "red" }}>
             <Path path={areaPath} style="fill">
               <LinearGradient
                 start={vec(0, chartTop)}
@@ -118,48 +135,44 @@ export default function SimpleChart({
               style="stroke"
               strokeWidth={2}
             />
-            {pressX != null && (
-              <>
-                <Path
-                  path={indicatorPath}
-                  color={getColor("primary")}
-                  style="stroke"
-                  strokeWidth={1}
-                />
-
-                <Circle
-                  cx={pressX}
-                  cy={points[selectedIndex].y}
-                  r={4}
-                  color={strokeColor}
-                />
-              </>
-            )}
+            {/* indicator line and circle as animated Views */}
           </Canvas>
-          {pressX != null && (
-            <>
-              {pressX != null && selectedIndex >= 0 && (
-                <View
-                  style={[
-                    {
-                      left: tooltipLeft,
-                      width: tooltipWidth,
-                      height: tooltipHeight,
-                    },
-                    styles.tooltipContainer,
-                  ]}
-                >
-                  <Text style={styles.tooltipText}>
-                    <Text style={styles.tooltipKeyText}>
-                      {points[selectedIndex].key}
-                    </Text>
-                    <Text> &bull; </Text>
-                    <Text>{points[selectedIndex].value}</Text>
+
+          <Animated.View style={[tooltipContainerStyle]}>
+            <Animated.View style={[styles.indicatorLine, lineStyleAnim]} />
+
+            {/* <Animated.View
+                style={[
+                  styles.indicatorCircle,
+                  {
+                    width: circleRadius * 2,
+                    height: circleRadius * 2,
+                    borderRadius: circleRadius,
+                    backgroundColor: strokeColor,
+                  },
+                  circleStyleAnim,
+                ]}
+              />
+
+              <Animated.View
+                style={[
+                  styles.tooltipContainer,
+                  {
+                    width: tooltipWidth,
+                    height: tooltipHeight,
+                  },
+                  tooltipStyle,
+                ]}
+              >
+                <Text style={styles.tooltipText}>
+                  <Text style={styles.tooltipKeyText}>
+                    {points[selectedIndex]?.key}
                   </Text>
-                </View>
-              )}
-            </>
-          )}
+                  <Text> &bull; </Text>
+                  <Text>{points[selectedIndex]?.value}</Text>
+                </Text>
+              </Animated.View> */}
+          </Animated.View>
         </View>
 
         {points.length > 0 && labelCount && (
@@ -209,5 +222,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
     color: getColor("mutedForeground"),
+  },
+  indicatorLine: {
+    position: "absolute",
+    width: 1,
+    backgroundColor: getColor("primary"),
+  },
+  indicatorCircle: {
+    position: "absolute",
   },
 });
