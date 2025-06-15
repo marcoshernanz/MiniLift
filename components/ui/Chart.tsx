@@ -104,11 +104,11 @@ export default function Chart({
   // gesture for horizontal pan
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
-      runOnJS(setOffsetX)((prev: number) => {
-        const next = prev + (e.translationX as number);
-        const minOffset = Math.min(0, width - chartWidth);
-        return Math.max(minOffset, Math.min(next, 0));
-      });
+      // compute new offset directly and clamp
+      const next = offsetX + (e.translationX as number);
+      const minOffset = Math.min(0, width - chartWidth);
+      const clamped = Math.max(minOffset, Math.min(next, 0));
+      runOnJS(setOffsetX)(clamped);
     })
     .onEnd(() => {});
 
