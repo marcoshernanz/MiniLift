@@ -1,10 +1,5 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import {
-  Inter_400Regular,
-  Inter_500Medium,
-  useFonts,
-} from "@expo-google-fonts/inter";
 import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
@@ -25,6 +20,7 @@ interface Props {
   tooltipHeight?: number;
   tooltipWidth?: number;
   labelCount?: number;
+  numPointsVisible?: number;
 }
 
 const bottomPadding = 0.1;
@@ -40,17 +36,23 @@ export default function Chart({
   tooltipHeight = 32,
   tooltipWidth = 92,
   labelCount,
+  numPointsVisible = Object.keys(data).length,
 }: Props) {
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium });
   const labelHeight = labelCount ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
-  const widthPerPoint = width / (Object.keys(data).length - 1 || 1);
+  const widthPerPoint = width / (numPointsVisible - 1);
+  const dataLength = Object.keys(data).length;
 
   const { linePath, areaPath, points } = useMemo(
     () =>
-      computeChartPaths({ data, width, height: chartHeight, bottomPadding }),
-    [data, width, chartHeight]
+      computeChartPaths({
+        data,
+        width: width * (dataLength / numPointsVisible),
+        height: chartHeight,
+        bottomPadding,
+      }),
+    [data, width, dataLength, numPointsVisible, chartHeight]
   );
 
   const pressX = useSharedValue<number>(0);
@@ -61,7 +63,7 @@ export default function Chart({
     return points[index];
   }, [pressX]);
 
-  const gesture = Gesture.Pan()
+  const tooltipGesture = Gesture.Pan()
     .activateAfterLongPress(200)
     .onStart((e) => {
       const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
@@ -77,7 +79,22 @@ export default function Chart({
       showTooltip.value = false;
     });
 
+  const panX = useSharedValue(0);
+
+  const panGesture = Gesture.Pan().onUpdate((e) => {
+    panX.value = e.translationX;
+  });
+
+  const gesture = Gesture.Race(tooltipGesture, panGesture);
+
   const animatedStyles = {
+    chartContainer: useAnimatedStyle(() => ({
+      flex: 1,
+      height: chartHeight,
+      marginTop: chartTop,
+      width: width * (dataLength / numPointsVisible),
+      transform: [{ translateX: panX.value }],
+    })),
     tooltipContainer: useAnimatedStyle(() => ({
       display: showTooltip.value ? "flex" : "none",
       position: "absolute",
@@ -127,72 +144,69 @@ export default function Chart({
     })),
   };
 
-  // wait for fonts to load before rendering chart labels
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
-        <Canvas
-          style={{
-            flex: 1,
-            height: chartHeight,
-            marginTop: chartTop,
-          }}
-        >
-          <Path path={areaPath} style="fill">
-            <LinearGradient
-              start={vec(0, chartTop)}
-              end={vec(0, chartHeight)}
-              colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+        <Animated.View style={animatedStyles.chartContainer}>
+          <Canvas
+            style={{
+              flex: 1,
+              height: chartHeight,
+              marginTop: chartTop,
+            }}
+          >
+            <Path path={areaPath} style="fill">
+              <LinearGradient
+                start={vec(0, chartTop)}
+                end={vec(0, chartHeight)}
+                colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+              />
+            </Path>
+            <Path
+              path={linePath}
+              color={getColor("primary")}
+              style="stroke"
+              strokeWidth={2}
             />
-          </Path>
-          <Path
-            path={linePath}
-            color={getColor("primary")}
-            style="stroke"
-            strokeWidth={2}
-          />
-        </Canvas>
+          </Canvas>
 
-        <Animated.View style={[animatedStyles.tooltipContainer]}>
-          <Animated.View style={[animatedStyles.tooltipLine]} />
+          <Animated.View style={animatedStyles.tooltipContainer}>
+            <Animated.View style={animatedStyles.tooltipLine} />
 
-          <Animated.View style={[animatedStyles.tooltipCircle]} />
+            <Animated.View style={animatedStyles.tooltipCircle} />
 
-          <Animated.View style={[animatedStyles.tooltipBox]}>
-            <AnimateableText
-              animatedProps={animatedProps.selectedPointKey}
-              style={[
-                styles.tooltipText,
-                styles.tooltipKeyText,
-                { fontFamily: "Inter_500Medium" },
-              ]}
-            />
-            <Text> &bull; </Text>
-            <AnimateableText
-              animatedProps={animatedProps.selectedPointValue}
-              style={[styles.tooltipText, { fontFamily: "Inter_400Regular" }]}
-            />
+            <Animated.View style={animatedStyles.tooltipBox}>
+              <AnimateableText
+                animatedProps={animatedProps.selectedPointKey}
+                style={[
+                  styles.tooltipText,
+                  styles.tooltipKeyText,
+                  { fontFamily: "Inter_500Medium" },
+                ]}
+              />
+              <Text> &bull; </Text>
+              <AnimateableText
+                animatedProps={animatedProps.selectedPointValue}
+                style={[styles.tooltipText, { fontFamily: "Inter_400Regular" }]}
+              />
+            </Animated.View>
           </Animated.View>
-        </Animated.View>
 
-        {points.length > 0 && labelCount && (
-          <View style={[styles.labelsContainer, { height: labelHeight }]}>
-            {Array.from({ length: labelCount }, (_, i) => {
-              const idx = Math.round(
-                ((i + 1) * points.length) / (labelCount + 1) - 1
-              );
-              return (
-                <Text key={idx} style={styles.labelText}>
-                  {points[idx].key}
-                </Text>
-              );
-            })}
-          </View>
-        )}
+          {points.length > 0 && labelCount && (
+            <View style={[styles.labelsContainer, { height: labelHeight }]}>
+              {Array.from({ length: labelCount }, (_, i) => {
+                const idx = Math.round(
+                  ((i + 1) * points.length) / (labelCount + 1) - 1
+                );
+                return (
+                  <Text key={idx} style={styles.labelText}>
+                    {points[idx].key}
+                  </Text>
+                );
+              })}
+            </View>
+          )}
+        </Animated.View>
       </View>
     </GestureDetector>
   );
