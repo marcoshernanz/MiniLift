@@ -79,11 +79,16 @@ export default function Chart({
       showTooltip.value = false;
     });
 
+  const startingPanX = useSharedValue(0);
   const panX = useSharedValue(0);
 
-  const panGesture = Gesture.Pan().onUpdate((e) => {
-    panX.value = e.translationX;
-  });
+  const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      panX.value = startingPanX.value + e.translationX;
+    })
+    .onEnd(() => {
+      startingPanX.value = panX.value;
+    });
 
   const gesture = Gesture.Race(tooltipGesture, panGesture);
 
