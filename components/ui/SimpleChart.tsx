@@ -108,6 +108,7 @@ export default function SimpleChart({
       top: 0,
       width: tooltipWidth,
       height: tooltipHeight,
+      flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       borderWidth: 1,
