@@ -62,11 +62,17 @@ export default function Chart({
 
   const pressX = useSharedValue<number>(0);
   const showTooltip = useSharedValue<boolean>(false);
+
+  const minPanX = -(chartWidth - (numPointsVisible - 1) * widthPerPoint);
+  const startingPanX = useSharedValue(minPanX);
+  const panX = useSharedValue(minPanX);
+
+  const tooltipX = useDerivedValue(() => pressX.value - panX.value);
   const selectedPoint = useDerivedValue(() => {
-    const target = Math.round(pressX.value / widthPerPoint);
+    const target = Math.round(tooltipX.value / widthPerPoint);
     const index = Math.min(points.length - 1, Math.max(0, target));
     return points[index];
-  }, [pressX]);
+  });
 
   const tooltipGesture = Gesture.Pan()
     .activateAfterLongPress(200)
@@ -83,11 +89,6 @@ export default function Chart({
     .onEnd(() => {
       showTooltip.value = false;
     });
-
-  const minPanX = -(chartWidth - (numPointsVisible - 1) * widthPerPoint);
-
-  const startingPanX = useSharedValue(minPanX);
-  const panX = useSharedValue(minPanX);
 
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
@@ -127,7 +128,7 @@ export default function Chart({
     })),
     tooltipLine: useAnimatedStyle(() => ({
       position: "absolute",
-      left: pressX.value - lineWidth / 2,
+      left: tooltipX.value - lineWidth / 2,
       top: tooltipHeight,
       width: 1,
       height: chartHeight + tooltipMargin,
@@ -135,7 +136,7 @@ export default function Chart({
     })),
     tooltipCircle: useAnimatedStyle(() => ({
       position: "absolute",
-      left: pressX.value - circleRadius,
+      left: tooltipX.value - circleRadius,
       top: selectedPoint.value.y - circleRadius + chartTop,
       width: circleRadius * 2,
       height: circleRadius * 2,
@@ -144,10 +145,15 @@ export default function Chart({
     })),
     tooltipBox: useAnimatedStyle(() => ({
       position: "absolute",
-      left: Math.min(
-        Math.max(pressX.value - tooltipWidth / 2, 0),
-        width - tooltipWidth
+      left: Math.max(
+        -panX.value,
+        Math.min(
+          tooltipX.value - tooltipWidth / 2,
+          -panX.value + width - tooltipWidth
+        )
       ),
+      // left: -panX.value,
+      // left: -panX.value + width - tooltipWidth,
       top: 0,
       width: tooltipWidth,
       height: tooltipHeight,
