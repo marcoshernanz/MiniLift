@@ -151,16 +151,16 @@ export default function SimpleChart({
           <Animated.View style={[animatedStyles.tooltipCircle]} />
 
           <Animated.View style={[animatedStyles.tooltipBox]}>
-            <Text style={styles.tooltipText}>
-              <AnimateableText
-                style={styles.tooltipKeyText}
-                animatedProps={animatedProps.selectedPointKey}
-              />
-              <Text> &bull; </Text>
-              <AnimateableText
-                animatedProps={animatedProps.selectedPointValue}
-              />
-            </Text>
+            <AnimateableText
+              // style={[styles.tooltipText, styles.tooltipKeyText]}
+              animatedProps={animatedProps.selectedPointKey}
+              style={{ color: "red" }}
+            />
+            <Text> &bull; </Text>
+            <AnimateableText
+              // style={styles.tooltipText}
+              animatedProps={animatedProps.selectedPointValue}
+            />
           </Animated.View>
         </Animated.View>
 
@@ -186,6 +186,7 @@ export default function SimpleChart({
 const styles = StyleSheet.create({
   tooltipText: {
     fontSize: 12,
+    color: getColor("foreground"),
   },
   tooltipKeyText: {
     fontWeight: 500,
