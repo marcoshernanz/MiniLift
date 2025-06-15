@@ -3,7 +3,7 @@ import getColor from "@/lib/getColor";
 import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { GestureDetector } from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -35,7 +35,7 @@ export default function SimpleChart({
 }: Props) {
   const labelHeight = labelCount ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
-  // const chartTop = tooltipHeight + tooltipMargin;
+  const chartTop = tooltipHeight + tooltipMargin;
 
   const pressX = useSharedValue<number>(-1);
 
@@ -63,25 +63,25 @@ export default function SimpleChart({
   //   top: indicatorY.value - circleRadius,
   // }));
 
-  // const gesture = Gesture.Pan()
-  //   .activateAfterLongPress(200)
-  //   .onStart((e) => {
-  //     const target = xs.reduce(
-  //       (prev: number, curr: number) =>
-  //         Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-  //       xs[0]
-  //     );
-  //     pressX.value = target;
-  //   })
-  //   .onUpdate((e) => {
-  //     const target = xs.reduce(
-  //       (prev: number, curr: number) =>
-  //         Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-  //       xs[0]
-  //     );
-  //     pressX.value = target;
-  //   })
-  //   .onEnd(() => (pressX.value = -1));
+  const gesture = Gesture.Pan()
+    .activateAfterLongPress(200)
+    .onStart((e) => {
+      // const target = xs.reduce(
+      //   (prev: number, curr: number) =>
+      //     Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+      //   xs[0]
+      // );
+      // pressX.value = target;
+    })
+    .onUpdate((e) => {
+      // const target = xs.reduce(
+      //   (prev: number, curr: number) =>
+      //     Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
+      //   xs[0]
+      // );
+      // pressX.value = target;
+    })
+    .onEnd(() => (pressX.value = -1));
 
   // const strokeColor = getColor("primary");
   // const gradientStart = getColor("primary", 0.5);
@@ -114,34 +114,32 @@ export default function SimpleChart({
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
-        <View
+        <Canvas
           style={{
-            width,
-            height: height - (labelCount ? labelHeight : 0),
-            position: "relative",
+            flex: 1,
+            height: chartHeight,
+            marginTop: chartTop,
           }}
         >
-          <Canvas style={{ flex: 1, backgroundColor: "red" }}>
-            <Path path={areaPath} style="fill">
-              <LinearGradient
-                start={vec(0, chartTop)}
-                end={vec(0, canvasHeight)}
-                colors={[gradientStart, gradientEnd]}
-              />
-            </Path>
-            <Path
-              path={linePath}
-              color={strokeColor}
-              style="stroke"
-              strokeWidth={2}
+          <Path path={areaPath} style="fill">
+            <LinearGradient
+              start={vec(0, chartTop)}
+              end={vec(0, chartHeight)}
+              colors={[getColor("primary", 0.5), getColor("primary", 0)]}
             />
-            {/* indicator line and circle as animated Views */}
-          </Canvas>
+          </Path>
+          <Path
+            path={linePath}
+            color={getColor("primary")}
+            style="stroke"
+            strokeWidth={2}
+          />
+        </Canvas>
 
-          <Animated.View style={[tooltipContainerStyle]}>
-            <Animated.View style={[styles.indicatorLine, lineStyleAnim]} />
+        <Animated.View style={[tooltipContainerStyle]}>
+          {/* <Animated.View style={[styles.indicatorLine, lineStyleAnim]} /> */}
 
-            {/* <Animated.View
+          {/* <Animated.View
                 style={[
                   styles.indicatorCircle,
                   {
@@ -172,8 +170,7 @@ export default function SimpleChart({
                   <Text>{points[selectedIndex]?.value}</Text>
                 </Text>
               </Animated.View> */}
-          </Animated.View>
-        </View>
+        </Animated.View>
 
         {points.length > 0 && labelCount && (
           <View style={[styles.labelsContainer, { height: labelHeight }]}>
@@ -213,7 +210,7 @@ const styles = StyleSheet.create({
   },
   labelsContainer: {
     alignItems: "center",
-    height: labelHeight,
+    // height: labelHeight,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
