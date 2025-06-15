@@ -44,6 +44,7 @@ const colors = {
 type ColorName = keyof typeof colors;
 
 export default function getColor(name: ColorName, opacity?: number) {
+  "worklet";
   const color = colors[name];
 
   if (opacity !== undefined) {
