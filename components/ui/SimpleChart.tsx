@@ -36,15 +36,45 @@ export default function SimpleChart({
   const labelHeight = labelCount ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
+  const widthPerPoint = width / (Object.keys(data).length - 1 || 1);
 
-  const pressX = useSharedValue<number>(-1);
+  const pressX = useSharedValue<number>(0);
+  const showTooltip = useSharedValue<boolean>(false);
 
   const { linePath, areaPath, points } = useMemo(
     () =>
       computeChartPaths({ data, width, height: chartHeight, bottomPadding }),
     [data, width, chartHeight]
   );
-  // const xs = useMemo(() => points.map((p: ChartPoint) => p.x), [points]);
+
+  const gesture = Gesture.Pan()
+    .activateAfterLongPress(200)
+    .onStart((e) => {
+      pressX.value = Math.round(e.x / widthPerPoint) * widthPerPoint;
+      showTooltip.value = true;
+    })
+    .onUpdate((e) => {
+      pressX.value = Math.round(e.x / widthPerPoint) * widthPerPoint;
+      showTooltip.value = true;
+    })
+    .onEnd(() => {
+      showTooltip.value = false;
+    });
+
+  const animatedStyles = {
+    tooltipContainer: useAnimatedStyle(() => ({
+      display: showTooltip.value ? "flex" : "none",
+      position: "absolute",
+    })),
+    tooltipLine: useAnimatedStyle(() => ({
+      position: "absolute",
+      width: 1,
+      height: chartHeight + tooltipMargin,
+      left: pressX.value - lineWidth / 2,
+      top: tooltipHeight,
+      backgroundColor: getColor("primary"),
+    })),
+  };
 
   // const indicatorY = useDerivedValue(() => {
   //   const idx =
@@ -53,35 +83,10 @@ export default function SimpleChart({
   // });
   // const canvasHeight = height - (labelCount ? labelHeight : 0);
 
-  // const lineStyleAnim = useAnimatedStyle(() => ({
-  //   left: pressX.value - lineWidth / 2,
-  //   top: tooltipHeight,
-  //   height: canvasHeight,
-  // }));
   // const circleStyleAnim = useAnimatedStyle(() => ({
   //   left: pressX.value - circleRadius,
   //   top: indicatorY.value - circleRadius,
   // }));
-
-  const gesture = Gesture.Pan()
-    .activateAfterLongPress(200)
-    .onStart((e) => {
-      // const target = xs.reduce(
-      //   (prev: number, curr: number) =>
-      //     Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-      //   xs[0]
-      // );
-      // pressX.value = target;
-    })
-    .onUpdate((e) => {
-      // const target = xs.reduce(
-      //   (prev: number, curr: number) =>
-      //     Math.abs(curr - e.x) < Math.abs(prev - e.x) ? curr : prev,
-      //   xs[0]
-      // );
-      // pressX.value = target;
-    })
-    .onEnd(() => (pressX.value = -1));
 
   // const strokeColor = getColor("primary");
   // const gradientStart = getColor("primary", 0.5);
@@ -107,9 +112,6 @@ export default function SimpleChart({
   //     width - tooltipWidth
   //   ),
   // }));
-  const tooltipContainerStyle = useAnimatedStyle(() => ({
-    display: pressX.value === -1 ? "none" : "flex",
-  }));
 
   return (
     <GestureDetector gesture={gesture}>
@@ -136,8 +138,10 @@ export default function SimpleChart({
           />
         </Canvas>
 
-        <Animated.View style={[tooltipContainerStyle]}>
-          {/* <Animated.View style={[styles.indicatorLine, lineStyleAnim]} /> */}
+        <Animated.View style={[animatedStyles.tooltipContainer]}>
+          <Animated.View
+            style={[styles.indicatorLine, animatedStyles.tooltipLine]}
+          />
 
           {/* <Animated.View
                 style={[
