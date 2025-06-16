@@ -108,7 +108,8 @@ export default function Chart({
     (currentValue, previousValue) => {
       if (currentValue !== previousValue) {
         const translate =
-          Math.round(panX.value / widthPerPoint) * widthPerPoint + padding;
+          Math.round((panX.value - padding) / widthPerPoint) * widthPerPoint +
+          padding;
         const fixedTranslate = Math.min(padding, Math.max(minPanX, translate));
 
         panX.value = withTiming(fixedTranslate);
