@@ -1,5 +1,5 @@
 import Button from "@/components/ui/Button";
-import Chart from "@/components/ui/SimpleChart";
+import SimpleChart from "@/components/ui/SimpleChart";
 import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
 import getColor from "@/lib/getColor";
@@ -92,7 +92,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         </Text>
       </Text>
 
-      <Chart
+      <SimpleChart
         data={dummyData}
         width={Dimensions.get("window").width - 32}
         height={250}
