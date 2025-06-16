@@ -86,8 +86,9 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   title: {
-    marginBottom: 12,
+    paddingBottom: 12,
   },
 });

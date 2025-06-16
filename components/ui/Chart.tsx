@@ -32,7 +32,7 @@ interface Props {
 }
 
 const bottomPadding = 0.1;
-const tooltipMargin = 12;
+const tooltipMargin = 16;
 const baseLabelHeight = 32;
 const lineWidth = 1;
 
