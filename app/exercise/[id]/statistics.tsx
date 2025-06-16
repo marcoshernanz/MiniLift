@@ -3,48 +3,56 @@ import StatisticsTypeSelector from "@/components/statistics/StatisticsTypeSelect
 import Chart from "@/components/ui/Chart";
 import SafeArea from "@/components/ui/SafeArea";
 import Title from "@/components/ui/Title";
+import useDailyData from "@/lib/data/getDailyData";
+import useMonthlyData from "@/lib/data/getMonthlyData";
+import useWeeklyData from "@/lib/data/getWeeklyData";
+import { format, parseISO } from "date-fns";
+import { useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
-const dummyData = {
-  "Jan 01": 90,
-  "Jan 02": 91,
-  "Jan 03": 88,
-  "Jan 04": 100,
-  "Jan 05": 85,
-  "Jan 06": 105,
-  "Jan 07": 100,
-  "Jan 08": 95,
-  "Jan 09": 90,
-  "Jan 10": 105,
-  "Jan 11": 90,
-  "Jan 12": 95,
-  "Jan 13": 100,
-  "Jan 14": 95,
-  "Jan 15": 90,
-  "Jan 16": 115,
-  "Jan 17": 105,
-  "Jan 18": 110,
-  "Jan 19": 130,
-  "Jan 20": 95,
-  "Jan 21": 110,
-  "Jan 22": 115,
-  "Jan 23": 120,
-  "Jan 24": 125,
-  "Jan 25": 110,
-  "Jan 26": 115,
-  "Jan 27": 100,
-  "Jan 28": 105,
-  "Jan 29": 120,
-  "Jan 30": 115,
-};
+export type TimeFrame = "7D" | "1M" | "3M" | "1Y" | "All";
+export type StatisticsType = "score" | "oneRepMax";
 
 export default function StatisticsScreen() {
-  const [selectedTimeFrame, setSelectedTimeFrame] = useState("7D");
-  const [selectedType, setSelectedType] = useState("score");
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>("7D");
+  const [selectedType, setSelectedType] = useState<StatisticsType>("score");
   const [chartHeight, setChartHeight] = useState<number>(0);
 
+  // get exercise id from route
+  const { id } = useLocalSearchParams<{ id: string }>();
+  // fetch raw score data
+  const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyData(id!);
+  const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyData(id!);
+  const { score: monthlyScore, oneRepMax: monthlyOneRepMax } = useMonthlyData(
+    id!
+  );
   const { width } = Dimensions.get("window");
+
+  // prepare full chart data mapping selectedType and timeframe
+  let dataMap: Record<string, number>;
+  if (selectedTimeFrame === "7D" || selectedTimeFrame === "1M") {
+    dataMap = selectedType === "score" ? dailyScore : dailyOneRepMax;
+  } else if (selectedTimeFrame === "3M") {
+    dataMap = selectedType === "score" ? weeklyScore : weeklyOneRepMax;
+  } else {
+    dataMap = selectedType === "score" ? monthlyScore : monthlyOneRepMax;
+  }
+  // Convert dataMap entries to chartData with formatted labels
+  const chartData = Object.entries(dataMap)
+    .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
+    .reduce<Record<string, number>>((acc, [key, val]) => {
+      const date = parseISO(key);
+      const labelFormat =
+        selectedTimeFrame === "7D" ||
+        selectedTimeFrame === "1M" ||
+        selectedTimeFrame === "3M"
+          ? "MMM dd"
+          : "MMM yyyy";
+      const label = format(date, labelFormat);
+      acc[label] = val;
+      return acc;
+    }, {} as Record<string, number>);
 
   return (
     <SafeArea style={styles.container}>
@@ -62,7 +70,7 @@ export default function StatisticsScreen() {
       >
         {chartHeight > 0 && (
           <Chart
-            data={dummyData}
+            data={chartData}
             width={width}
             height={chartHeight}
             labelCount={4}

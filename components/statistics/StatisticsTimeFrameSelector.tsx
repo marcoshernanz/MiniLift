@@ -1,12 +1,13 @@
+import { TimeFrame } from "@/app/exercise/[id]/statistics";
 import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 
 interface Props {
-  selectedTimeFrame: string;
-  setSelectedTimeFrame: (timeFrame: string) => void;
+  selectedTimeFrame: TimeFrame;
+  setSelectedTimeFrame: (timeFrame: TimeFrame) => void;
 }
 
-const timeFrames = ["7D", "1M", "3M", "1Y", "All"];
+const timeFrames: TimeFrame[] = ["7D", "1M", "3M", "1Y", "All"];
 
 export default function StatisticsTimeFrameSelector({
   selectedTimeFrame,

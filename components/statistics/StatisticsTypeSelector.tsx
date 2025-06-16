@@ -1,11 +1,12 @@
+import { StatisticsType } from "@/app/exercise/[id]/statistics";
 import getColor from "@/lib/getColor";
 import { AtomIcon, DumbbellIcon } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
 
 interface Props {
-  selectedType: string;
-  setSelectedType: (type: string) => void;
+  selectedType: StatisticsType;
+  setSelectedType: (type: StatisticsType) => void;
 }
 
 export default function StatisticsTypeSelector({
@@ -42,14 +43,14 @@ export default function StatisticsTypeSelector({
       <Pressable
         style={styles.pressable}
         android_ripple={{ color: getColor("muted"), borderless: true }}
-        onPress={() => setSelectedType("1rm")}
+        onPress={() => setSelectedType("oneRepMax")}
       >
         <View style={styles.iconWrapper}>
           <DumbbellIcon
             size={24}
             strokeWidth={1.75}
             color={
-              selectedType === "1rm"
+              selectedType === "oneRepMax"
                 ? getColor("primary")
                 : getColor("mutedForeground")
             }
@@ -58,7 +59,7 @@ export default function StatisticsTypeSelector({
         <Text
           style={{
             color:
-              selectedType === "1rm"
+              selectedType === "oneRepMax"
                 ? getColor("primary")
                 : getColor("mutedForeground"),
           }}
