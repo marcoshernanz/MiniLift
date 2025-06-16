@@ -66,7 +66,6 @@ export default function Chart({
 
   const minPanX =
     -(chartWidth - (numPointsVisible - 1) * widthPerPoint) + padding;
-  // const minPanX = -chartWidth;
   const startingPanX = useSharedValue(minPanX);
   const panX = useSharedValue(minPanX);
 
@@ -77,18 +76,17 @@ export default function Chart({
     return points[index];
   });
 
+  const tooltipUpdate = (e: any) => {
+    const target =
+      Math.round((e.x - padding) / widthPerPoint) * widthPerPoint + padding;
+    pressX.value = Math.max(padding, Math.min(target, width - padding));
+    showTooltip.value = true;
+  };
+
   const tooltipGesture = Gesture.Pan()
     .activateAfterLongPress(200)
-    .onStart((e) => {
-      const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
-      pressX.value = Math.max(0, Math.min(target, width));
-      showTooltip.value = true;
-    })
-    .onUpdate((e) => {
-      const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
-      pressX.value = Math.max(0, Math.min(target, width));
-      showTooltip.value = true;
-    })
+    .onStart(tooltipUpdate)
+    .onUpdate(tooltipUpdate)
     .onEnd(() => {
       showTooltip.value = false;
     });
