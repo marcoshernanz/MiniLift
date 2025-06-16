@@ -8,7 +8,7 @@ import useMonthlyData from "@/lib/data/getMonthlyData";
 import useWeeklyData from "@/lib/data/getWeeklyData";
 import { format, parseISO } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 export type TimeFrame = "7D" | "1M" | "3M" | "1Y" | "All";
@@ -19,17 +19,14 @@ export default function StatisticsScreen() {
   const [selectedType, setSelectedType] = useState<StatisticsType>("score");
   const [chartHeight, setChartHeight] = useState<number>(0);
 
-  // get exercise id from route
   const { id } = useLocalSearchParams<{ id: string }>();
-  // fetch raw score data
-  const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyData(id!);
-  const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyData(id!);
-  const { score: monthlyScore, oneRepMax: monthlyOneRepMax } = useMonthlyData(
-    id!
-  );
+
+  const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyData(id);
+  const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyData(id);
+  const { score: monthlyScore, oneRepMax: monthlyOneRepMax } =
+    useMonthlyData(id);
   const { width } = Dimensions.get("window");
 
-  // prepare full chart data mapping selectedType and timeframe
   let dataMap: Record<string, number>;
   if (selectedTimeFrame === "7D" || selectedTimeFrame === "1M") {
     dataMap = selectedType === "score" ? dailyScore : dailyOneRepMax;
@@ -38,7 +35,7 @@ export default function StatisticsScreen() {
   } else {
     dataMap = selectedType === "score" ? monthlyScore : monthlyOneRepMax;
   }
-  // Convert dataMap entries to chartData with formatted labels
+
   const chartData = Object.entries(dataMap)
     .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
     .reduce<Record<string, number>>((acc, [key, val]) => {
@@ -54,6 +51,17 @@ export default function StatisticsScreen() {
       return acc;
     }, {} as Record<string, number>);
 
+  const numPointsVisible =
+    selectedTimeFrame === "7D"
+      ? 7
+      : selectedTimeFrame === "1M"
+      ? 30
+      : selectedTimeFrame === "3M"
+      ? 12
+      : selectedTimeFrame === "1Y"
+      ? 12
+      : Object.entries(chartData).length;
+
   return (
     <SafeArea style={styles.container}>
       <View style={styles.headerContainer}>
@@ -68,15 +76,13 @@ export default function StatisticsScreen() {
         style={{ flex: 1 }}
         onLayout={(e) => setChartHeight(e.nativeEvent.layout.height)}
       >
-        {chartHeight > 0 && (
-          <Chart
-            data={chartData}
-            width={width}
-            height={chartHeight}
-            labelCount={4}
-            numPointsVisible={7}
-          />
-        )}
+        <Chart
+          data={chartData}
+          width={width}
+          height={chartHeight}
+          labelCount={4}
+          numPointsVisible={numPointsVisible}
+        />
       </View>
 
       <StatisticsTypeSelector
