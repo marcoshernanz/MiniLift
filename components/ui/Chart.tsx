@@ -1,12 +1,6 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import {
-  Canvas,
-  Circle,
-  LinearGradient,
-  Path,
-  vec,
-} from "@shopify/react-native-skia";
+import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
@@ -194,24 +188,6 @@ export default function Chart({
               style="stroke"
               strokeWidth={2}
             />
-            {points.map((p, idx) => (
-              <React.Fragment key={idx}>
-                <Circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={5}
-                  color={getColor("background")}
-                />
-                <Circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={5}
-                  color={getColor("primary")}
-                  style="stroke"
-                  strokeWidth={1.5}
-                />
-              </React.Fragment>
-            ))}
           </Canvas>
 
           <Animated.View style={animatedStyles.tooltipContainer}>
@@ -234,6 +210,19 @@ export default function Chart({
             </Animated.View>
           </Animated.View>
 
+          {points.map((p, idx) => (
+            <View
+              key={idx}
+              style={[
+                styles.chartDot,
+                {
+                  left: p.x - 5.5,
+                  top: chartTop + p.y - 5.5,
+                },
+              ]}
+            />
+          ))}
+
           {points.length > 0 && numTotalLabels && (
             <View style={[styles.labelsContainer, { height: labelHeight }]}>
               {Array.from({ length: numTotalLabels }, (_, i) => {
@@ -255,6 +244,16 @@ export default function Chart({
 }
 
 const styles = StyleSheet.create({
+  chartDot: {
+    position: "absolute",
+    width: 11,
+    height: 11,
+    borderRadius: 999,
+    backgroundColor: getColor("background"),
+    borderColor: getColor("primary"),
+    borderWidth: 1.5,
+    zIndex: 1,
+  },
   tooltipText: {
     fontSize: 12,
     color: getColor("foreground"),
