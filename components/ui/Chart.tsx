@@ -1,6 +1,12 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
+import {
+  Canvas,
+  Circle,
+  LinearGradient,
+  Path,
+  vec,
+} from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
@@ -28,7 +34,6 @@ interface Props {
 const bottomPadding = 0.1;
 const tooltipMargin = 12;
 const baseLabelHeight = 24;
-const circleRadius = 4;
 const lineWidth = 1;
 
 export default function Chart({
@@ -134,15 +139,6 @@ export default function Chart({
       height: chartHeight + tooltipMargin,
       backgroundColor: getColor("primary"),
     })),
-    tooltipCircle: useAnimatedStyle(() => ({
-      position: "absolute",
-      left: tooltipX.value - circleRadius,
-      top: selectedPoint.value.y - circleRadius + chartTop,
-      width: circleRadius * 2,
-      height: circleRadius * 2,
-      borderRadius: 999,
-      backgroundColor: getColor("primary"),
-    })),
     tooltipBox: useAnimatedStyle(() => ({
       position: "absolute",
       left: Math.max(
@@ -152,8 +148,6 @@ export default function Chart({
           -panX.value + width - tooltipWidth
         )
       ),
-      // left: -panX.value,
-      // left: -panX.value + width - tooltipWidth,
       top: 0,
       width: tooltipWidth,
       height: tooltipHeight,
@@ -200,12 +194,28 @@ export default function Chart({
               style="stroke"
               strokeWidth={2}
             />
+            {points.map((p, idx) => (
+              <React.Fragment key={idx}>
+                <Circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={5}
+                  color={getColor("background")}
+                />
+                <Circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={5}
+                  color={getColor("primary")}
+                  style="stroke"
+                  strokeWidth={1.5}
+                />
+              </React.Fragment>
+            ))}
           </Canvas>
 
           <Animated.View style={animatedStyles.tooltipContainer}>
             <Animated.View style={animatedStyles.tooltipLine} />
-
-            <Animated.View style={animatedStyles.tooltipCircle} />
 
             <Animated.View style={animatedStyles.tooltipBox}>
               <AnimateableText
