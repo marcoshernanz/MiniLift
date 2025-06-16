@@ -128,7 +128,7 @@ export default function Chart({
     chartContainer: useAnimatedStyle(() => ({
       flex: 1,
       height: chartHeight,
-      marginTop: chartTop,
+      paddingTop: chartTop,
       width: chartWidth,
       transform: [{ translateX: panX.value }],
     })),
@@ -183,13 +183,12 @@ export default function Chart({
             style={{
               flex: 1,
               height: chartHeight,
-              marginTop: chartTop,
             }}
           >
             <Path path={areaPath} style="fill" dither>
               <LinearGradient
                 start={vec(0, chartTop)}
-                end={vec(0, chartHeight - chartTop)}
+                end={vec(0, chartHeight)}
                 colors={[getColor("primary", 0.5), getColor("primary", 0)]}
               />
             </Path>

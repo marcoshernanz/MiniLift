@@ -36,6 +36,7 @@ export function computeChartPaths({
   const values = entries.map(([, v]) => v);
   const max = Math.max(...values);
   const min = Math.min(...values);
+
   const points: ChartPoint[] = entries.map(([key, value], index) => {
     const x = (index / (entries.length - 1 || 1)) * width;
     const y = ((max - value) / (max - min || 1)) * chartHeight;
