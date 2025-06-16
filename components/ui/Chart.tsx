@@ -22,6 +22,7 @@ interface Props {
   tooltipHeight?: number;
   tooltipWidth?: number;
   labelCount?: number;
+  padding?: number;
   numPointsVisible?: number;
 }
 
@@ -37,14 +38,15 @@ export default function Chart({
   tooltipHeight = 32,
   tooltipWidth = 92,
   labelCount = 0,
+  padding = 16,
   numPointsVisible = Object.keys(data).length,
 }: Props) {
   const labelHeight = labelCount ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
-  const widthPerPoint = width / (numPointsVisible - 1);
+  const widthPerPoint = (width - padding * 2) / (numPointsVisible - 1);
   const dataLength = Object.keys(data).length;
-  const chartWidth = width * ((dataLength - 1) / (numPointsVisible - 1));
+  const chartWidth = widthPerPoint * (dataLength - 1);
   const numTotalLabels =
     labelCount * Math.round((dataLength - 1) / (numPointsVisible - 1));
 
@@ -62,7 +64,9 @@ export default function Chart({
   const pressX = useSharedValue<number>(0);
   const showTooltip = useSharedValue<boolean>(false);
 
-  const minPanX = -(chartWidth - (numPointsVisible - 1) * widthPerPoint);
+  const minPanX =
+    -(chartWidth - (numPointsVisible - 1) * widthPerPoint) + padding;
+  // const minPanX = -chartWidth;
   const startingPanX = useSharedValue(minPanX);
   const panX = useSharedValue(minPanX);
 
@@ -104,8 +108,8 @@ export default function Chart({
     (currentValue, previousValue) => {
       if (currentValue !== previousValue) {
         const translate =
-          Math.round(panX.value / widthPerPoint) * widthPerPoint;
-        const fixedTranslate = Math.min(0, Math.max(minPanX, translate));
+          Math.round(panX.value / widthPerPoint) * widthPerPoint + padding;
+        const fixedTranslate = Math.min(padding, Math.max(minPanX, translate));
 
         panX.value = withTiming(fixedTranslate);
         startingPanX.value = withTiming(fixedTranslate);
