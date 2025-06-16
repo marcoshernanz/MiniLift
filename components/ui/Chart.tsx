@@ -4,7 +4,12 @@ import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import {
+  Gesture,
+  GestureDetector,
+  GestureUpdateEvent,
+  PanGestureHandlerEventPayload,
+} from "react-native-gesture-handler";
 import Animated, {
   useAnimatedProps,
   useAnimatedReaction,
@@ -76,9 +81,12 @@ export default function Chart({
     return points[index];
   });
 
-  const tooltipUpdate = (e: any) => {
+  const tooltipUpdate = (
+    e: GestureUpdateEvent<PanGestureHandlerEventPayload>
+  ) => {
+    const x = e.x;
     const target =
-      Math.round((e.x - padding) / widthPerPoint) * widthPerPoint + padding;
+      Math.round((x - padding) / widthPerPoint) * widthPerPoint + padding;
     pressX.value = Math.max(padding, Math.min(target, width - padding));
     showTooltip.value = true;
   };
