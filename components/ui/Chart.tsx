@@ -33,7 +33,7 @@ interface Props {
 
 const bottomPadding = 0.1;
 const tooltipMargin = 12;
-const baseLabelHeight = 24;
+const baseLabelHeight = 32;
 const lineWidth = 1;
 
 export default function Chart({
