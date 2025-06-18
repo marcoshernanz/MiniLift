@@ -257,8 +257,6 @@ export default function Chart({
 
                 const paragraphHeight = paragraph?.getHeight() || 0;
 
-                console.log(paragraphHeight);
-
                 return (
                   <Paragraph
                     key={idx}
