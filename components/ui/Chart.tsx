@@ -15,7 +15,7 @@ import {
   vec,
 } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
 import {
   Gesture,
@@ -224,7 +224,7 @@ export default function Chart({
                 const idx = Math.round(
                   ((i + 1) * points.length) / (numTotalLabels + 1) - 1
                 );
-                const width = Dimensions.get("window").width / labelCount;
+                const width = (chartWidth + padding * 2) / numTotalLabels;
                 const paragraph = (() => {
                   if (!fontManager) return null;
 
