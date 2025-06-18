@@ -2,6 +2,7 @@ import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
 import {
   Canvas,
+  Circle,
   Group,
   LinearGradient,
   Path,
@@ -205,6 +206,25 @@ export default function Chart({
                 style="stroke"
                 strokeWidth={2}
               />
+
+              {points.map((p, idx) => (
+                <React.Fragment key={idx}>
+                  <Circle
+                    cx={p.x}
+                    cy={p.y}
+                    r={5.5}
+                    color={getColor("background")}
+                  />
+                  <Circle
+                    cx={p.x}
+                    cy={p.y}
+                    r={5.5}
+                    color={getColor("primary")}
+                    style="stroke"
+                    strokeWidth={1.5}
+                  />
+                </React.Fragment>
+              ))}
             </Group>
           </Canvas>
 
@@ -227,19 +247,6 @@ export default function Chart({
               />
             </Animated.View>
           </Animated.View>
-
-          {points.map((p, idx) => (
-            <View
-              key={idx}
-              style={[
-                styles.chartDot,
-                {
-                  left: p.x - 5.5,
-                  top: chartTop + p.y - 5.5,
-                },
-              ]}
-            />
-          ))}
 
           {points.length > 0 && numTotalLabels && (
             <View style={[styles.labelsContainer, { height: labelHeight }]}>
