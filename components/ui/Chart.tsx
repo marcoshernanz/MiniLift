@@ -133,26 +133,13 @@ export default function Chart({
   );
 
   const animatedStyles = {
-    chartContainer: useAnimatedStyle(() => ({
-      flex: 1,
-      height: chartHeight,
-      paddingTop: chartTop,
-      width: width,
-    })),
     tooltipContainer: useAnimatedStyle(() => ({
       display: showTooltip.value ? "flex" : "none",
-      position: "absolute",
     })),
     tooltipLine: useAnimatedStyle(() => ({
-      position: "absolute",
       left: tooltipX.value - lineWidth / 2,
-      top: tooltipHeight,
-      width: 1,
-      height: chartHeight + tooltipMargin,
-      backgroundColor: getColor("primary"),
     })),
     tooltipBox: useAnimatedStyle(() => ({
-      position: "absolute",
       left: Math.max(
         -panX.value,
         Math.min(
@@ -160,16 +147,6 @@ export default function Chart({
           -panX.value + width - tooltipWidth
         )
       ),
-      top: 0,
-      width: tooltipWidth,
-      height: tooltipHeight,
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      borderWidth: 1,
-      borderColor: getColor("primary"),
-      backgroundColor: getColor("primary", 0.1),
-      borderRadius: 4,
     })),
   };
 
@@ -185,7 +162,16 @@ export default function Chart({
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
-        <Animated.View style={animatedStyles.chartContainer}>
+        <Animated.View
+          style={[
+            styles.chartContainer,
+            {
+              height: chartHeight,
+              paddingTop: chartTop,
+              width: width,
+            },
+          ]}
+        >
           <Canvas
             style={{
               flex: 1,
@@ -228,10 +214,30 @@ export default function Chart({
             </Group>
           </Canvas>
 
-          <Animated.View style={animatedStyles.tooltipContainer}>
-            <Animated.View style={animatedStyles.tooltipLine} />
+          <Animated.View
+            style={[animatedStyles.tooltipContainer, styles.tooltipContainer]}
+          >
+            <Animated.View
+              style={[
+                animatedStyles.tooltipLine,
+                styles.tooltipLine,
+                {
+                  top: tooltipHeight,
+                  height: chartHeight + tooltipMargin,
+                },
+              ]}
+            />
 
-            <Animated.View style={animatedStyles.tooltipBox}>
+            <Animated.View
+              style={[
+                animatedStyles.tooltipBox,
+                styles.tooltipBox,
+                {
+                  width: tooltipWidth,
+                  height: tooltipHeight,
+                },
+              ]}
+            >
               <AnimateableText
                 animatedProps={animatedProps.selectedPointKey}
                 style={[
@@ -269,6 +275,9 @@ export default function Chart({
 }
 
 const styles = StyleSheet.create({
+  chartContainer: {
+    flex: 1,
+  },
   chartDot: {
     position: "absolute",
     width: 11,
@@ -278,6 +287,25 @@ const styles = StyleSheet.create({
     borderColor: getColor("primary"),
     borderWidth: 1.5,
     zIndex: 1,
+  },
+  tooltipContainer: {
+    position: "absolute",
+  },
+  tooltipBox: {
+    position: "absolute",
+    top: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: getColor("primary"),
+    backgroundColor: getColor("primary", 0.1),
+    borderRadius: 4,
+  },
+  tooltipLine: {
+    position: "absolute",
+    width: 1,
+    backgroundColor: getColor("primary"),
   },
   tooltipText: {
     fontSize: 12,
