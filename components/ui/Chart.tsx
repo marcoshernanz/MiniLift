@@ -87,9 +87,8 @@ export default function Chart({
   const startingPanX = useSharedValue(minPanX);
   const panX = useSharedValue(minPanX);
 
-  const tooltipX = useDerivedValue(() => pressX.value - panX.value);
   const selectedPoint = useDerivedValue(() => {
-    const target = Math.round(tooltipX.value / widthPerPoint);
+    const target = Math.round(pressX.value / widthPerPoint);
     const index = Math.min(points.length - 1, Math.max(0, target));
     return points[index];
   });
@@ -143,15 +142,12 @@ export default function Chart({
       display: showTooltip.value ? "flex" : "none",
     })),
     tooltipLine: useAnimatedStyle(() => ({
-      left: tooltipX.value - lineWidth / 2,
+      left: pressX.value - lineWidth / 2,
     })),
     tooltipBox: useAnimatedStyle(() => ({
       left: Math.max(
-        -panX.value,
-        Math.min(
-          tooltipX.value - tooltipWidth / 2,
-          -panX.value + width - tooltipWidth
-        )
+        0,
+        Math.min(pressX.value - tooltipWidth / 2, width - tooltipWidth)
       ),
     })),
   };
