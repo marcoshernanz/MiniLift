@@ -88,7 +88,7 @@ export default function Chart({
   const panX = useSharedValue(minPanX);
 
   const selectedPoint = useDerivedValue(() => {
-    const target = Math.round(pressX.value / widthPerPoint);
+    const target = Math.round((pressX.value - panX.value) / widthPerPoint);
     const index = Math.min(points.length - 1, Math.max(0, target));
     return points[index];
   });
@@ -306,7 +306,7 @@ export default function Chart({
             </Animated.View>
           </Animated.View>
 
-          {points.length > 0 && numTotalLabels && (
+          {/* {points.length > 0 && numTotalLabels && (
             <View
               style={[
                 styles.labelsContainer,
@@ -328,7 +328,7 @@ export default function Chart({
                 );
               })}
             </View>
-          )}
+          )} */}
         </Animated.View>
       </View>
     </GestureDetector>
