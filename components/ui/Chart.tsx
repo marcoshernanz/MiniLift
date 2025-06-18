@@ -1,6 +1,12 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
+import {
+  Canvas,
+  Group,
+  LinearGradient,
+  Path,
+  vec,
+} from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
@@ -80,6 +86,7 @@ export default function Chart({
     const index = Math.min(points.length - 1, Math.max(0, target));
     return points[index];
   });
+  const transform = useDerivedValue(() => [{ translateX: panX.value }]);
 
   const tooltipUpdate = (
     e: GestureUpdateEvent<PanGestureHandlerEventPayload>
@@ -129,8 +136,7 @@ export default function Chart({
       flex: 1,
       height: chartHeight,
       paddingTop: chartTop,
-      width: chartWidth,
-      transform: [{ translateX: panX.value }],
+      width: width,
     })),
     tooltipContainer: useAnimatedStyle(() => ({
       display: showTooltip.value ? "flex" : "none",
@@ -185,19 +191,21 @@ export default function Chart({
               height: chartHeight,
             }}
           >
-            <Path path={areaPath} style="fill" dither>
-              <LinearGradient
-                start={vec(0, chartTop)}
-                end={vec(0, chartHeight)}
-                colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+            <Group transform={transform}>
+              <Path path={areaPath} style="fill" dither>
+                <LinearGradient
+                  start={vec(0, chartTop)}
+                  end={vec(0, chartHeight)}
+                  colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+                />
+              </Path>
+              <Path
+                path={linePath}
+                color={getColor("primary")}
+                style="stroke"
+                strokeWidth={2}
               />
-            </Path>
-            <Path
-              path={linePath}
-              color={getColor("primary")}
-              style="stroke"
-              strokeWidth={2}
-            />
+            </Group>
           </Canvas>
 
           <Animated.View style={animatedStyles.tooltipContainer}>
