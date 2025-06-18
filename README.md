@@ -5,3 +5,4 @@
 - FlashList performance
 - Change statistics title to exercise name
 - Chart circles with skia
+- Fix search
