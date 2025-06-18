@@ -5,11 +5,17 @@ import {
   Circle,
   Group,
   LinearGradient,
+  Paragraph,
   Path,
+  Skia,
+  SkParagraphStyle,
+  SkTextStyle,
+  TextAlign,
+  useFonts,
   vec,
 } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
 import {
   Gesture,
@@ -159,6 +165,12 @@ export default function Chart({
     })),
   };
 
+  const fontManager = useFonts({
+    Inter: [
+      require("@/node_modules/@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf"),
+    ],
+  });
+
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
@@ -166,7 +178,7 @@ export default function Chart({
           style={[
             styles.chartContainer,
             {
-              height: chartHeight,
+              height,
               paddingTop: chartTop,
               width: width,
             },
@@ -175,7 +187,7 @@ export default function Chart({
           <Canvas
             style={{
               flex: 1,
-              height: chartHeight,
+              height,
             }}
           >
             <Group transform={transform}>
@@ -211,6 +223,52 @@ export default function Chart({
                   />
                 </React.Fragment>
               ))}
+
+              {Array.from({ length: numTotalLabels }, (_, i) => {
+                const idx = Math.round(
+                  ((i + 1) * points.length) / (numTotalLabels + 1) - 1
+                );
+                const width = Dimensions.get("window").width / labelCount;
+                const paragraph = (() => {
+                  if (!fontManager) return null;
+
+                  const paragraphStyle: SkParagraphStyle = {
+                    textAlign: TextAlign.Center,
+                  };
+
+                  const textStyle: SkTextStyle = {
+                    color: Skia.Color(getColor("mutedForeground")),
+                    fontFamilies: ["Inter"],
+                    fontSize: 12,
+                  };
+
+                  const paragraph = Skia.ParagraphBuilder.Make(
+                    paragraphStyle,
+                    fontManager
+                  )
+                    .pushStyle(textStyle)
+                    .addText(points[idx].key)
+                    .build();
+
+                  paragraph.layout(width);
+
+                  return paragraph;
+                })();
+
+                const paragraphHeight = paragraph?.getHeight() || 0;
+
+                console.log(paragraphHeight);
+
+                return (
+                  <Paragraph
+                    key={idx}
+                    paragraph={paragraph}
+                    x={-padding + width * i}
+                    y={chartHeight + labelHeight / 2 - paragraphHeight / 2}
+                    width={width}
+                  />
+                );
+              })}
             </Group>
           </Canvas>
 
@@ -255,7 +313,16 @@ export default function Chart({
           </Animated.View>
 
           {points.length > 0 && numTotalLabels && (
-            <View style={[styles.labelsContainer, { height: labelHeight }]}>
+            <View
+              style={[
+                styles.labelsContainer,
+                {
+                  height: labelHeight,
+                  position: "absolute",
+                  bottom: 0,
+                },
+              ]}
+            >
               {Array.from({ length: numTotalLabels }, (_, i) => {
                 const idx = Math.round(
                   ((i + 1) * points.length) / (numTotalLabels + 1) - 1
