@@ -14,7 +14,7 @@ import {
   useFonts,
   vec,
 } from "@shopify/react-native-skia";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
 import {
@@ -24,6 +24,7 @@ import {
   PanGestureHandlerEventPayload,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnUI,
   useAnimatedProps,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -87,6 +88,13 @@ export default function Chart({
     -(chartWidth - (numPointsVisible - 1) * widthPerPoint) + padding;
   const startingPanX = useSharedValue(minPanX);
   const panX = useSharedValue(minPanX);
+
+  useEffect(() => {
+    runOnUI(() => {
+      panX.value = minPanX;
+      startingPanX.value = minPanX;
+    })();
+  }, [data, minPanX, panX, startingPanX]);
 
   const selectedPoint = useDerivedValue(() => {
     if (points.length === 0) {
