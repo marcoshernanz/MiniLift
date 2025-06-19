@@ -42,16 +42,10 @@ export default function useDailyData(exerciseId: string): DataType {
     oneRepMaxMap[key] = sum / count;
   });
 
-  const resultOneRepMax: Record<string, number> = {};
-  let lastOneRepMax: number | undefined;
+  const resultOneRepMax: Record<string, number | null> = {};
   days.forEach((day) => {
     const key = format(day, "yyyy-MM-dd");
-    if (oneRepMaxMap[key] != null) {
-      lastOneRepMax = oneRepMaxMap[key];
-    }
-    if (lastOneRepMax != null) {
-      resultOneRepMax[key] = lastOneRepMax;
-    }
+    resultOneRepMax[key] = oneRepMaxMap[key] ?? null;
   });
 
   const bodyweightMap: Record<string, number> = {};
@@ -68,12 +62,11 @@ export default function useDailyData(exerciseId: string): DataType {
     logsByDay[key].push({ weight, reps });
   });
 
-  const resultScore: Record<string, number> = {};
+  const resultScore: Record<string, number | null> = {};
   const bodyweightEntries = bodyweightLogs
     .map(({ date, bodyweight }) => ({ date, weight: bodyweight }))
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  let lastScore: number | undefined;
   days.forEach((day) => {
     const key = format(day, "yyyy-MM-dd");
     let bodyweight: number | undefined;
@@ -101,10 +94,9 @@ export default function useDailyData(exerciseId: string): DataType {
         calculateScore({ weight, reps, bodyweight: bodyweight! })
       );
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      lastScore = Math.round(avg);
-    }
-    if (lastScore != null) {
-      resultScore[key] = lastScore;
+      resultScore[key] = Math.round(avg);
+    } else {
+      resultScore[key] = null;
     }
   });
 

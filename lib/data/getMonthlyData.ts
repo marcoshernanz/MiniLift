@@ -37,16 +37,10 @@ export default function useMonthlyData(exerciseId: string): DataType {
     oneRepMaxMap[key] = sum / count;
   });
 
-  const resultOneRepMax: Record<string, number> = {};
-  let lastOrm: number | undefined;
+  const resultOneRepMax: Record<string, number | null> = {};
   months.forEach((monthStart) => {
     const key = format(monthStart, "yyyy-MM-dd");
-    if (oneRepMaxMap[key] != null) {
-      lastOrm = oneRepMaxMap[key];
-    }
-    if (lastOrm != null) {
-      resultOneRepMax[key] = lastOrm;
-    }
+    resultOneRepMax[key] = oneRepMaxMap[key] ?? null;
   });
 
   const bodyweightMap: Record<string, number> = {};

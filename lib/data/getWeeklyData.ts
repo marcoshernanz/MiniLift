@@ -40,19 +40,12 @@ export default function useWeeklyData(exerciseId: string): DataType {
     oneRepMaxMap[key] = sum / count;
   });
 
-  const resultOneRepMax: Record<string, number> = {};
-  let lastOneRepMax: number | undefined;
+  const resultOneRepMax: Record<string, number | null> = {};
   weeks.forEach((weekStart) => {
     const key = format(weekStart, "yyyy-MM-dd");
-    if (oneRepMaxMap[key] != null) {
-      lastOneRepMax = oneRepMaxMap[key];
-    }
-    if (lastOneRepMax != null) {
-      resultOneRepMax[key] = lastOneRepMax;
-    }
+    resultOneRepMax[key] = oneRepMaxMap[key] ?? null;
   });
 
-  // bodyweight map keyed by date string
   const bodyweightMap: Record<string, number> = {};
   bodyweightLogs
     .sort((a, b) => a.date.getTime() - b.date.getTime())
@@ -60,7 +53,6 @@ export default function useWeeklyData(exerciseId: string): DataType {
       bodyweightMap[format(date, "yyyy-MM-dd")] = bodyweight;
     });
 
-  // group logs by week start
   const logsByWeek: Record<string, { weight: number; reps: number }[]> = {};
   logs.forEach(({ weight, reps, date }) => {
     const weekStart = startOfWeek(date, { weekStartsOn: 1 });
@@ -69,12 +61,11 @@ export default function useWeeklyData(exerciseId: string): DataType {
     logsByWeek[key].push({ weight, reps });
   });
 
-  const resultScore: Record<string, number> = {};
+  const resultScore: Record<string, number | null> = {};
   const bodyweightEntries = bodyweightLogs
     .map(({ date, bodyweight }) => ({ date, weight: bodyweight }))
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  let lastScore: number | undefined;
   weeks.forEach((weekStart) => {
     const key = format(weekStart, "yyyy-MM-dd");
     let bw: number | undefined;
@@ -102,10 +93,9 @@ export default function useWeeklyData(exerciseId: string): DataType {
         calculateScore({ weight, reps, bodyweight: bw! })
       );
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      lastScore = Math.round(avg);
-    }
-    if (lastScore != null) {
-      resultScore[key] = lastScore;
+      resultScore[key] = Math.round(avg);
+    } else {
+      resultScore[key] = null;
     }
   });
 
