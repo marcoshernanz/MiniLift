@@ -77,7 +77,7 @@ export default function Chart({
       }),
     [data, chartWidth, chartHeight]
   );
-  // preserve ordered keys for label rendering
+
   const dataKeys = Object.keys(data);
 
   const pressX = useSharedValue<number>(0);
@@ -89,9 +89,16 @@ export default function Chart({
   const panX = useSharedValue(minPanX);
 
   const selectedPoint = useDerivedValue(() => {
-    const target = Math.round((pressX.value - panX.value) / widthPerPoint);
-    const index = Math.min(points.length - 1, Math.max(0, target));
-    return points[index];
+    if (points.length === 0) {
+      return { x: 0, y: 0, key: "", value: 0 };
+    }
+
+    const offsetX = pressX.value - panX.value;
+    return points.reduce((prev, curr) => {
+      return Math.abs(curr.x - offsetX) < Math.abs(prev.x - offsetX)
+        ? curr
+        : prev;
+    });
   });
   const transform = useDerivedValue(() => [{ translateX: panX.value }]);
 
@@ -111,10 +118,6 @@ export default function Chart({
     });
 
     const screenX = closest.x + panX.value;
-    if (screenX < padding || screenX > width - padding) {
-      showTooltip.value = false;
-      return;
-    }
     pressX.value = screenX;
     showTooltip.value = true;
   };
