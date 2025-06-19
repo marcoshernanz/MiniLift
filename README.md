@@ -6,8 +6,8 @@
 - Change statistics title to exercise name
 - Fix search
 
-- Chart tooltip when changing view
-- Chart tooltip
 - Chart data
+- Chart tooltip
+- Chart tooltip when changing view
 - Chart positioning when changing view
 - Chart animation
