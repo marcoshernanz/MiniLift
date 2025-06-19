@@ -4,7 +4,12 @@ import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import {
+  Gesture,
+  GestureDetector,
+  GestureUpdateEvent,
+  PanGestureHandlerEventPayload,
+} from "react-native-gesture-handler";
 import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
@@ -39,7 +44,6 @@ export default function SimpleChart({
   const labelHeight = labelCount ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
-  const widthPerPoint = width / (Object.keys(data).length - 1 || 1);
 
   const { linePath, areaPath, points } = useMemo(
     () =>
@@ -50,23 +54,36 @@ export default function SimpleChart({
   const pressX = useSharedValue<number>(0);
   const showTooltip = useSharedValue<boolean>(false);
   const selectedPoint = useDerivedValue(() => {
-    const target = Math.round(pressX.value / widthPerPoint);
-    const index = Math.min(points.length - 1, Math.max(0, target));
-    return points[index];
-  }, [pressX]);
+    if (points.length === 0) {
+      return { x: 0, y: 0, key: "", value: 0 };
+    }
+
+    return points.reduce((prev, curr) =>
+      Math.abs(curr.x - pressX.value) < Math.abs(prev.x - pressX.value)
+        ? curr
+        : prev
+    );
+  });
+
+  const tooltipUpdate = (
+    e: GestureUpdateEvent<PanGestureHandlerEventPayload>
+  ) => {
+    if (points.length === 0) {
+      showTooltip.value = false;
+      return;
+    }
+
+    const closest = points.reduce((prev, curr) =>
+      Math.abs(curr.x - e.x) < Math.abs(prev.x - e.x) ? curr : prev
+    );
+    pressX.value = closest.x;
+    showTooltip.value = true;
+  };
 
   const gesture = Gesture.Pan()
     .activateAfterLongPress(200)
-    .onStart((e) => {
-      const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
-      pressX.value = Math.max(0, Math.min(target, width));
-      showTooltip.value = true;
-    })
-    .onUpdate((e) => {
-      const target = Math.round(e.x / widthPerPoint) * widthPerPoint;
-      pressX.value = Math.max(0, Math.min(target, width));
-      showTooltip.value = true;
-    })
+    .onStart(tooltipUpdate)
+    .onUpdate(tooltipUpdate)
     .onEnd(() => {
       showTooltip.value = false;
     });
