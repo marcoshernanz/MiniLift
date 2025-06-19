@@ -221,6 +221,7 @@ export default function Chart({
 
               {Array.from({ length: numTotalLabels }, (_, i) => {
                 const idx = i * pointsPerLabel + 1;
+                const width = widthPerPoint * pointsPerLabel;
                 const paragraph = (() => {
                   if (!fontManager) return null;
 
@@ -242,7 +243,7 @@ export default function Chart({
                     .addText(points[idx].key)
                     .build();
 
-                  paragraph.layout(widthPerPoint * 2);
+                  paragraph.layout(width);
 
                   return paragraph;
                 })();
@@ -253,9 +254,9 @@ export default function Chart({
                   <Paragraph
                     key={idx}
                     paragraph={paragraph}
-                    x={widthPerPoint * idx - widthPerPoint}
+                    x={widthPerPoint * idx - width / 2}
                     y={chartHeight + labelHeight / 2 - paragraphHeight / 2}
-                    width={widthPerPoint * 2}
+                    width={width}
                   />
                 );
               })}
@@ -301,30 +302,6 @@ export default function Chart({
               />
             </Animated.View>
           </Animated.View>
-
-          {/* {points.length > 0 && numTotalLabels && (
-            <View
-              style={[
-                styles.labelsContainer,
-                {
-                  height: labelHeight,
-                  position: "absolute",
-                  bottom: 0,
-                },
-              ]}
-            >
-              {Array.from({ length: numTotalLabels }, (_, i) => {
-                const idx = Math.round(
-                  ((i + 1) * points.length) / (numTotalLabels + 1) - 1
-                );
-                return (
-                  <Text key={idx} style={styles.labelText}>
-                    {points[idx].key}
-                  </Text>
-                );
-              })}
-            </View>
-          )} */}
         </Animated.View>
       </View>
     </GestureDetector>

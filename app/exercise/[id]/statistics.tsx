@@ -51,16 +51,21 @@ export default function StatisticsScreen() {
       return acc;
     }, {} as Record<string, number>);
 
-  const numPointsVisible =
-    selectedTimeFrame === "7D"
-      ? 7
-      : selectedTimeFrame === "1M"
-      ? 30
-      : selectedTimeFrame === "3M"
-      ? 12
-      : selectedTimeFrame === "1Y"
-      ? 12
-      : Object.entries(chartData).length;
+  const numPointsVisible = {
+    "7D": 7,
+    "1M": 30,
+    "3M": 12,
+    "1Y": 12,
+    All: Object.entries(chartData).length,
+  }[selectedTimeFrame];
+
+  const pointsPerLabel = {
+    "7D": 2,
+    "1M": 7,
+    "3M": 3,
+    "1Y": 3,
+    All: 3 * Math.round(1 + Object.entries(chartData).length / 365),
+  }[selectedTimeFrame];
 
   return (
     <SafeArea style={styles.container}>
@@ -80,7 +85,7 @@ export default function StatisticsScreen() {
           data={chartData}
           width={width}
           height={chartHeight}
-          pointsPerLabel={3}
+          pointsPerLabel={pointsPerLabel}
           numPointsVisible={numPointsVisible}
         />
       </View>
