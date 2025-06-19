@@ -3,10 +3,12 @@ import calculateOneRepMax from "@/lib/lift/calculateOneRepMax";
 import calculateScore from "@/lib/lift/calculateScore";
 import { eachDayOfInterval, format } from "date-fns";
 
-export default function useDailyData(exerciseId: string): {
-  score: Record<string, number>;
-  oneRepMax: Record<string, number>;
-} {
+export type DataType = {
+  score: Record<string, number | null>;
+  oneRepMax: Record<string, number | null>;
+};
+
+export default function useDailyData(exerciseId: string): DataType {
   const { appData } = useAppContext();
 
   const { liftLogs, bodyweightLogs } = appData;

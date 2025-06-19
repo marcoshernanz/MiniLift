@@ -2,11 +2,9 @@ import { useAppContext } from "@/context/AppContext";
 import calculateOneRepMax from "@/lib/lift/calculateOneRepMax";
 import calculateScore from "@/lib/lift/calculateScore";
 import { eachMonthOfInterval, format, startOfMonth } from "date-fns";
+import { DataType } from "./getDailyData";
 
-export default function useMonthlyData(exerciseId: string): {
-  score: Record<string, number>;
-  oneRepMax: Record<string, number>;
-} {
+export default function useMonthlyData(exerciseId: string): DataType {
   const { appData } = useAppContext();
   const { liftLogs, bodyweightLogs } = appData;
   const logs = liftLogs
