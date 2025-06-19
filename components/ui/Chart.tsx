@@ -39,7 +39,7 @@ interface Props {
   height: number;
   tooltipHeight?: number;
   tooltipWidth?: number;
-  labelCount?: number;
+  pointsPerLabel?: number;
   padding?: number;
   numPointsVisible?: number;
 }
@@ -55,18 +55,17 @@ export default function Chart({
   height,
   tooltipHeight = 32,
   tooltipWidth = 92,
-  labelCount = 0,
+  pointsPerLabel = 0,
   padding = 16,
   numPointsVisible = Object.keys(data).length,
 }: Props) {
-  const labelHeight = labelCount ? baseLabelHeight : 0;
+  const labelHeight = pointsPerLabel ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
   const widthPerPoint = (width - padding * 2) / (numPointsVisible - 1);
   const dataLength = Object.keys(data).length;
   const chartWidth = widthPerPoint * (dataLength - 1);
-  const numTotalLabels =
-    labelCount * Math.round((dataLength - 1) / (numPointsVisible - 1));
+  const numTotalLabels = Math.floor(dataLength / pointsPerLabel);
 
   const { linePath, areaPath, points } = useMemo(
     () =>
@@ -221,10 +220,7 @@ export default function Chart({
               ))}
 
               {Array.from({ length: numTotalLabels }, (_, i) => {
-                const idx = Math.round(
-                  ((i + 1) * points.length) / (numTotalLabels + 1) - 1
-                );
-                const width = (chartWidth + padding * 2) / numTotalLabels;
+                const idx = i * pointsPerLabel + 1;
                 const paragraph = (() => {
                   if (!fontManager) return null;
 
@@ -246,7 +242,7 @@ export default function Chart({
                     .addText(points[idx].key)
                     .build();
 
-                  paragraph.layout(width);
+                  paragraph.layout(widthPerPoint * 2);
 
                   return paragraph;
                 })();
@@ -257,9 +253,9 @@ export default function Chart({
                   <Paragraph
                     key={idx}
                     paragraph={paragraph}
-                    x={-padding + width * i}
+                    x={widthPerPoint * idx - widthPerPoint}
                     y={chartHeight + labelHeight / 2 - paragraphHeight / 2}
-                    width={width}
+                    width={widthPerPoint * 2}
                   />
                 );
               })}

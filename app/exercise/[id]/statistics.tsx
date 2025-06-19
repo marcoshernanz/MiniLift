@@ -80,7 +80,7 @@ export default function StatisticsScreen() {
           data={chartData}
           width={width}
           height={chartHeight}
-          labelCount={4}
+          pointsPerLabel={3}
           numPointsVisible={numPointsVisible}
         />
       </View>
