@@ -77,6 +77,8 @@ export default function Chart({
       }),
     [data, chartWidth, chartHeight]
   );
+  // preserve ordered keys for label rendering
+  const dataKeys = Object.keys(data);
 
   const pressX = useSharedValue<number>(0);
   const showTooltip = useSharedValue<boolean>(false);
@@ -220,8 +222,8 @@ export default function Chart({
               ))}
 
               {Array.from({ length: numTotalLabels }, (_, i) => {
-                const idx = i * pointsPerLabel + 1;
-                const width = widthPerPoint * pointsPerLabel;
+                const entryIdx = i * pointsPerLabel + 1;
+                const labelWidth = widthPerPoint * pointsPerLabel;
                 const paragraph = (() => {
                   if (!fontManager) return null;
 
@@ -235,15 +237,16 @@ export default function Chart({
                     fontSize: 12,
                   };
 
+                  const labelKey = dataKeys[entryIdx] || "";
                   const paragraph = Skia.ParagraphBuilder.Make(
                     paragraphStyle,
                     fontManager
                   )
                     .pushStyle(textStyle)
-                    .addText(points[idx].key)
+                    .addText(labelKey)
                     .build();
 
-                  paragraph.layout(width);
+                  paragraph.layout(labelWidth);
 
                   return paragraph;
                 })();
@@ -252,11 +255,11 @@ export default function Chart({
 
                 return (
                   <Paragraph
-                    key={idx}
+                    key={entryIdx}
                     paragraph={paragraph}
-                    x={widthPerPoint * idx - width / 2}
+                    x={widthPerPoint * entryIdx - labelWidth / 2}
                     y={chartHeight + labelHeight / 2 - paragraphHeight / 2}
-                    width={width}
+                    width={labelWidth}
                   />
                 );
               })}
