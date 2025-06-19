@@ -99,9 +99,23 @@ export default function Chart({
     e: GestureUpdateEvent<PanGestureHandlerEventPayload>
   ) => {
     const x = e.x;
-    const target =
-      Math.round((x - padding) / widthPerPoint) * widthPerPoint + padding;
-    pressX.value = Math.max(padding, Math.min(target, width - padding));
+    if (points.length === 0) {
+      showTooltip.value = false;
+      return;
+    }
+
+    const closest = points.reduce((prev, curr) => {
+      const prevX = prev.x + panX.value;
+      const currX = curr.x + panX.value;
+      return Math.abs(currX - x) < Math.abs(prevX - x) ? curr : prev;
+    });
+
+    const screenX = closest.x + panX.value;
+    if (screenX < padding || screenX > width - padding) {
+      showTooltip.value = false;
+      return;
+    }
+    pressX.value = screenX;
     showTooltip.value = true;
   };
 
