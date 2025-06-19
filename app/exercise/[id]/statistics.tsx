@@ -27,7 +27,7 @@ export default function StatisticsScreen() {
     useMonthlyData(id);
   const { width } = Dimensions.get("window");
 
-  let dataMap: Record<string, number>;
+  let dataMap: Record<string, number | null>;
   if (selectedTimeFrame === "7D" || selectedTimeFrame === "1M") {
     dataMap = selectedType === "score" ? dailyScore : dailyOneRepMax;
   } else if (selectedTimeFrame === "3M") {
@@ -38,7 +38,7 @@ export default function StatisticsScreen() {
 
   const chartData = Object.entries(dataMap)
     .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
-    .reduce<Record<string, number>>((acc, [key, val]) => {
+    .reduce<Record<string, number | null>>((acc, [key, val]) => {
       const date = parseISO(key);
       const labelFormat =
         selectedTimeFrame === "7D" ||
@@ -49,7 +49,7 @@ export default function StatisticsScreen() {
       const label = format(date, labelFormat);
       acc[label] = val;
       return acc;
-    }, {} as Record<string, number>);
+    }, {} as Record<string, number | null>);
 
   const numPointsVisible = {
     "7D": 7,

@@ -10,7 +10,7 @@ export interface ChartPoint {
 }
 
 interface Params {
-  data: Record<string, number>;
+  data: Record<string, number | null>;
   width: number;
   height: number;
   bottomPadding: number;
@@ -29,18 +29,22 @@ export function computeChartPaths({
 } {
   const linePath = Skia.Path.Make();
   const areaPath = Skia.Path.Make();
-  const entries = Object.entries(data) as [string, number][];
 
+  const entries = Object.entries(data) as [string, number | null][];
   const chartAreaHeight = height;
   const chartHeight = chartAreaHeight * (1 - bottomPadding);
-  const values = entries.map(([, v]) => v);
-  const max = Math.max(...values);
-  const min = Math.min(...values);
+  const numericValues = entries
+    .map(([, v]) => v)
+    .filter((v): v is number => v != null);
+  const max = numericValues.length ? Math.max(...numericValues) : 0;
+  const min = numericValues.length ? Math.min(...numericValues) : 0;
 
-  const points: ChartPoint[] = entries.map(([key, value], index) => {
+  const points: ChartPoint[] = [];
+  entries.forEach(([key, value], index) => {
+    if (value == null) return;
     const x = (index / (entries.length - 1 || 1)) * width;
     const y = ((max - value) / (max - min || 1)) * chartHeight;
-    return { x, y, key, value };
+    points.push({ x, y, key, value });
   });
 
   if (points.length > 0) {

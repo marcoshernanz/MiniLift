@@ -34,7 +34,7 @@ import Animated, {
 import Text from "./Text";
 
 interface Props {
-  data: Record<string, number>;
+  data: Record<string, number | null>;
   width: number;
   height: number;
   tooltipHeight?: number;
