@@ -28,7 +28,6 @@ interface ComboBoxProps {
   onInputBlur?: () => void;
   inputProps?: TextInputProps;
   inputRef?: React.Ref<TextInputHandle>;
-  /** Optional list of favorite option values to highlight and sort first */
   favorites?: string[];
 }
 
@@ -53,9 +52,7 @@ export default function ComboBox({
     setSearchText(value);
   }, [value]);
 
-  // Prepare a set of favorites for quick lookup
   const favoritesSet = new Set(favorites);
-  // Sort filtered options: favorites first
   const sortedOptions = favorites.length
     ? [...filteredOptions].sort(
         (a, b) => (favoritesSet.has(b) ? 1 : 0) - (favoritesSet.has(a) ? 1 : 0)
@@ -65,6 +62,15 @@ export default function ComboBox({
   const handleChangeText = (text: string) => {
     setSearchText(text);
     onChange(text);
+
+    // console.log(
+    //   searchItems({
+    //     items: options,
+    //     query: text,
+    //     getText: (item) => item,
+    //   })
+    // );
+
     setFilteredOptions(
       searchItems({
         items: options,

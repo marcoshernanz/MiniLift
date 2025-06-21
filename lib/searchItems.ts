@@ -9,24 +9,48 @@ export default function searchItems<T>({
   query,
   getText,
 }: Params<T>): T[] {
-  if (!query.trim()) return items;
+  const queryLower = query.trim().toLowerCase();
+  if (!queryLower) {
+    return items;
+  }
 
-  const lowerQuery = query.trim().toLowerCase();
-  return items.filter((item) => {
+  const scored = items.map((item) => {
     const lowerText = getText(item).toLowerCase();
+    const textTokens = lowerText.split(/[^a-z0-9]+/).filter(Boolean);
 
-    if (lowerText.includes(lowerQuery)) {
-      return true;
-    }
+    let queryIndex = 0;
+    let numTokensMatched = 0;
+    for (const token of textTokens) {
+      let hasMatched = false;
+      for (const char of token) {
+        if (char === queryLower[queryIndex]) {
+          queryIndex++;
+          hasMatched = true;
 
-    let targetIndex = 0;
-    for (const char of lowerQuery) {
-      targetIndex = lowerText.indexOf(char, targetIndex);
-      if (targetIndex === -1) {
-        return false;
+          if (queryIndex >= queryLower.length) {
+            break;
+          }
+        } else {
+          break;
+        }
       }
-      targetIndex++;
+
+      if (hasMatched) {
+        numTokensMatched++;
+      }
+
+      if (queryIndex >= queryLower.length) {
+        return { item, numTokensMatched };
+      }
     }
-    return true;
+
+    return { item, numTokensMatched: 0 };
   });
+
+  console.log(scored);
+
+  return scored
+    .filter(({ numTokensMatched }) => numTokensMatched > 0)
+    .sort((a, b) => a.numTokensMatched - b.numTokensMatched)
+    .map(({ item }) => item);
 }
