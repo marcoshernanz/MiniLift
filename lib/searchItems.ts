@@ -11,7 +11,10 @@ export default function searchItems<T>({
   query,
   getText,
 }: Params<T>): T[] {
-  const queryLower = query.trim().toLowerCase();
+  const queryLower = query
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
   if (!queryLower) {
     return items;
   }
