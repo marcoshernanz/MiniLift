@@ -4,6 +4,8 @@ interface Params<T> {
   getText: (item: T) => string;
 }
 
+type Match = { queryIndex: number; numTokensMatched: number };
+
 export default function searchItems<T>({
   items,
   query,
@@ -13,41 +15,50 @@ export default function searchItems<T>({
   if (!queryLower) {
     return items;
   }
-
   const scored = items.map((item) => {
     const lowerText = getText(item).toLowerCase();
     const textTokens = lowerText.split(/[^a-z0-9]+/).filter(Boolean);
 
-    let queryIndex = 0;
-    let numTokensMatched = 0;
+    const matches: Match[] = [{ queryIndex: 0, numTokensMatched: 0 }];
     for (const token of textTokens) {
-      let hasMatched = false;
-      for (const char of token) {
-        if (char === queryLower[queryIndex]) {
-          queryIndex++;
-          hasMatched = true;
+      const newMatches: Match[] = [];
+      for (const match of matches) {
+        let queryIndex = match.queryIndex;
+        if (queryIndex >= queryLower.length) {
+          continue;
+        }
 
-          if (queryIndex >= queryLower.length) {
+        for (const char of token) {
+          if (char === queryLower[queryIndex]) {
+            queryIndex++;
+
+            newMatches.push({
+              queryIndex: queryIndex,
+              numTokensMatched: match.numTokensMatched + 1,
+            });
+
+            if (queryIndex >= queryLower.length) {
+              break;
+            }
+          } else {
             break;
           }
-        } else {
-          break;
         }
       }
-
-      if (hasMatched) {
-        numTokensMatched++;
-      }
-
-      if (queryIndex >= queryLower.length) {
-        return { item, numTokensMatched };
+      matches.push(...newMatches);
+    }
+    let minTokensMatched = Infinity;
+    for (const match of matches) {
+      if (match.queryIndex >= queryLower.length) {
+        minTokensMatched = Math.min(minTokensMatched, match.numTokensMatched);
       }
     }
+    if (minTokensMatched === Infinity) {
+      minTokensMatched = 0;
+    }
 
-    return { item, numTokensMatched: 0 };
+    return { item, numTokensMatched: minTokensMatched };
   });
-
-  console.log(scored);
 
   return scored
     .filter(({ numTokensMatched }) => numTokensMatched > 0)
