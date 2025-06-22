@@ -25,11 +25,7 @@ export default function ExercisesSearchBar({ search, setSearch }: Props) {
           style={styles.clearIconContainer}
           onPress={() => setSearch("")}
         >
-          <XIcon
-            color={getColor("mutedForeground")}
-            size={18}
-            style={{ opacity: search ? 1 : 0 }}
-          />
+          <XIcon color={getColor("mutedForeground")} size={18} />
         </Pressable>
       )}
     </View>

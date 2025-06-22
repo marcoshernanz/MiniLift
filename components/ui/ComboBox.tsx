@@ -1,6 +1,6 @@
 import getColor from "@/lib/getColor";
 import searchItems from "@/lib/searchItems";
-import { StarIcon } from "lucide-react-native";
+import { StarIcon, XIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -29,6 +29,8 @@ interface ComboBoxProps {
   inputProps?: TextInputProps;
   inputRef?: React.Ref<TextInputHandle>;
   favorites?: string[];
+  clearable?: boolean;
+  onClear?: () => void;
 }
 
 export default function ComboBox({
@@ -42,6 +44,7 @@ export default function ComboBox({
   inputProps,
   inputRef,
   favorites = [],
+  clearable = false,
 }: ComboBoxProps) {
   const [searchText, setSearchText] = useState(value);
   const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
@@ -71,6 +74,12 @@ export default function ComboBox({
       })
     );
     setShowDropdown(true);
+  };
+
+  const handleClear = () => {
+    setSearchText("");
+    onChange("");
+    handleChangeText("");
   };
 
   const opacity = useSharedValue(0);
@@ -111,7 +120,7 @@ export default function ComboBox({
   }, [showDropdown, opacity, scale]);
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         {...inputProps}
         placeholder={placeholder}
@@ -128,6 +137,11 @@ export default function ComboBox({
           setTimeout(() => setShowDropdown(false), 100);
         }}
       />
+      {clearable && searchText ? (
+        <Pressable style={styles.clearIconContainer} onPress={handleClear}>
+          <XIcon color={getColor("mutedForeground")} size={18} />
+        </Pressable>
+      ) : null}
       {visible && (
         <Animated.View
           style={[styles.dropdown, animatedStyle]}
@@ -170,6 +184,9 @@ export default function ComboBox({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+  },
   dropdown: {
     position: "absolute",
     top: 45,
@@ -200,5 +217,13 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  clearIconContainer: {
+    position: "absolute",
+    height: "100%",
+    aspectRatio: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    right: 0,
   },
 });

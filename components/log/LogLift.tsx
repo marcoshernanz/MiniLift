@@ -105,6 +105,7 @@ export default function LogLift({
           favorites={favoriteExercises}
           value={exercise}
           onChange={setExercise}
+          clearable={editingEnabled}
           placeholder="Exercise"
           editable={editingEnabled}
           inputRef={exerciseInputRef}
