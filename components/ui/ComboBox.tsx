@@ -63,14 +63,6 @@ export default function ComboBox({
     setSearchText(text);
     onChange(text);
 
-    // console.log(
-    //   searchItems({
-    //     items: options,
-    //     query: text,
-    //     getText: (item) => item,
-    //   })
-    // );
-
     setFilteredOptions(
       searchItems({
         items: options,
