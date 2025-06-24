@@ -153,6 +153,7 @@ export default function ComboBox({
             keyboardShouldPersistTaps="handled"
             data={sortedOptions}
             keyExtractor={(item, index) => `${item}-${index}`}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <Pressable
                 style={styles.dropdownItem}
@@ -203,18 +204,17 @@ const styles = StyleSheet.create({
   },
   dropdownItemText: {
     color: getColor("foreground"),
+    flexShrink: 1,
   },
   dropdownItem: {
     padding: 12,
     borderBottomWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderBottomColor: getColor("border"),
   },
   starIconContainer: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-    bottom: 0,
-    aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
   },

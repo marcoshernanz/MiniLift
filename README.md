@@ -4,7 +4,6 @@
 - FlashList performance
 
 - Exercises name overflow
-  - Combobox items
   - Exercise search
   - Combobox search
   - Activity item
