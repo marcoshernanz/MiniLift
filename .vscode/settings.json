@@ -1,8 +1,3 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
-    "source.sortMembers": "explicit"
-  },
   "cSpell.words": ["epley", "lombardi", "minilift", "Minilift", "uuidv"]
 }
