@@ -123,6 +123,7 @@ export default function ComboBox({
     <View style={styles.container}>
       <TextInput
         {...inputProps}
+        style={[inputProps?.style, styles.textInput]}
         placeholder={placeholder}
         value={searchText}
         onChangeText={handleChangeText}
@@ -142,7 +143,7 @@ export default function ComboBox({
           <XIcon color={getColor("mutedForeground")} size={18} />
         </Pressable>
       ) : null}
-      {visible && (
+      {visible && sortedOptions.length > 0 && (
         <Animated.View
           style={[styles.dropdown, animatedStyle]}
           onLayout={(e) => {
@@ -187,6 +188,9 @@ export default function ComboBox({
 const styles = StyleSheet.create({
   container: {
     position: "relative",
+  },
+  textInput: {
+    paddingRight: 40,
   },
   dropdown: {
     position: "absolute",

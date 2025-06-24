@@ -4,7 +4,6 @@
 - FlashList performance
 
 - Exercises name overflow
-  - Combobox search
   - Activity item
 - Code deletion on save
 
