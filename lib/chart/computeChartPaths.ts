@@ -14,6 +14,7 @@ interface Params {
   width: number;
   height: number;
   bottomPadding: number;
+  topOffset?: number;
 }
 
 export function computeChartPaths({
@@ -21,6 +22,7 @@ export function computeChartPaths({
   width,
   height,
   bottomPadding,
+  topOffset = 0,
 }: Params): {
   linePath: SkPath;
   areaPath: SkPath;
@@ -33,6 +35,7 @@ export function computeChartPaths({
   const entries = Object.entries(data) as [string, number | null][];
   const chartAreaHeight = height;
   const chartHeight = chartAreaHeight * (1 - bottomPadding);
+  const offsetY = topOffset;
   const numericValues = entries
     .map(([, v]) => v)
     .filter((v): v is number => v != null);
@@ -43,7 +46,7 @@ export function computeChartPaths({
   entries.forEach(([key, value], index) => {
     if (value == null) return;
     const x = (index / (entries.length - 1 || 1)) * width;
-    const y = ((max - value) / (max - min || 1)) * chartHeight;
+    const y = ((max - value) / (max - min || 1)) * chartHeight + offsetY;
     points.push({ x, y, key, value });
   });
 
@@ -63,8 +66,9 @@ export function computeChartPaths({
     const last = points[points.length - 1];
     linePath.lineTo(last.x, last.y);
     areaPath.lineTo(last.x, last.y);
-    areaPath.lineTo(width, height);
-    areaPath.lineTo(0, height);
+
+    areaPath.lineTo(width, height + offsetY);
+    areaPath.lineTo(0, height + offsetY);
     areaPath.close();
   }
 

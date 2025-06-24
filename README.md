@@ -4,6 +4,5 @@
 - FlashList performance
 
 - Chart animation
-- Chart top dot visible
 - FlatList scroll bug
 - Chart with no data

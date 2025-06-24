@@ -75,8 +75,9 @@ export default function Chart({
         width: chartWidth,
         height: chartHeight,
         bottomPadding,
+        topOffset: chartTop,
       }),
-    [data, chartWidth, chartHeight]
+    [data, chartWidth, chartHeight, chartTop]
   );
 
   const dataKeys = Object.keys(data);
@@ -196,16 +197,7 @@ export default function Chart({
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
-        <Animated.View
-          style={[
-            styles.chartContainer,
-            {
-              height,
-              paddingTop: chartTop,
-              width: width,
-            },
-          ]}
-        >
+        <Animated.View style={[styles.chartContainer, { height, width }]}>
           <Canvas
             style={{
               flex: 1,
@@ -216,7 +208,7 @@ export default function Chart({
               <Path path={areaPath} style="fill" dither>
                 <LinearGradient
                   start={vec(0, chartTop)}
-                  end={vec(0, chartHeight)}
+                  end={vec(0, chartTop + chartHeight)}
                   colors={[getColor("primary", 0.5), getColor("primary", 0)]}
                 />
               </Path>
@@ -283,7 +275,12 @@ export default function Chart({
                     key={entryIdx}
                     paragraph={paragraph}
                     x={widthPerPoint * entryIdx - labelWidth / 2}
-                    y={chartHeight + labelHeight / 2 - paragraphHeight / 2}
+                    y={
+                      chartTop +
+                      chartHeight +
+                      labelHeight / 2 -
+                      paragraphHeight / 2
+                    }
                     width={labelWidth}
                   />
                 );

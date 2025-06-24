@@ -47,8 +47,14 @@ export default function SimpleChart({
 
   const { linePath, areaPath, points } = useMemo(
     () =>
-      computeChartPaths({ data, width, height: chartHeight, bottomPadding }),
-    [data, width, chartHeight]
+      computeChartPaths({
+        data,
+        width,
+        height: chartHeight,
+        bottomPadding,
+        topOffset: chartTop,
+      }),
+    [data, width, chartHeight, chartTop]
   );
 
   const pressX = useSharedValue<number>(0);
@@ -144,14 +150,13 @@ export default function SimpleChart({
         <Canvas
           style={{
             flex: 1,
-            height: chartHeight,
-            marginTop: chartTop,
+            height,
           }}
         >
           <Path path={areaPath} style="fill" dither>
             <LinearGradient
               start={vec(0, chartTop)}
-              end={vec(0, chartHeight)}
+              end={vec(0, chartTop + chartHeight)}
               colors={[getColor("primary", 0.5), getColor("primary", 0)]}
             />
           </Path>
@@ -186,7 +191,12 @@ export default function SimpleChart({
         </Animated.View>
 
         {points.length > 0 && labelCount && (
-          <View style={[styles.labelsContainer, { height: labelHeight }]}>
+          <View
+            style={[
+              styles.labelsContainer,
+              { height: labelHeight, marginTop: chartTop },
+            ]}
+          >
             {Array.from({ length: labelCount }, (_, i) => {
               const idx = Math.round(
                 ((i + 1) * points.length) / (labelCount + 1) - 1
