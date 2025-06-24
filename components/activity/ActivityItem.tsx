@@ -31,6 +31,7 @@ export default function ActivityItem({ item }: Props) {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 16 }}
           renderItem={({ item }) => <ActivityLogItem log={item} />}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>

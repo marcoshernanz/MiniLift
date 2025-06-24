@@ -32,6 +32,7 @@ export default function ExercisesList({ search }: Props) {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ExerciseListItem item={item} />}
       contentContainerStyle={styles.flatList}
+      showsVerticalScrollIndicator={false}
     />
   );
 }
