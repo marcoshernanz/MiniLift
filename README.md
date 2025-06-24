@@ -4,6 +4,11 @@
 - FlashList performance
 
 - Exercises name overflow
+  - Combobox items
+  - Exercise search
+  - Combobox search
+  - Activity item
+- Code deletion on save
 
 - Chart animation
 - Chart top dot visible

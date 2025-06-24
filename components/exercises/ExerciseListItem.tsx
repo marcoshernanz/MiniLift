@@ -48,45 +48,49 @@ export default function ExerciseListItem({ item }: Props) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.mainPressableWrapper}>
-        <Pressable
-          style={styles.mainPressable}
-          android_ripple={{ color: getColor("muted") }}
-          onPress={() => router.push(`/exercise/${item.id}`)}
-        >
-          <Text style={styles.mainText}>{item.name}</Text>
-        </Pressable>
-        <View style={styles.iconsContainer}>
+    <>
+      <View style={styles.container}>
+        <View style={styles.mainPressableWrapper}>
           <Pressable
-            style={styles.favoritePressable}
-            android_ripple={{ color: getColor("muted"), radius: 20 }}
-            onPress={toggleFavorite}
+            style={styles.mainPressable}
+            android_ripple={{ color: getColor("muted") }}
+            onPress={() => router.push(`/exercise/${item.id}`)}
           >
-            <StarIcon
-              size={20}
-              strokeWidth={1.75}
-              color={
-                item.isFavorite
-                  ? getColor("primary")
-                  : getColor("mutedForeground")
-              }
-              fill={item.isFavorite ? getColor("primary") : "transparent"}
-            />
-          </Pressable>
-          <Pressable
-            style={styles.deletePressable}
-            android_ripple={{ color: getColor("muted"), radius: 20 }}
-            onPress={() => setDialogVisible(true)}
-          >
-            <TrashIcon
-              size={20}
-              strokeWidth={1.75}
-              color={getColor("mutedForeground")}
-            />
+            <Text style={styles.mainText}>{item.name}</Text>
+
+            <View style={styles.iconsContainer}>
+              <Pressable
+                style={styles.favoritePressable}
+                android_ripple={{ color: getColor("muted"), radius: 20 }}
+                onPress={toggleFavorite}
+              >
+                <StarIcon
+                  size={20}
+                  strokeWidth={1.75}
+                  color={
+                    item.isFavorite
+                      ? getColor("primary")
+                      : getColor("mutedForeground")
+                  }
+                  fill={item.isFavorite ? getColor("primary") : "transparent"}
+                />
+              </Pressable>
+              <Pressable
+                style={styles.deletePressable}
+                android_ripple={{ color: getColor("muted"), radius: 20 }}
+                onPress={() => setDialogVisible(true)}
+              >
+                <TrashIcon
+                  size={20}
+                  strokeWidth={1.75}
+                  color={getColor("mutedForeground")}
+                />
+              </Pressable>
+            </View>
           </Pressable>
         </View>
       </View>
+
       <AlertDialog
         visible={dialogVisible}
         buttonVariant="destructive"
@@ -102,7 +106,7 @@ export default function ExerciseListItem({ item }: Props) {
         onCancel={() => setDialogVisible(false)}
         onConfirm={handleDelete}
       />
-    </View>
+    </>
   );
 }
 
@@ -117,18 +121,19 @@ const styles = StyleSheet.create({
   },
   mainPressable: {
     flex: 1,
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderRadius: 8,
   },
   mainText: {
     fontSize: 16,
     padding: 12,
+    flex: 1,
+    flexShrink: 1,
   },
   iconsContainer: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-    bottom: 0,
+    height: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
