@@ -110,7 +110,7 @@ export default function SimpleChart({
     tooltipCircle: useAnimatedStyle(() => ({
       position: "absolute",
       left: pressX.value - circleRadius,
-      top: selectedPoint.value.y - circleRadius + chartTop,
+      top: selectedPoint.value.y - circleRadius,
       width: circleRadius * 2,
       height: circleRadius * 2,
       borderRadius: 999,
@@ -191,12 +191,7 @@ export default function SimpleChart({
         </Animated.View>
 
         {points.length > 0 && labelCount && (
-          <View
-            style={[
-              styles.labelsContainer,
-              { height: labelHeight, marginTop: chartTop },
-            ]}
-          >
+          <View style={[styles.labelsContainer, { height: labelHeight }]}>
             {Array.from({ length: labelCount }, (_, i) => {
               const idx = Math.round(
                 ((i + 1) * points.length) / (labelCount + 1) - 1
