@@ -3,6 +3,7 @@ import StatisticsTypeSelector from "@/components/statistics/StatisticsTypeSelect
 import Chart from "@/components/ui/Chart";
 import SafeArea from "@/components/ui/SafeArea";
 import Title from "@/components/ui/Title";
+import { useAppContext } from "@/context/AppContext";
 import useDailyData from "@/lib/data/getDailyData";
 import useMonthlyData from "@/lib/data/getMonthlyData";
 import useWeeklyData from "@/lib/data/getWeeklyData";
@@ -15,11 +16,14 @@ export type TimeFrame = "7D" | "1M" | "3M" | "1Y" | "All";
 export type StatisticsType = "score" | "oneRepMax";
 
 export default function StatisticsScreen() {
+  const { appData } = useAppContext();
+
   const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>("7D");
   const [selectedType, setSelectedType] = useState<StatisticsType>("score");
   const [chartHeight, setChartHeight] = useState<number>(0);
 
   const { id } = useLocalSearchParams<{ id: string }>();
+  const exercise = appData.exercises[id];
 
   const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyData(id);
   const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyData(id);
@@ -70,7 +74,7 @@ export default function StatisticsScreen() {
   return (
     <SafeArea style={styles.container}>
       <View style={styles.headerContainer}>
-        <Title style={styles.title}>Statistics</Title>
+        <Title style={styles.title}>{exercise.name}</Title>
         <StatisticsTimeFrameSelector
           selectedTimeFrame={selectedTimeFrame}
           setSelectedTimeFrame={setSelectedTimeFrame}
