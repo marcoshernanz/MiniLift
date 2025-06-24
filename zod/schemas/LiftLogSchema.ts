@@ -6,7 +6,7 @@ export const LiftLogSchema = z
     id: z.string().uuid(),
     date: z.coerce.date(),
     reps: z.number().int().min(1),
-    weight: z.number().positive(),
+    weight: z.number().nonnegative(),
     exercise: ExerciseSchema,
   })
   .strict();
