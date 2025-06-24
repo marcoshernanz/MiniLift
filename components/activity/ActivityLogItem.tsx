@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginLeft: 12,
+    flexShrink: 1,
   },
   primaryText: {
     fontSize: 15,
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
   timeContainer: {
     marginLeft: "auto",
     paddingRight: 4,
+    paddingLeft: 12,
   },
   timeText: {
     color: getColor("mutedForeground"),

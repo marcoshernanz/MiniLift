@@ -3,9 +3,9 @@
 - Custom way of calculating 1RM with ai
 - FlashList performance
 
-- Exercises name overflow
-  - Activity item
 - Code deletion on save
+
+- Log exercise with 0 weight
 
 - Chart animation
 - Chart top dot visible
