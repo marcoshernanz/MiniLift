@@ -171,6 +171,9 @@ export default function SimpleChart({
       backgroundColor: getColor("primary", 0.1),
       borderRadius: 4,
     })),
+    fadeIn: useAnimatedStyle(() => ({
+      opacity: animationProgress.value * 2,
+    })),
   };
 
   const animatedProps = {
@@ -185,26 +188,30 @@ export default function SimpleChart({
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
-        <Canvas
-          style={{
-            flex: 1,
-            height,
-          }}
+        <Animated.View
+          style={[{ flex: 1, width, height }, animatedStyles.fadeIn]}
         >
-          <Path path={animatedAreaPath} style="fill" dither>
-            <LinearGradient
-              start={vec(0, chartTop)}
-              end={vec(0, chartTop + chartHeight)}
-              colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+          <Canvas
+            style={{
+              flex: 1,
+              height,
+            }}
+          >
+            <Path path={animatedAreaPath} style="fill" dither>
+              <LinearGradient
+                start={vec(0, chartTop)}
+                end={vec(0, chartTop + chartHeight)}
+                colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+              />
+            </Path>
+            <Path
+              path={animatedLinePath}
+              color={getColor("primary")}
+              style="stroke"
+              strokeWidth={2}
             />
-          </Path>
-          <Path
-            path={animatedLinePath}
-            color={getColor("primary")}
-            style="stroke"
-            strokeWidth={2}
-          />
-        </Canvas>
+          </Canvas>
+        </Animated.View>
 
         <Animated.View style={animatedStyles.tooltipContainer}>
           <Animated.View style={animatedStyles.tooltipLine} />
