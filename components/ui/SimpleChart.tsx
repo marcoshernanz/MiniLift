@@ -1,7 +1,14 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
 import getColor from "@/lib/getColor";
-import { Canvas, LinearGradient, Path, vec } from "@shopify/react-native-skia";
-import React, { useMemo } from "react";
+import {
+  Canvas,
+  LinearGradient,
+  Path,
+  vec,
+  processTransform2d,
+  usePathValue,
+} from "@shopify/react-native-skia";
+import React, { useMemo, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import AnimateableText from "react-native-animateable-text";
 import {
@@ -15,6 +22,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 import Text from "./Text";
 
@@ -32,6 +40,7 @@ const tooltipMargin = 12;
 const baseLabelHeight = 24;
 const circleRadius = 4;
 const lineWidth = 1;
+const animationDuration = 1000;
 
 export default function SimpleChart({
   data,
@@ -59,6 +68,35 @@ export default function SimpleChart({
 
   const pressX = useSharedValue<number>(0);
   const showTooltip = useSharedValue<boolean>(false);
+
+  const animationProgress = useSharedValue(0);
+  const animatedLinePath = usePathValue((path) => {
+    "worklet";
+    path.transform(
+      processTransform2d([
+        {
+          translateY: (chartHeight + chartTop) * (1 - animationProgress.value),
+        },
+        { scaleY: animationProgress.value },
+      ])
+    );
+  }, linePath);
+  const animatedAreaPath = usePathValue((path) => {
+    "worklet";
+    path.transform(
+      processTransform2d([
+        {
+          translateY: (chartHeight + chartTop) * (1 - animationProgress.value),
+        },
+        { scaleY: animationProgress.value },
+      ])
+    );
+  }, areaPath);
+
+  useEffect(() => {
+    animationProgress.value = withTiming(1, { duration: animationDuration });
+  }, [animationProgress, data, chartHeight, chartTop]);
+
   const selectedPoint = useDerivedValue(() => {
     if (points.length === 0) {
       return { x: 0, y: 0, key: "", value: 0 };
@@ -153,7 +191,7 @@ export default function SimpleChart({
             height,
           }}
         >
-          <Path path={areaPath} style="fill" dither>
+          <Path path={animatedAreaPath} style="fill" dither>
             <LinearGradient
               start={vec(0, chartTop)}
               end={vec(0, chartTop + chartHeight)}
@@ -161,7 +199,7 @@ export default function SimpleChart({
             />
           </Path>
           <Path
-            path={linePath}
+            path={animatedLinePath}
             color={getColor("primary")}
             style="stroke"
             strokeWidth={2}
