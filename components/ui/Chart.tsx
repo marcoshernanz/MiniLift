@@ -7,11 +7,13 @@ import {
   LinearGradient,
   Paragraph,
   Path,
+  processTransform2d,
   Skia,
   SkParagraphStyle,
   SkTextStyle,
   TextAlign,
   useFonts,
+  usePathValue,
   vec,
 } from "@shopify/react-native-skia";
 import React, { useEffect, useMemo } from "react";
@@ -24,7 +26,6 @@ import {
   PanGestureHandlerEventPayload,
 } from "react-native-gesture-handler";
 import Animated, {
-  runOnUI,
   useAnimatedProps,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -49,6 +50,7 @@ const bottomPadding = 0.1;
 const tooltipMargin = 16;
 const baseLabelHeight = 32;
 const lineWidth = 1;
+const animationDuration = 3000;
 
 export default function Chart({
   data,
@@ -80,6 +82,32 @@ export default function Chart({
     [data, chartWidth, chartHeight, chartTop]
   );
 
+  const animationProgress = useSharedValue(0);
+
+  const animatedLinePath = usePathValue((path) => {
+    "worklet";
+    path.transform(
+      processTransform2d([
+        {
+          translateY: (chartHeight + chartTop) * (1 - animationProgress.value),
+        },
+        { scaleY: animationProgress.value },
+      ])
+    );
+  }, linePath);
+
+  const animatedAreaPath = usePathValue((path) => {
+    "worklet";
+    path.transform(
+      processTransform2d([
+        {
+          translateY: (chartHeight + chartTop) * (1 - animationProgress.value),
+        },
+        { scaleY: animationProgress.value },
+      ])
+    );
+  }, areaPath);
+
   const dataKeys = Object.keys(data);
 
   const pressX = useSharedValue<number>(0);
@@ -91,11 +119,11 @@ export default function Chart({
   const panX = useSharedValue(minPanX);
 
   useEffect(() => {
-    runOnUI(() => {
-      panX.value = minPanX;
-      startingPanX.value = minPanX;
-    })();
-  }, [data, minPanX, panX, startingPanX]);
+    panX.value = minPanX;
+    startingPanX.value = minPanX;
+    animationProgress.value = 0;
+    animationProgress.value = withTiming(1, { duration: animationDuration });
+  }, [animationProgress, data, minPanX, panX, startingPanX]);
 
   const selectedPoint = useDerivedValue(() => {
     if (points.length === 0) {
@@ -205,7 +233,7 @@ export default function Chart({
             }}
           >
             <Group transform={transform}>
-              <Path path={areaPath} style="fill" dither>
+              <Path path={animatedAreaPath} style="fill" dither>
                 <LinearGradient
                   start={vec(0, chartTop)}
                   end={vec(0, chartTop + chartHeight)}
@@ -213,7 +241,7 @@ export default function Chart({
                 />
               </Path>
               <Path
-                path={linePath}
+                path={animatedLinePath}
                 color={getColor("primary")}
                 style="stroke"
                 strokeWidth={2}
