@@ -272,9 +272,32 @@ export default function Chart({
                 strokeWidth={2}
               />
 
-              {points.map((p, idx) => (
-                <ChartPoint key={idx} x={p.x} y={p.y} />
-              ))}
+              {points.map((p, idx) => {
+                if (idx >= points.length - numPointsVisible * 2) {
+                  return <ChartPoint key={idx} x={p.x} y={p.y} />;
+                }
+
+                return (
+                  <>
+                    <Circle
+                      key={`bg-${idx}`}
+                      cx={p.x}
+                      cy={p.y}
+                      r={5.5}
+                      color={getColor("background")}
+                    />
+                    <Circle
+                      key={`fg-${idx}`}
+                      cx={p.x}
+                      cy={p.y}
+                      r={5.5}
+                      color={getColor("primary")}
+                      style="stroke"
+                      strokeWidth={1.5}
+                    />
+                  </>
+                );
+              })}
 
               {Array.from({ length: numTotalLabels }, (_, i) => {
                 const entryIdx = i * pointsPerLabel + 1;
