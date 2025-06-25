@@ -226,6 +226,9 @@ export default function Chart({
         Math.min(pressX.value - tooltipWidth / 2, width - tooltipWidth)
       ),
     })),
+    fadeIn: useAnimatedStyle(() => ({
+      opacity: animationProgress.value * 2,
+    })),
   };
 
   const animatedProps = {
@@ -246,13 +249,14 @@ export default function Chart({
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
-        <Animated.View style={[styles.chartContainer, { height, width }]}>
-          <Canvas
-            style={{
-              flex: 1,
-              height,
-            }}
-          >
+        <Animated.View
+          style={[
+            styles.chartContainer,
+            animatedStyles.fadeIn,
+            { height, width },
+          ]}
+        >
+          <Canvas style={{ flex: 1, height }}>
             <Group transform={transform}>
               <Path path={animatedAreaPath} style="fill" dither>
                 <LinearGradient
