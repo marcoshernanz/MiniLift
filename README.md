@@ -6,3 +6,4 @@
 - Chart animation
 - FlatList scroll bug
 - Chart with no data
+- Chart no last point
