@@ -50,7 +50,7 @@ const bottomPadding = 0.1;
 const tooltipMargin = 16;
 const baseLabelHeight = 32;
 const lineWidth = 1;
-const animationDuration = 3000;
+const animationDuration = 1000;
 
 export default function Chart({
   data,
@@ -107,6 +107,27 @@ export default function Chart({
       ])
     );
   }, areaPath);
+
+  const ChartPoint = ({ x, y }: { x: number; y: number }) => {
+    const cy = useDerivedValue(
+      () =>
+        (chartHeight + chartTop) * (1 - animationProgress.value) +
+        y * animationProgress.value
+    );
+    return (
+      <>
+        <Circle cx={x} cy={cy} r={5.5} color={getColor("background")} />
+        <Circle
+          cx={x}
+          cy={cy}
+          r={5.5}
+          color={getColor("primary")}
+          style="stroke"
+          strokeWidth={1.5}
+        />
+      </>
+    );
+  };
 
   const dataKeys = Object.keys(data);
 
@@ -248,22 +269,7 @@ export default function Chart({
               />
 
               {points.map((p, idx) => (
-                <React.Fragment key={idx}>
-                  <Circle
-                    cx={p.x}
-                    cy={p.y}
-                    r={5.5}
-                    color={getColor("background")}
-                  />
-                  <Circle
-                    cx={p.x}
-                    cy={p.y}
-                    r={5.5}
-                    color={getColor("primary")}
-                    style="stroke"
-                    strokeWidth={1.5}
-                  />
-                </React.Fragment>
+                <ChartPoint key={idx} x={p.x} y={p.y} />
               ))}
 
               {Array.from({ length: numTotalLabels }, (_, i) => {
