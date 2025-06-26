@@ -78,6 +78,7 @@ export default function Chart({
         height: chartHeight,
         bottomPadding,
         topOffset: chartTop,
+        minValue: 0,
       }),
     [data, chartWidth, chartHeight, chartTop]
   );

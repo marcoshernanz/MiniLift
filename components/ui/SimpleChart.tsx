@@ -62,6 +62,7 @@ export default function SimpleChart({
         height: chartHeight,
         bottomPadding,
         topOffset: chartTop,
+        minValue: 0,
       }),
     [data, width, chartHeight, chartTop]
   );

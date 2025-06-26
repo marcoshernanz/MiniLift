@@ -15,6 +15,7 @@ interface Params {
   height: number;
   bottomPadding: number;
   topOffset?: number;
+  minValue?: number;
 }
 
 export function computeChartPaths({
@@ -23,6 +24,7 @@ export function computeChartPaths({
   height,
   bottomPadding,
   topOffset = 0,
+  minValue,
 }: Params): {
   linePath: SkPath;
   areaPath: SkPath;
@@ -40,7 +42,8 @@ export function computeChartPaths({
     .map(([, v]) => v)
     .filter((v): v is number => v != null);
   const max = numericValues.length ? Math.max(...numericValues) : 0;
-  const min = numericValues.length ? Math.min(...numericValues) : 0;
+  const dataMin = numericValues.length ? Math.min(...numericValues) : 0;
+  const min = minValue !== undefined ? minValue : dataMin;
 
   const points: ChartPoint[] = [];
   entries.forEach(([key, value], index) => {

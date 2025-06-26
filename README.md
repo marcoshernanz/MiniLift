@@ -3,7 +3,6 @@
 - Custom way of calculating 1RM with ai
 - FlashList performance
 
-- Chart y axis start from 0
 - Exercise details chart always 30 days
 - Chart all with 1 point
 - No chart left animation when only a few points
