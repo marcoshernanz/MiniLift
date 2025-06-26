@@ -248,10 +248,6 @@ export default function Chart({
     ],
   });
 
-  const chartStart = useDerivedValue(() =>
-    animationProgress.value === 1 ? 0 : 1 - (width * 2) / chartWidth
-  );
-
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
@@ -276,7 +272,6 @@ export default function Chart({
                 color={getColor("primary")}
                 style="stroke"
                 strokeWidth={2}
-                start={chartStart}
               />
 
               {points.map((p, idx) => {
