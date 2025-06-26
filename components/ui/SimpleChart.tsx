@@ -7,6 +7,12 @@ import {
   vec,
   processTransform2d,
   usePathValue,
+  useFonts,
+  SkParagraphStyle,
+  TextAlign,
+  SkTextStyle,
+  Skia,
+  Paragraph,
 } from "@shopify/react-native-skia";
 import React, { useMemo, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
@@ -27,12 +33,13 @@ import Animated, {
 import Text from "./Text";
 
 interface Props {
-  data: Record<string, number>;
+  data: Record<string, number | null>;
   width: number;
   height: number;
   tooltipHeight?: number;
   tooltipWidth?: number;
-  labelCount?: number;
+  pointsPerLabel?: number;
+  labelStart?: number;
 }
 
 const bottomPadding = 0.1;
@@ -48,11 +55,17 @@ export default function SimpleChart({
   height,
   tooltipHeight = 32,
   tooltipWidth = 92,
-  labelCount,
+  pointsPerLabel = 0,
+  labelStart = 1,
 }: Props) {
-  const labelHeight = labelCount ? baseLabelHeight : 0;
+  const labelHeight = pointsPerLabel ? baseLabelHeight : 0;
   const chartHeight = height - tooltipHeight - tooltipMargin - labelHeight;
   const chartTop = tooltipHeight + tooltipMargin;
+  const dataLength = Object.keys(data).length;
+  const widthPerPoint = width / dataLength;
+  const numTotalLabels =
+    pointsPerLabel === 0 ? 0 : Math.floor(dataLength / pointsPerLabel);
+  const dataKeys = Object.keys(data);
 
   const { linePath, areaPath, points } = useMemo(
     () =>
@@ -186,6 +199,12 @@ export default function SimpleChart({
     })),
   };
 
+  const fontManager = useFonts({
+    Inter: [
+      require("@/node_modules/@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf"),
+    ],
+  });
+
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>
@@ -211,6 +230,54 @@ export default function SimpleChart({
               style="stroke"
               strokeWidth={2}
             />
+
+            {Array.from({ length: numTotalLabels }, (_, i) => {
+              const entryIdx = i * pointsPerLabel + labelStart;
+              const labelWidth = widthPerPoint * pointsPerLabel;
+              const paragraph = (() => {
+                if (!fontManager) return null;
+
+                const paragraphStyle: SkParagraphStyle = {
+                  textAlign: TextAlign.Center,
+                };
+
+                const textStyle: SkTextStyle = {
+                  color: Skia.Color(getColor("mutedForeground")),
+                  fontFamilies: ["Inter"],
+                  fontSize: 12,
+                };
+
+                const labelKey = dataKeys[entryIdx] || "";
+                const paragraph = Skia.ParagraphBuilder.Make(
+                  paragraphStyle,
+                  fontManager
+                )
+                  .pushStyle(textStyle)
+                  .addText(labelKey)
+                  .build();
+
+                paragraph.layout(labelWidth);
+
+                return paragraph;
+              })();
+
+              const paragraphHeight = paragraph?.getHeight() || 0;
+
+              return (
+                <Paragraph
+                  key={`${i}-${entryIdx}`}
+                  paragraph={paragraph}
+                  x={widthPerPoint * entryIdx - labelWidth / 2}
+                  y={
+                    chartTop +
+                    chartHeight +
+                    labelHeight / 2 -
+                    paragraphHeight / 2
+                  }
+                  width={labelWidth}
+                />
+              );
+            })}
           </Canvas>
         </Animated.View>
 
@@ -235,21 +302,6 @@ export default function SimpleChart({
             />
           </Animated.View>
         </Animated.View>
-
-        {points.length > 0 && labelCount && (
-          <View style={[styles.labelsContainer, { height: labelHeight }]}>
-            {Array.from({ length: labelCount }, (_, i) => {
-              const idx = Math.round(
-                ((i + 1) * points.length) / (labelCount + 1) - 1
-              );
-              return (
-                <Text key={`${i}-${idx}`} style={styles.labelText}>
-                  {points[idx].key}
-                </Text>
-              );
-            })}
-          </View>
-        )}
       </View>
     </GestureDetector>
   );

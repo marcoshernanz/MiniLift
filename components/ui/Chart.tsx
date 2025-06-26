@@ -68,7 +68,8 @@ export default function Chart({
   const widthPerPoint = (width - padding * 2) / (numPointsVisible - 1);
   const dataLength = Object.keys(data).length;
   const chartWidth = widthPerPoint * (dataLength - 1);
-  const numTotalLabels = Math.floor(dataLength / pointsPerLabel);
+  const numTotalLabels =
+    pointsPerLabel === 0 ? 0 : Math.floor(dataLength / pointsPerLabel);
 
   const { linePath, areaPath, points } = useMemo(
     () =>

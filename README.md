@@ -11,6 +11,7 @@
 - Chart initial scroll to last point
 - Chart with no data
 - Chart no last point
+- Chart duplicate key
 
 - Export and import app data.
 - FlatList scroll bug

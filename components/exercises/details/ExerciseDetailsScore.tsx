@@ -17,23 +17,24 @@ interface Props {
 
 export default function ExerciseDetailsScore({ exercise }: Props) {
   const [helpVisible, setHelpVisible] = useState(false);
+
   const { score } = useDailyData(exercise.id);
+
   const endDate = new Date();
   const startDate = subDays(endDate, 29);
   const days = eachDayOfInterval({ start: startDate, end: endDate });
-  const chartData: Record<string, number> = days.reduce<Record<string, number>>(
-    (acc, day) => {
-      const key = format(day, "yyyy-MM-dd");
-      const label = format(day, "MMM dd");
-      if (score[key] != null) {
-        acc[label] = score[key];
-      }
-      return acc;
-    },
-    {} as Record<string, number>
-  );
 
-  const values = Object.values(chartData);
+  const chartData: Record<string, number | null> = days.reduce((acc, day) => {
+    const key = format(day, "yyyy-MM-dd");
+    const label = format(day, "MMM dd");
+    acc[label] = score[key];
+
+    return acc;
+  }, {} as Record<string, number | null>);
+
+  // console.log(chartData);
+
+  const values = Object.values(chartData).filter((value) => value !== null);
   const change =
     values.length >= 2 && values[0] !== 0
       ? (values[values.length - 1] - values[0]) / values[0]
@@ -85,7 +86,8 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         data={chartData}
         width={Dimensions.get("window").width - 32}
         height={250}
-        labelCount={4}
+        pointsPerLabel={7}
+        labelStart={4}
       />
 
       <Button
