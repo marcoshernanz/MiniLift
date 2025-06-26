@@ -273,7 +273,7 @@ export default function Chart({
               />
 
               {points.map((p, idx) => {
-                if (idx >= points.length - numPointsVisible * 2) {
+                if (p.x >= chartWidth - width * 2) {
                   return <ChartPoint key={idx} x={p.x} y={p.y} />;
                 }
 
