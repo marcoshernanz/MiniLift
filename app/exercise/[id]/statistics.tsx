@@ -40,7 +40,8 @@ export default function StatisticsScreen() {
     dataMap = selectedType === "score" ? monthlyScore : monthlyOneRepMax;
   }
 
-  const chartData = Object.entries(dataMap)
+  // const chartData = Object.entries(dataMap)
+  const x = Object.entries(dataMap)
     .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
     .reduce<Record<string, number | null>>((acc, [key, val]) => {
       const date = parseISO(key);
@@ -55,12 +56,22 @@ export default function StatisticsScreen() {
       return acc;
     }, {} as Record<string, number | null>);
 
+  const chartData: Record<string, number | null> = Object.entries(x)
+    .slice(0, 2)
+    .reduce((acc, [key, val]) => {
+      acc[key] = val;
+      return acc;
+    }, {} as Record<string, number | null>);
+
   const numPointsVisible = {
     "7D": 7,
     "1M": 30,
     "3M": 12,
     "1Y": 12,
-    All: Object.entries(chartData).length,
+    All:
+      Object.entries(chartData).length === 1
+        ? 2
+        : Object.entries(chartData).length,
   }[selectedTimeFrame];
 
   const pointsPerLabel = {

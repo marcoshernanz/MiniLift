@@ -204,6 +204,12 @@ export default function Chart({
     () => startingPanX.value,
     (currentValue, previousValue) => {
       if (currentValue !== previousValue) {
+        if (dataLength < numPointsVisible) {
+          panX.value = withTiming(minPanX);
+          startingPanX.value = withTiming(minPanX);
+          return;
+        }
+
         const translate =
           Math.round((panX.value - padding) / widthPerPoint) * widthPerPoint +
           padding;
