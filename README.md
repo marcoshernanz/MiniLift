@@ -12,6 +12,7 @@
 - Chart with no data
 - Chart no last point
 - Chart duplicate key
+- Chart only animate visible part
 
 - Export and import app data.
 - FlatList scroll bug
