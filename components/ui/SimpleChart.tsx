@@ -243,7 +243,7 @@ export default function SimpleChart({
                 ((i + 1) * points.length) / (labelCount + 1) - 1
               );
               return (
-                <Text key={idx} style={styles.labelText}>
+                <Text key={`${i}-${idx}`} style={styles.labelText}>
                   {points[idx].key}
                 </Text>
               );

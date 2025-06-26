@@ -339,7 +339,7 @@ export default function Chart({
 
                 return (
                   <Paragraph
-                    key={entryIdx}
+                    key={`${i}-${entryIdx}`}
                     paragraph={paragraph}
                     x={widthPerPoint * entryIdx - labelWidth / 2}
                     y={
