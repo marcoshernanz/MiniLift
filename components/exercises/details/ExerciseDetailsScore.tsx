@@ -86,8 +86,8 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         data={chartData}
         width={Dimensions.get("window").width - 32}
         height={250}
-        pointsPerLabel={7}
-        labelStart={4}
+        pointsPerLabel={10}
+        labelStart={5}
       />
 
       <Button

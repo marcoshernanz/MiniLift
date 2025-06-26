@@ -55,8 +55,12 @@ export function computeChartPaths({
 
   if (points.length > 0) {
     const first = points[0];
-    linePath.moveTo(first.x, first.y);
-    areaPath.moveTo(first.x, first.y);
+    const startY = first.y;
+
+    linePath.moveTo(0, startY);
+    linePath.lineTo(first.x, first.y);
+    areaPath.moveTo(0, startY);
+    areaPath.lineTo(first.x, first.y);
 
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1];
@@ -67,8 +71,10 @@ export function computeChartPaths({
     }
 
     const last = points[points.length - 1];
-    linePath.lineTo(last.x, last.y);
-    areaPath.lineTo(last.x, last.y);
+    const endY = last.y;
+
+    linePath.lineTo(width, endY);
+    areaPath.lineTo(width, endY);
 
     areaPath.lineTo(width, height + offsetY);
     areaPath.lineTo(0, height + offsetY);
