@@ -7,7 +7,6 @@ export interface ChartPoint {
   y: number;
   key: string;
   value: number;
-  /** index in original data entries */
   entryIndex: number;
 }
 
@@ -18,7 +17,6 @@ interface Params {
   bottomPadding: number;
   topOffset?: number;
   minValue?: number;
-  /** number of points at end to mark as visible */
   numVisiblePoints?: number;
 }
 
@@ -70,36 +68,61 @@ export function computeChartPaths({
 
   if (initialPoints.length > 0) {
     const first = initialPoints[0];
-    linePath.moveTo(first.x, first.y);
-    areaPath.moveTo(first.x, first.y);
+
+    linePath.moveTo(0, first.y);
+    linePath.lineTo(first.x, first.y);
+    areaPath.moveTo(0, first.y);
+    areaPath.lineTo(first.x, first.y);
+
     for (let i = 1; i < initialPoints.length; i++) {
       const prev = initialPoints[i - 1];
       const curr = initialPoints[i];
       const cx = (prev.x + curr.x) / 2;
+
       linePath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
       areaPath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
     }
+
     const last = initialPoints[initialPoints.length - 1];
-    areaPath.lineTo(last.x, height + offsetY);
-    areaPath.lineTo(first.x, height + offsetY);
+
+    if (visiblePoints.length === 0) {
+      linePath.lineTo(width, last.y);
+      areaPath.lineTo(width, last.y);
+      areaPath.lineTo(width, height + offsetY);
+    } else {
+      areaPath.lineTo(last.x, height + offsetY);
+    }
+
+    areaPath.lineTo(0, height + offsetY);
     areaPath.close();
   }
 
   const visibleLinePath = Skia.Path.Make();
   const visibleAreaPath = Skia.Path.Make();
+
   if (visiblePoints.length > 0) {
     const firstV = visiblePoints[0];
-    visibleLinePath.moveTo(firstV.x, firstV.y);
-    visibleAreaPath.moveTo(firstV.x, firstV.y);
+    const splitX = firstV.x;
+
+    visibleLinePath.moveTo(splitX, firstV.y);
+    visibleLinePath.lineTo(firstV.x, firstV.y);
+    visibleAreaPath.moveTo(splitX, firstV.y);
+    visibleAreaPath.lineTo(firstV.x, firstV.y);
+
     for (let i = 1; i < visiblePoints.length; i++) {
       const prev = visiblePoints[i - 1];
       const curr = visiblePoints[i];
       const cx = (prev.x + curr.x) / 2;
+
       visibleLinePath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
       visibleAreaPath.cubicTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
     }
+
     const lastV = visiblePoints[visiblePoints.length - 1];
-    visibleAreaPath.lineTo(lastV.x, height + offsetY);
+
+    visibleLinePath.lineTo(width, lastV.y);
+    visibleAreaPath.lineTo(width, lastV.y);
+    visibleAreaPath.lineTo(width, height + offsetY);
     visibleAreaPath.lineTo(firstV.x, height + offsetY);
     visibleAreaPath.close();
   }

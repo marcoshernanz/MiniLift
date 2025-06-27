@@ -5,7 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Chart reaching the end
 - SimpleChart 1 point
 
 - Export and import app data.
