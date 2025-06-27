@@ -6,5 +6,7 @@
 - Only render visible parts of the chart
 
 - FlatList scroll bug
+- SimpleChart reaching the end
+- SimpleChart 1 point
 
 - Export and import app data.
