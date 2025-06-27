@@ -4,7 +4,6 @@
 - FlashList performance
 
 - Chart tooltip when going back
-- Chart with no data
 - Chart duplicate key
 - Chart only animate visible part
 

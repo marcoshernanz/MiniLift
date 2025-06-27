@@ -205,6 +205,23 @@ export default function SimpleChart({
     ],
   });
 
+  if (points.length === 0) {
+    return (
+      <View
+        style={{
+          width,
+          height,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ color: getColor("mutedForeground") }}>
+          No Data Available
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <GestureDetector gesture={gesture}>
       <View style={{ width, height, flexDirection: "column" }}>

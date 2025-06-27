@@ -57,7 +57,7 @@ export default function StatisticsScreen() {
     }, {} as Record<string, number | null>);
 
   const chartData: Record<string, number | null> = Object.entries(x)
-    // .slice(0, 2)
+    .slice(0, 1)
     .reduce((acc, [key, val]) => {
       acc[key] = val;
       return acc;
