@@ -5,7 +5,6 @@
 
 - Chart labels on the entire screen
 - Chart tooltip when going back
-- Chart tooltip width
 - Chart with no data
 - Chart duplicate key
 - Chart only animate visible part
