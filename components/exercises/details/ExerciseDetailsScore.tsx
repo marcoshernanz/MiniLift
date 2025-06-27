@@ -27,12 +27,10 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
   const chartData: Record<string, number | null> = days.reduce((acc, day) => {
     const key = format(day, "yyyy-MM-dd");
     const label = format(day, "MMM dd");
-    acc[label] = score[key];
+    acc[label] = score[key] ?? null;
 
     return acc;
   }, {} as Record<string, number | null>);
-
-  // console.log(chartData);
 
   const values = Object.values(chartData).filter((value) => value !== null);
   const change =
