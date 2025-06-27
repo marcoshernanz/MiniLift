@@ -40,6 +40,9 @@ export default function ActivityScreen() {
           renderItem={({ item }) => (
             <ActivityItem key={item.date.toDateString()} item={item} />
           )}
+          overScrollMode="never"
+          bounces={false}
+          alwaysBounceVertical={false}
         />
 
         <ActivityAdd date={currentDate} />

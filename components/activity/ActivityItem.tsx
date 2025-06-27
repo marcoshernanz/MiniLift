@@ -32,6 +32,9 @@ export default function ActivityItem({ item }: Props) {
           contentContainerStyle={{ paddingBottom: 16 }}
           renderItem={({ item }) => <ActivityLogItem log={item} />}
           showsVerticalScrollIndicator={false}
+          overScrollMode="never"
+          bounces={false}
+          alwaysBounceVertical={false}
         />
       )}
     </View>

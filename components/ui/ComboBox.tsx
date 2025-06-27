@@ -155,6 +155,9 @@ export default function ComboBox({
             data={sortedOptions}
             keyExtractor={(item, index) => `${item}-${index}`}
             showsVerticalScrollIndicator={false}
+            overScrollMode="never"
+            bounces={false}
+            alwaysBounceVertical={false}
             renderItem={({ item }) => (
               <Pressable
                 style={styles.dropdownItem}

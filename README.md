@@ -5,7 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- FlatList scroll bug
 - SimpleChart reaching the end
 - SimpleChart 1 point
 

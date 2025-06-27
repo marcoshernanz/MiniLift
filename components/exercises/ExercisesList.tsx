@@ -33,6 +33,9 @@ export default function ExercisesList({ search }: Props) {
       renderItem={({ item }) => <ExerciseListItem item={item} />}
       contentContainerStyle={styles.flatList}
       showsVerticalScrollIndicator={false}
+      overScrollMode="never"
+      bounces={false}
+      alwaysBounceVertical={false}
     />
   );
 }
