@@ -37,6 +37,7 @@ export default function ExerciseDetailScreen() {
         )}
         renderItem={({ item }) => <ActivityLogItem log={item} showDate />}
         contentContainerStyle={{ paddingHorizontal: 0, paddingBottom: 24 }}
+        showsVerticalScrollIndicator={false}
       />
     </SafeArea>
   );
