@@ -319,7 +319,7 @@ export default function Chart({
                 }
 
                 return (
-                  <>
+                  <React.Fragment key={idx}>
                     <Circle
                       key={`bg-${idx}`}
                       cx={p.x}
@@ -336,7 +336,7 @@ export default function Chart({
                       style="stroke"
                       strokeWidth={1.5}
                     />
-                  </>
+                  </React.Fragment>
                 );
               })}
 

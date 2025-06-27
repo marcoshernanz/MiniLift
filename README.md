@@ -5,7 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Chart duplicate key
+- FlatList scroll bug
 
 - Export and import app data.
-- FlatList scroll bug
