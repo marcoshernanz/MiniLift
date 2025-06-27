@@ -71,18 +71,20 @@ export default function Chart({
   const numTotalLabels =
     pointsPerLabel === 0 ? 0 : Math.floor(dataLength / pointsPerLabel);
 
-  const { linePath, areaPath, points } = useMemo(
-    () =>
-      computeChartPaths({
-        data,
-        width: chartWidth,
-        height: chartHeight,
-        bottomPadding,
-        topOffset: chartTop,
-        minValue: 0,
-      }),
-    [data, chartWidth, chartHeight, chartTop]
-  );
+  const { linePath, visibleLinePath, areaPath, visibleAreaPath, points } =
+    useMemo(
+      () =>
+        computeChartPaths({
+          data,
+          width: chartWidth,
+          height: chartHeight,
+          bottomPadding,
+          topOffset: chartTop,
+          minValue: 0,
+          numVisiblePoints: numPointsVisible * 2,
+        }),
+      [data, chartWidth, chartHeight, chartTop, numPointsVisible]
+    );
 
   const animationProgress = useSharedValue(0);
 
@@ -96,7 +98,7 @@ export default function Chart({
         { scaleY: animationProgress.value },
       ])
     );
-  }, linePath);
+  }, visibleLinePath);
 
   const animatedAreaPath = usePathValue((path) => {
     "worklet";
@@ -108,7 +110,7 @@ export default function Chart({
         { scaleY: animationProgress.value },
       ])
     );
-  }, areaPath);
+  }, visibleAreaPath);
 
   const ChartPoint = ({ x, y }: { x: number; y: number }) => {
     const cy = useDerivedValue(
@@ -292,6 +294,20 @@ export default function Chart({
               </Path>
               <Path
                 path={animatedLinePath}
+                color={getColor("primary")}
+                style="stroke"
+                strokeWidth={2}
+              />
+
+              <Path path={areaPath} style="fill" dither>
+                <LinearGradient
+                  start={vec(0, chartTop)}
+                  end={vec(0, chartTop + chartHeight)}
+                  colors={[getColor("primary", 0.5), getColor("primary", 0)]}
+                />
+              </Path>
+              <Path
+                path={linePath}
                 color={getColor("primary")}
                 style="stroke"
                 strokeWidth={2}
