@@ -5,7 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Edit exercise name
 - Fix bug where clicking in two exercises too fast opens both
 - Fix bug where keyboard blocks the first touch
 

@@ -12,6 +12,7 @@ import { Keyboard, Modal, Pressable, StyleSheet, View } from "react-native";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { Toast } from "@/components/ui/Toast";
+import { useRouter } from "expo-router";
 
 interface Props {
   exercise: Exercise;
@@ -19,6 +20,7 @@ interface Props {
 
 export default function ExerciseDetailsHeader({ exercise }: Props) {
   const { appData, setAppData } = useAppContext();
+  const router = useRouter();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState(exercise.name);
@@ -51,8 +53,13 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
     const newId = uuidv4();
 
     setAppData((prev) => {
+      const oldExercise = prev.exercises[oldId];
       const { [oldId]: _, ...remainingExercises } = prev.exercises;
-      const newExercise = { id: newId, name: nameTrimmed, isFavorite: false };
+      const newExercise = {
+        id: newId,
+        name: nameTrimmed,
+        isFavorite: oldExercise.isFavorite,
+      };
       const updatedLiftLogs = prev.liftLogs.map((log) =>
         log.exercise.id === oldId ? { ...log, exercise: newExercise } : log
       );
