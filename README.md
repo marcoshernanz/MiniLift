@@ -7,6 +7,7 @@
 
 - Edit exercise name
 - Fix bug where clicking in two exercises too fast opens both
+- Fix bug where keyboard blocks the first touch
 
 - Export and import app data
 
