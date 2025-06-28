@@ -55,6 +55,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 16,
   },
+  title: {
+    paddingRight: 40,
+  },
   buttonContainer: {
     position: "absolute",
     top: 0,
