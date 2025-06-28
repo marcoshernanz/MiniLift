@@ -5,7 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Statistics name long exercise name 
 - Edit exercise name
 
 - Export and import app data

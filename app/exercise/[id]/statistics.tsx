@@ -77,7 +77,9 @@ export default function StatisticsScreen() {
   return (
     <SafeArea style={styles.container}>
       <View style={styles.headerContainer}>
-        <Title style={styles.title}>{exercise.name}</Title>
+        <Title style={styles.title} numberOfLines={1}>
+          {exercise.name}
+        </Title>
         <StatisticsTimeFrameSelector
           selectedTimeFrame={selectedTimeFrame}
           setSelectedTimeFrame={setSelectedTimeFrame}
