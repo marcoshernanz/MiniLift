@@ -5,4 +5,10 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Export and import app data.
+- Exercises screen long exercise name
+- Statistics name long exercise name 
+- Edit exercise name
+
+- Export and import app data
+
+- Dashboard
