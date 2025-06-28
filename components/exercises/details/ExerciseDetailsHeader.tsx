@@ -10,9 +10,7 @@ import { Edit3Icon, XIcon } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Keyboard, Modal, Pressable, StyleSheet, View } from "react-native";
 import { z } from "zod";
-import { v4 as uuidv4 } from "uuid";
 import { Toast } from "@/components/ui/Toast";
-import { useRouter } from "expo-router";
 
 interface Props {
   exercise: Exercise;
@@ -20,7 +18,6 @@ interface Props {
 
 export default function ExerciseDetailsHeader({ exercise }: Props) {
   const { appData, setAppData } = useAppContext();
-  const router = useRouter();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState(exercise.name);
@@ -50,23 +47,17 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
     }
     const nameTrimmed = result.data.name;
     const oldId = exercise.id;
-    const newId = uuidv4();
 
     setAppData((prev) => {
       const oldExercise = prev.exercises[oldId];
-      const { [oldId]: _, ...remainingExercises } = prev.exercises;
-      const newExercise = {
-        id: newId,
-        name: nameTrimmed,
-        isFavorite: oldExercise.isFavorite,
-      };
+      const updatedExercise = { ...oldExercise, name: nameTrimmed };
+      const updatedExercises = { ...prev.exercises, [oldId]: updatedExercise };
       const updatedLiftLogs = prev.liftLogs.map((log) =>
-        log.exercise.id === oldId ? { ...log, exercise: newExercise } : log
+        log.exercise.id === oldId ? { ...log, exercise: updatedExercise } : log
       );
-
       return {
         ...prev,
-        exercises: { ...remainingExercises, [newId]: newExercise },
+        exercises: updatedExercises,
         liftLogs: updatedLiftLogs,
       };
     });
