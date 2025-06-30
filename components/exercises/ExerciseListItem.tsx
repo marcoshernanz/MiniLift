@@ -13,6 +13,8 @@ interface Props {
   item: Exercise;
 }
 
+let navigationInProgress = false;
+
 export default function ExerciseListItem({ item }: Props) {
   const router = useRouter();
   const { appData, setAppData } = useAppContext();
@@ -47,6 +49,15 @@ export default function ExerciseListItem({ item }: Props) {
     Toast.show({ text: `${item.name} has been deleted.`, variant: "success" });
   };
 
+  const handleNavigate = () => {
+    if (navigationInProgress) return;
+    navigationInProgress = true;
+    router.push(`/exercise/${item.id}`);
+    setTimeout(() => {
+      navigationInProgress = false;
+    }, 1000);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -54,7 +65,7 @@ export default function ExerciseListItem({ item }: Props) {
           <Pressable
             style={styles.mainPressable}
             android_ripple={{ color: getColor("muted") }}
-            onPress={() => router.push(`/exercise/${item.id}`)}
+            onPress={handleNavigate}
           >
             <Text style={styles.mainText}>{item.name}</Text>
 
