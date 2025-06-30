@@ -28,6 +28,7 @@ export default function ExercisesList({ search }: Props) {
 
   return (
     <FlatList
+      keyboardShouldPersistTaps="handled"
       data={sortedExercises}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ExerciseListItem item={item} />}
