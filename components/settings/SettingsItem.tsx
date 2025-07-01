@@ -2,14 +2,19 @@ import { Pressable, StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
 import getColor from "@/lib/getColor";
 
-interface Props {
+export interface SettingsItemProps {
   text: string;
   onPress?: () => void;
+  isLast?: boolean;
 }
 
-export default function SettingsItem({ text, onPress }: Props) {
+export default function SettingsItem({
+  text,
+  onPress,
+  isLast,
+}: SettingsItemProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isLast && { borderBottomWidth: 0 }]}>
       <Pressable style={styles.pressable} onPress={onPress}>
         <Text>{text}</Text>
       </Pressable>
