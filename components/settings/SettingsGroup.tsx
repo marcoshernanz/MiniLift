@@ -16,7 +16,10 @@ export default function SettingsGroup({ children }: Props) {
   return (
     <View style={styles.container}>
       {items.map((child, index) =>
-        React.cloneElement(child, { isLast: index === items.length - 1 })
+        React.cloneElement(child, {
+          isFirst: index === 0,
+          isLast: index === items.length - 1,
+        })
       )}
     </View>
   );
