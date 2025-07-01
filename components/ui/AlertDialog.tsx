@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import Text from "@/components/ui/Text";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import React from "react";
 import { Dimensions, Modal, Pressable, StyleSheet, View } from "react-native";
 

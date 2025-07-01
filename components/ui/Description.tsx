@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { StyleSheet, TextProps } from "react-native";
 import Text from "./Text";
 

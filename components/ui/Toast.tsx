@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import {

@@ -4,7 +4,7 @@ import SafeArea from "@/components/ui/SafeArea";
 import TextInput, { TextInputHandle } from "@/components/ui/TextInput";
 import Title from "@/components/ui/Title";
 import { useAppContext } from "@/context/AppContext";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { Edit3Icon, XIcon } from "lucide-react-native";
 import { useRef, useState } from "react";

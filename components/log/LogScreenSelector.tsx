@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { DumbbellIcon, WeightIcon } from "lucide-react-native";
 import React from "react";
 import { Dimensions, Pressable, StyleSheet, View } from "react-native";

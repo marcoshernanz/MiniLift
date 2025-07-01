@@ -1,5 +1,5 @@
 import { StatisticsType } from "@/app/exercise/[id]/statistics";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { AtomIcon, DumbbellIcon } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import Text from "../ui/Text";

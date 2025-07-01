@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import React from "react";
 import {
   Platform,

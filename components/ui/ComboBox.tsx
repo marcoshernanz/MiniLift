@@ -1,5 +1,5 @@
-import getColor from "@/lib/getColor";
-import searchItems from "@/lib/searchItems";
+import getColor from "@/lib/utils/getColor";
+import searchItems from "@/lib/utils/searchItems";
 import { StarIcon, XIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {

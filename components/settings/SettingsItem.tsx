@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 
 export interface SettingsItemProps {
   text: string;

@@ -1,5 +1,5 @@
 import TextInput from "@/components/ui/TextInput";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { SearchIcon, XIcon } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 

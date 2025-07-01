@@ -3,7 +3,7 @@ import SimpleChart from "@/components/ui/SimpleChart";
 import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
 import useDailyData from "@/lib/data/getDailyData";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { eachDayOfInterval, format, subDays } from "date-fns";
 import { useRouter } from "expo-router";

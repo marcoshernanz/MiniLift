@@ -1,5 +1,5 @@
 import { useAppContext } from "@/context/AppContext";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { LogType } from "@/lib/hooks/useActivity";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { format } from "date-fns";

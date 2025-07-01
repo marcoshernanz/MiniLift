@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";

@@ -1,5 +1,5 @@
 import { computeChartPaths } from "@/lib/chart/computeChartPaths";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import {
   Canvas,
   Circle,

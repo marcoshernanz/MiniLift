@@ -1,5 +1,5 @@
 import React from "react";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { StyleSheet, View } from "react-native";
 import type { SettingsItemProps } from "./SettingsItem";
 

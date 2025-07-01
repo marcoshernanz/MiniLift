@@ -1,5 +1,5 @@
 import { useAppContext } from "@/context/AppContext";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { XIcon } from "lucide-react-native";
 import React, { useRef, useState } from "react";
 import { Keyboard, Pressable, StyleSheet, View } from "react-native";

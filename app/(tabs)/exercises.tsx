@@ -2,7 +2,7 @@ import ExercisesAddButton from "@/components/exercises/ExercisesAddButton";
 import ExercisesList from "@/components/exercises/ExercisesList";
 import ExercisesSearchBar from "@/components/exercises/ExercisesSearchBar";
 import Title from "@/components/ui/Title";
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { useState } from "react";
 import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

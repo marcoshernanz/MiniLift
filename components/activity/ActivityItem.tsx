@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { ActivityEntry } from "@/lib/hooks/useActivity";
 import { format } from "date-fns";
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";

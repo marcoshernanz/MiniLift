@@ -1,5 +1,5 @@
 import { useAppContext } from "@/context/AppContext";
-import searchItems from "@/lib/searchItems";
+import searchItems from "@/lib/utils/searchItems";
 import { FlatList, StyleSheet } from "react-native";
 import ExerciseListItem from "./ExerciseListItem";
 

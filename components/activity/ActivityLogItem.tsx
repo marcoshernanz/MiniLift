@@ -1,4 +1,4 @@
-import getColor from "@/lib/getColor";
+import getColor from "@/lib/utils/getColor";
 import { LogType } from "@/lib/hooks/useActivity";
 import { format } from "date-fns";
 import { DumbbellIcon, WeightIcon } from "lucide-react-native";
