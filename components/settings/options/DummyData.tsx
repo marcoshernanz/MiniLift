@@ -2,11 +2,11 @@ import { useAppContext } from "@/context/AppContext";
 import SettingsGroup from "../SettingsGroup";
 import SettingsItem from "../SettingsItem";
 
-import { v4 as uuidv4 } from "uuid";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { AppData } from "@/zod/schemas/AppDataSchema";
 import { Toast } from "@/components/ui/Toast";
 import Constants from "expo-constants";
+import uuidv4 from "@/lib/utils/uuidv4";
 
 export default function DummyData() {
   const { setAppData } = useAppContext();

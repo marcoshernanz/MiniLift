@@ -8,11 +8,11 @@ import Animated, {
   SharedValue,
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
-import { v4 as uuidv4 } from "uuid";
 import Button from "../ui/Button";
 import { Toast } from "../ui/Toast";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
+import uuidv4 from "@/lib/utils/uuidv4";
 
 interface Props {
   onClose: () => void;

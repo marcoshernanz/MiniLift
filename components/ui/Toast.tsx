@@ -17,8 +17,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { v4 as uuidv4 } from "uuid";
 import Text from "./Text";
+import uuidv4 from "@/lib/utils/uuidv4";
 
 export type ToastOptions = {
   text: string;

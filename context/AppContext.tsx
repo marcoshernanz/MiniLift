@@ -1,9 +1,9 @@
 import { appConfig } from "@/config/appConfig";
 import { exercisesConfig } from "@/config/exercisesConfig";
 import { storage } from "@/lib/storage/mmkv";
+import uuidv4 from "@/lib/utils/uuidv4";
 import { AppDataSchema, type AppData } from "@/zod/schemas/AppDataSchema";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 interface AppContextValue {
   appData: AppData;

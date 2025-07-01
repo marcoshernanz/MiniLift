@@ -3,13 +3,13 @@ import getColor from "@/lib/utils/getColor";
 import { XIcon } from "lucide-react-native";
 import React, { useRef, useState } from "react";
 import { Keyboard, Pressable, StyleSheet, View } from "react-native";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
 import { Toast } from "../ui/Toast";
+import uuidv4 from "@/lib/utils/uuidv4";
 
 interface Props {
   onClose: () => void;
