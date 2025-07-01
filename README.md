@@ -5,7 +5,8 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Settings
+- uuidv4 function
+
 - Dashboard
 
 - Fix toasts

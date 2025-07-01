@@ -6,9 +6,13 @@ import { v4 as uuidv4 } from "uuid";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { AppData } from "@/zod/schemas/AppDataSchema";
 import { Toast } from "@/components/ui/Toast";
+import Constants from "expo-constants";
 
 export default function DummyData() {
   const { setAppData } = useAppContext();
+  const appVariant = Constants.expoConfig?.extra?.APP_VARIANT;
+  const showDummyData = appVariant !== "production";
+  if (!showDummyData) return null;
 
   const loadDummyData = () => {
     const exercisesMap: Record<string, Exercise> = {};
