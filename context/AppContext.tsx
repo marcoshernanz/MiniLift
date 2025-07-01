@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from "uuid";
 interface AppContextValue {
   appData: AppData;
   setAppData: React.Dispatch<React.SetStateAction<AppData>>;
+  exportData: () => string;
+  importData: (json: string) => void;
 }
 
 const defaultState = AppDataSchema.parse(undefined);
@@ -41,12 +43,28 @@ export default function AppContextProvider({ children }: Props) {
     return { ...defaultState, exercises: exercisesRecord };
   });
 
+  const exportData = () => {
+    return JSON.stringify(appData, null, 2);
+  };
+
+  const importData = (json: string) => {
+    try {
+      const parsed = AppDataSchema.parse(JSON.parse(json));
+      setAppData(parsed);
+    } catch (err) {
+      console.error("Invalid import data:", err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     storage.set(appConfig.storageKey, JSON.stringify(appData));
   }, [appData]);
 
   return (
-    <AppContext.Provider value={{ appData, setAppData }}>
+    <AppContext.Provider
+      value={{ appData, setAppData, exportData, importData }}
+    >
       {children}
     </AppContext.Provider>
   );
