@@ -71,9 +71,7 @@ export default function ToastProvider() {
   }, []);
 
   return (
-    <GestureHandlerRootView
-      style={[styles.container, { paddingTop: top + 16 }]}
-    >
+    <GestureHandlerRootView style={[styles.container, { top: top + 16 }]}>
       {toasts.map((toast) => (
         <ToastItem
           key={toast.id}
