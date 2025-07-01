@@ -7,13 +7,13 @@ import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import type { AppData } from "@/zod/schemas/AppDataSchema";
 import type { Exercise } from "@/zod/schemas/ExerciseSchema";
-import { v4 as uuidv4 } from "uuid";
 import { Toast } from "@/components/ui/Toast";
 import SettingsGroup from "@/components/settings/SettingsGroup";
 import Text from "@/components/ui/Text";
 import SettingsItem from "@/components/settings/SettingsItem";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Title from "@/components/ui/Title";
+import DummyData from "@/components/settings/options/DummyData";
 
 export default function SettingsScreen() {
   // const { setAppData, exportData, importData } = useAppContext();
@@ -131,10 +131,7 @@ export default function SettingsScreen() {
         bounces={false}
         alwaysBounceVertical={false}
       >
-        <SettingsGroup>
-          <SettingsItem text="Setting 1" />
-          <SettingsItem text="Setting 2" />
-        </SettingsGroup>
+        <DummyData />
         <SettingsGroup>
           <SettingsItem text="Setting 3" />
           <SettingsItem text="Setting 4" />
