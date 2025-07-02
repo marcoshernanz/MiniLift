@@ -5,6 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Dashboard
+- Log exercises with 0 weight
 
 - Fix toasts
