@@ -5,6 +5,8 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
+- Fix keyboard blocking touch while editing log
+
 - Dashboard
 
 - Fix toasts
