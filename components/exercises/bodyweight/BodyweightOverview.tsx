@@ -1,24 +1,15 @@
 import Button from "@/components/ui/Button";
 import SimpleChart from "@/components/ui/SimpleChart";
-import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
-import useDailyScore from "@/lib/hooks/score/useDailyScore";
+import useDailyBodyweight from "@/lib/hooks/bodyweight/useDailyBodyweight";
 import getColor from "@/lib/utils/getColor";
-import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { eachDayOfInterval, format, subDays } from "date-fns";
 import { useRouter } from "expo-router";
-import { CircleHelpIcon, MaximizeIcon } from "lucide-react-native";
-import { useState } from "react";
+import { MaximizeIcon } from "lucide-react-native";
 import { Dimensions, StyleSheet, View } from "react-native";
 
-interface Props {
-  exercise?: Exercise;
-}
-
-export default function ScoreOverview({ exercise }: Props) {
-  const [helpVisible, setHelpVisible] = useState(false);
-
-  const { score } = useDailyScore(exercise?.id);
+export default function BodyweightOverview() {
+  const bodyweight = useDailyBodyweight();
 
   const endDate = new Date();
   const startDate = subDays(endDate, 29);
@@ -27,7 +18,7 @@ export default function ScoreOverview({ exercise }: Props) {
   const chartData: Record<string, number | null> = days.reduce((acc, day) => {
     const key = format(day, "yyyy-MM-dd");
     const label = format(day, "MMM dd");
-    acc[label] = score[key] ?? null;
+    acc[label] = bodyweight[key] ?? null;
 
     return acc;
   }, {} as Record<string, number | null>);
@@ -44,28 +35,7 @@ export default function ScoreOverview({ exercise }: Props) {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Score</Text>
-        <Button
-          variant="ghost"
-          containerStyle={{
-            marginTop: 2.5,
-            marginLeft: 2,
-            height: 32,
-            width: 32,
-            borderRadius: 999,
-          }}
-          pressableStyle={{ padding: 8 }}
-          onPress={() => setHelpVisible(true)}
-        >
-          <CircleHelpIcon color={getColor("mutedForeground")} />
-        </Button>
       </View>
-
-      <SimpleDialog
-        title="Score"
-        content="Your score shows how strong you are for your body weight. It’s your max lift divided by your body weight, shown as a percent."
-        visible={helpVisible}
-        onClose={() => setHelpVisible(false)}
-      />
 
       <Text style={styles.description}>
         Last 30 days{" "}
@@ -93,7 +63,7 @@ export default function ScoreOverview({ exercise }: Props) {
         pressableStyle={styles.maximizeButton}
         containerStyle={styles.maximizeButtonContainer}
         onPress={() => {
-          router.push(`/statistics/score/${exercise?.id}`);
+          router.push(`/statistics/bodyweight`);
         }}
       >
         <MaximizeIcon color={getColor("foreground")} />
