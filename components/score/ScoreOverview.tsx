@@ -92,7 +92,9 @@ export default function ScoreOverview({ exercise }: Props) {
         variant="ghost"
         pressableStyle={styles.maximizeButton}
         containerStyle={styles.maximizeButtonContainer}
-        onPress={() => router.push(`/statistics/${exercise?.id}`)}
+        onPress={() => {
+          router.push(`/statistics/${exercise?.id}`);
+        }}
       >
         <MaximizeIcon color={getColor("foreground")} />
       </Button>
@@ -102,7 +104,6 @@ export default function ScoreOverview({ exercise }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
     paddingBottom: 32,
   },
   titleContainer: {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
   },
   maximizeButtonContainer: {
     position: "absolute",
-    right: 16,
+    right: 0,
     height: 46,
     width: 46,
     borderRadius: 999,

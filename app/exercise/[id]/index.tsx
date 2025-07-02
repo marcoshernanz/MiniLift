@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
 import ActivityLogItem from "@/components/activity/ActivityLogItem";
 import ExerciseDetailsHeader from "@/components/exercises/details/ExerciseDetailsHeader";
@@ -30,10 +30,10 @@ export default function ExerciseDetailScreen() {
         data={logs}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
-          <>
+          <View style={{ paddingHorizontal: 16 }}>
             <ScoreOverview exercise={exercise} />
             <Text style={styles.activityTitle}>Activity</Text>
-          </>
+          </View>
         )}
         renderItem={({ item }) => <ActivityLogItem log={item} showDate />}
         contentContainerStyle={{ paddingHorizontal: 0, paddingBottom: 24 }}
@@ -51,6 +51,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     paddingBottom: 12,
-    paddingHorizontal: 16,
   },
 });
