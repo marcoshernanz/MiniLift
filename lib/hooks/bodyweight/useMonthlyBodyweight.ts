@@ -1,7 +1,7 @@
 import { useAppContext } from "@/context/AppContext";
-import { eachYearOfInterval, format, startOfYear } from "date-fns";
+import { eachMonthOfInterval, format, startOfMonth } from "date-fns";
 
-export default function useYearlyBodyweight(): Record<string, number | null> {
+export default function useMonthlyBodyweight(): Record<string, number | null> {
   const { appData } = useAppContext();
   const { bodyweightLogs } = appData;
 
@@ -13,9 +13,9 @@ export default function useYearlyBodyweight(): Record<string, number | null> {
     return {};
   }
 
-  const startDate = startOfYear(logs[0].date);
+  const startDate = startOfMonth(logs[0].date);
   const endDate = new Date();
-  const years = eachYearOfInterval({ start: startDate, end: endDate });
+  const months = eachMonthOfInterval({ start: startDate, end: endDate });
 
   const bodyweightMap: Record<string, number> = {};
   const entries = logs.map(({ date, bodyweight }) => ({
@@ -24,20 +24,20 @@ export default function useYearlyBodyweight(): Record<string, number | null> {
   }));
 
   logs.forEach(({ date, bodyweight }) => {
-    const key = format(startOfYear(date), "yyyy-MM-dd");
+    const key = format(startOfMonth(date), "yyyy-MM-dd");
     bodyweightMap[key] = bodyweight;
   });
 
   const result: Record<string, number | null> = {};
-  years.forEach((yearStart) => {
-    const key = format(yearStart, "yyyy-MM-dd");
+  months.forEach((monthStart) => {
+    const key = format(monthStart, "yyyy-MM-dd");
     let bw: number;
 
     if (bodyweightMap[key] != null) {
       bw = bodyweightMap[key];
     } else {
       const nextIndex = entries.findIndex(
-        (e) => e.date.getTime() > yearStart.getTime()
+        (e) => e.date.getTime() > monthStart.getTime()
       );
       if (nextIndex === -1) {
         bw = entries[entries.length - 1].weight;
@@ -47,7 +47,7 @@ export default function useYearlyBodyweight(): Record<string, number | null> {
         const prev = entries[nextIndex - 1];
         const next = entries[nextIndex];
         const total = next.date.getTime() - prev.date.getTime();
-        const dt = yearStart.getTime() - prev.date.getTime();
+        const dt = monthStart.getTime() - prev.date.getTime();
         bw = prev.weight + ((next.weight - prev.weight) * dt) / total;
       }
     }
