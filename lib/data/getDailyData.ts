@@ -8,8 +8,10 @@ export type DataType = {
   oneRepMax: Record<string, number | null>;
 };
 
-export default function useDailyData(exerciseId: string): DataType {
+export default function useDailyData(exerciseId?: string): DataType {
   const { appData } = useAppContext();
+
+  // TODO: Handle case where exerciseId is not provided
 
   const { liftLogs, bodyweightLogs } = appData;
   const logs = liftLogs

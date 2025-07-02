@@ -2,12 +2,12 @@ import { FlatList, StyleSheet } from "react-native";
 
 import ActivityLogItem from "@/components/activity/ActivityLogItem";
 import ExerciseDetailsHeader from "@/components/exercises/details/ExerciseDetailsHeader";
-import ExerciseDetailsScore from "@/components/exercises/details/ExerciseDetailsScore";
 import SafeArea from "@/components/ui/SafeArea";
 import Text from "@/components/ui/Text";
 import { useAppContext } from "@/context/AppContext";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
+import ScoreOverview from "@/components/score/ScoreOverview";
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -31,7 +31,7 @@ export default function ExerciseDetailScreen() {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
           <>
-            <ExerciseDetailsScore exercise={exercise} />
+            <ScoreOverview exercise={exercise} />
             <Text style={styles.activityTitle}>Activity</Text>
           </>
         )}

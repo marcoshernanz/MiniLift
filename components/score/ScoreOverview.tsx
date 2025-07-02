@@ -12,13 +12,13 @@ import { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 interface Props {
-  exercise: Exercise;
+  exercise?: Exercise;
 }
 
-export default function ExerciseDetailsScore({ exercise }: Props) {
+export default function ScoreOverview({ exercise }: Props) {
   const [helpVisible, setHelpVisible] = useState(false);
 
-  const { score } = useDailyData(exercise.id);
+  const { score } = useDailyData(exercise?.id);
 
   const endDate = new Date();
   const startDate = subDays(endDate, 29);
@@ -92,7 +92,7 @@ export default function ExerciseDetailsScore({ exercise }: Props) {
         variant="ghost"
         pressableStyle={styles.maximizeButton}
         containerStyle={styles.maximizeButtonContainer}
-        onPress={() => router.push(`/exercise/${exercise.id}/statistics`)}
+        onPress={() => router.push(`/statistics/${exercise?.id}`)}
       >
         <MaximizeIcon color={getColor("foreground")} />
       </Button>

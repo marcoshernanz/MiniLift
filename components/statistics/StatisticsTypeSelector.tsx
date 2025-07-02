@@ -1,4 +1,4 @@
-import { StatisticsType } from "@/app/exercise/[id]/statistics";
+import { StatisticsType } from "@/app/statistics/[id]";
 import getColor from "@/lib/utils/getColor";
 import { AtomIcon, DumbbellIcon } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";

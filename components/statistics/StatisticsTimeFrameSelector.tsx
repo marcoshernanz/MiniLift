@@ -1,4 +1,4 @@
-import { TimeFrame } from "@/app/exercise/[id]/statistics";
+import { TimeFrame } from "@/app/statistics/[id]";
 import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 
