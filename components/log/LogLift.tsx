@@ -64,7 +64,10 @@ export default function LogLift({
       .trim()
       .nonempty()
       .refine((name) => exerciseList.includes(name)),
-    weight: z.preprocess((v) => parseFloat(v as string), z.number().positive()),
+    weight: z.preprocess(
+      (v) => parseFloat(v as string),
+      z.number().nonnegative()
+    ),
     reps: z.preprocess((v) => parseFloat(v as string), z.number().int().min(1)),
   });
 
