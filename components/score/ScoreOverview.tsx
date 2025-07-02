@@ -93,7 +93,11 @@ export default function ScoreOverview({ exercise }: Props) {
         pressableStyle={styles.maximizeButton}
         containerStyle={styles.maximizeButtonContainer}
         onPress={() => {
-          router.push(`/statistics/score/${exercise?.id}`);
+          if (!exercise) {
+            router.push("/statistics/score");
+          } else {
+            router.push(`/statistics/score/${exercise?.id}`);
+          }
         }}
       >
         <MaximizeIcon color={getColor("foreground")} />
