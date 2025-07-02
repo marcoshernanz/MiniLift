@@ -1,10 +1,10 @@
 import { useAppContext } from "@/context/AppContext";
 import calculateOneRepMax from "@/lib/lift/calculateOneRepMax";
 import calculateScore from "@/lib/lift/calculateScore";
-import { eachMonthOfInterval, format, startOfMonth } from "date-fns";
-import { DataType } from "./getDailyData";
+import { eachWeekOfInterval, format, startOfWeek } from "date-fns";
+import { DataType } from "./useDailyScore";
 
-export default function useMonthlyData(exerciseId?: string): DataType {
+export default function useWeeklyScore(exerciseId?: string): DataType {
   const { appData } = useAppContext();
 
   const { liftLogs, bodyweightLogs } = appData;
@@ -17,20 +17,23 @@ export default function useMonthlyData(exerciseId?: string): DataType {
     return { oneRepMax: {}, score: {} };
   }
 
-  const startDate = startOfMonth(logs[0].date);
+  const startDate = startOfWeek(logs[0].date, { weekStartsOn: 1 });
   const endDate = new Date();
-  const months = eachMonthOfInterval({ start: startDate, end: endDate });
+  const weeks = eachWeekOfInterval(
+    { start: startDate, end: endDate },
+    { weekStartsOn: 1 }
+  );
 
   const oneRepMaxAcc: Record<string, { sum: number; count: number }> = {};
   logs.forEach(({ weight, reps, date }) => {
-    const monthStart = startOfMonth(date);
-    const key = format(monthStart, "yyyy-MM-dd");
-    const orm = calculateOneRepMax({ weight, reps });
+    const weekStart = startOfWeek(date, { weekStartsOn: 1 });
+    const key = format(weekStart, "yyyy-MM-dd");
+    const oneRepMax = calculateOneRepMax({ weight, reps });
     if (oneRepMaxAcc[key]) {
-      oneRepMaxAcc[key].sum += orm;
+      oneRepMaxAcc[key].sum += oneRepMax;
       oneRepMaxAcc[key].count += 1;
     } else {
-      oneRepMaxAcc[key] = { sum: orm, count: 1 };
+      oneRepMaxAcc[key] = { sum: oneRepMax, count: 1 };
     }
   });
 
@@ -40,8 +43,8 @@ export default function useMonthlyData(exerciseId?: string): DataType {
   });
 
   const resultOneRepMax: Record<string, number | null> = {};
-  months.forEach((monthStart) => {
-    const key = format(monthStart, "yyyy-MM-dd");
+  weeks.forEach((weekStart) => {
+    const key = format(weekStart, "yyyy-MM-dd");
     resultOneRepMax[key] = oneRepMaxMap[key] ?? null;
   });
 
@@ -52,28 +55,27 @@ export default function useMonthlyData(exerciseId?: string): DataType {
       bodyweightMap[format(date, "yyyy-MM-dd")] = bodyweight;
     });
 
-  const logsByMonth: Record<string, { weight: number; reps: number }[]> = {};
+  const logsByWeek: Record<string, { weight: number; reps: number }[]> = {};
   logs.forEach(({ weight, reps, date }) => {
-    const monthStart = startOfMonth(date);
-    const key = format(monthStart, "yyyy-MM-dd");
-    if (!logsByMonth[key]) logsByMonth[key] = [];
-    logsByMonth[key].push({ weight, reps });
+    const weekStart = startOfWeek(date, { weekStartsOn: 1 });
+    const key = format(weekStart, "yyyy-MM-dd");
+    if (!logsByWeek[key]) logsByWeek[key] = [];
+    logsByWeek[key].push({ weight, reps });
   });
 
-  const resultScore: Record<string, number> = {};
+  const resultScore: Record<string, number | null> = {};
   const bodyweightEntries = bodyweightLogs
     .map(({ date, bodyweight }) => ({ date, weight: bodyweight }))
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  let lastScore: number | undefined;
-  months.forEach((monthStart) => {
-    const key = format(monthStart, "yyyy-MM-dd");
+  weeks.forEach((weekStart) => {
+    const key = format(weekStart, "yyyy-MM-dd");
     let bw: number | undefined;
     if (bodyweightMap[key] != null) {
       bw = bodyweightMap[key];
     } else {
       const nextIndex = bodyweightEntries.findIndex(
-        (e) => e.date.getTime() > monthStart.getTime()
+        (e) => e.date.getTime() > weekStart.getTime()
       );
       if (nextIndex === -1) {
         bw = bodyweightEntries[bodyweightEntries.length - 1]?.weight;
@@ -83,20 +85,19 @@ export default function useMonthlyData(exerciseId?: string): DataType {
         const prev = bodyweightEntries[nextIndex - 1];
         const next = bodyweightEntries[nextIndex];
         const total = next.date.getTime() - prev.date.getTime();
-        const dt = monthStart.getTime() - prev.date.getTime();
+        const dt = weekStart.getTime() - prev.date.getTime();
         bw = prev.weight + ((next.weight - prev.weight) * dt) / total;
       }
     }
 
-    if (bw != null && logsByMonth[key]?.length) {
-      const scores = logsByMonth[key].map(({ weight, reps }) =>
+    if (bw != null && logsByWeek[key]?.length) {
+      const scores = logsByWeek[key].map(({ weight, reps }) =>
         calculateScore({ weight, reps, bodyweight: bw! })
       );
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      lastScore = Math.round(avg);
-    }
-    if (lastScore != null) {
-      resultScore[key] = lastScore;
+      resultScore[key] = Math.round(avg);
+    } else {
+      resultScore[key] = null;
     }
   });
 

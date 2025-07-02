@@ -4,9 +4,9 @@ import Chart from "@/components/ui/Chart";
 import SafeArea from "@/components/ui/SafeArea";
 import Title from "@/components/ui/Title";
 import { useAppContext } from "@/context/AppContext";
-import useDailyData from "@/lib/data/getDailyData";
-import useMonthlyData from "@/lib/data/getMonthlyData";
-import useWeeklyData from "@/lib/data/getWeeklyData";
+import useDailyScore from "@/lib/hooks/score/useDailyScore";
+import useMonthlyScore from "@/lib/hooks/score/useMonthlyScore";
+import useWeeklyScore from "@/lib/hooks/score/useWeeklyScore";
 import { format, parseISO } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -25,10 +25,10 @@ export default function StatisticsScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const exercise = id ? appData.exercises[id] : null;
 
-  const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyData(id);
-  const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyData(id);
+  const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyScore(id);
+  const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyScore(id);
   const { score: monthlyScore, oneRepMax: monthlyOneRepMax } =
-    useMonthlyData(id);
+    useMonthlyScore(id);
   const { width } = Dimensions.get("window");
 
   let dataMap: Record<string, number | null>;

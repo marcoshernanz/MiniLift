@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 import SimpleChart from "@/components/ui/SimpleChart";
 import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
-import useDailyData from "@/lib/data/getDailyData";
+import useDailyScore from "@/lib/hooks/score/useDailyScore";
 import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { eachDayOfInterval, format, subDays } from "date-fns";
@@ -18,7 +18,7 @@ interface Props {
 export default function ScoreOverview({ exercise }: Props) {
   const [helpVisible, setHelpVisible] = useState(false);
 
-  const { score } = useDailyData(exercise?.id);
+  const { score } = useDailyScore(exercise?.id);
 
   const endDate = new Date();
   const startDate = subDays(endDate, 29);
