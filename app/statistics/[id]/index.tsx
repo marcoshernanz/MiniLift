@@ -22,8 +22,8 @@ export default function StatisticsScreen() {
   const [selectedType, setSelectedType] = useState<StatisticsType>("score");
   const [chartHeight, setChartHeight] = useState<number>(0);
 
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const exercise = appData.exercises[id];
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const exercise = id ? appData.exercises[id] : null;
 
   const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyData(id);
   const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyData(id);
@@ -78,7 +78,7 @@ export default function StatisticsScreen() {
     <SafeArea style={styles.container}>
       <View style={styles.headerContainer}>
         <Title style={styles.title} numberOfLines={1}>
-          {exercise.name}
+          {exercise ? exercise.name : "Overall"}
         </Title>
         <StatisticsTimeFrameSelector
           selectedTimeFrame={selectedTimeFrame}

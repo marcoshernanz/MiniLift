@@ -11,12 +11,11 @@ export type DataType = {
 export default function useDailyData(exerciseId?: string): DataType {
   const { appData } = useAppContext();
 
-  // TODO: Handle case where exerciseId is not provided
-
   const { liftLogs, bodyweightLogs } = appData;
-  const logs = liftLogs
-    .filter((log) => log.exercise.id === exerciseId)
-    .sort((a, b) => a.date.getTime() - b.date.getTime());
+  const filteredLogs = exerciseId
+    ? liftLogs.filter((log) => log.exercise.id === exerciseId)
+    : liftLogs;
+  const logs = filteredLogs.sort((a, b) => a.date.getTime() - b.date.getTime());
 
   if (logs.length === 0) {
     return { oneRepMax: {}, score: {} };
