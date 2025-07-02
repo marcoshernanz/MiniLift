@@ -24,6 +24,7 @@ export default function ActivityScreen() {
           pagingEnabled
           directionalLockEnabled
           showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           keyExtractor={({ date }) => date.toDateString()}
           initialScrollIndex={data.length - 1}
           getItemLayout={(_, index) => ({
