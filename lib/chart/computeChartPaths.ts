@@ -58,7 +58,14 @@ export function computeChartPaths({
     points.push({ x, y, key, value, entryIndex: index });
   });
 
-  const splitEntryIndex = Math.max(entries.length - numVisiblePoints, 0);
+  const rawSplitEntryIndex = Math.max(entries.length - numVisiblePoints, 0);
+  const validIndices = points
+    .map((p) => p.entryIndex)
+    .filter((i) => i <= rawSplitEntryIndex);
+  const splitEntryIndex =
+    validIndices.length > 0 && numVisiblePoints > 0
+      ? Math.max(...validIndices)
+      : rawSplitEntryIndex;
   const initialPoints = points.filter((p) => p.entryIndex <= splitEntryIndex);
   const visiblePoints = points.filter((p) => p.entryIndex >= splitEntryIndex);
 
