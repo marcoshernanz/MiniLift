@@ -6,3 +6,5 @@
 - Only render visible parts of the chart
 
 - Fix toasts
+
+- Optimize
