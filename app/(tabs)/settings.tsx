@@ -12,6 +12,7 @@ export default function SettingsScreen() {
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
         overScrollMode="never"
         bounces={false}
         alwaysBounceVertical={false}
