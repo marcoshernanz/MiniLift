@@ -34,14 +34,14 @@ export default function BodyweightOverview() {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Score</Text>
+        <Text style={styles.title}>Bodyweight</Text>
       </View>
 
       <Text style={styles.description}>
         Last 30 days{" "}
         <Text
           style={{
-            color: change >= 0 ? getColor("green") : getColor("red"),
+            color: change <= 0 ? getColor("green") : getColor("red"),
             fontWeight: 600,
           }}
         >

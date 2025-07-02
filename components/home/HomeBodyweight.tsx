@@ -1,1 +1,5 @@
-export default function HomeBodyweight() {}
+import BodyweightOverview from "../exercises/bodyweight/BodyweightOverview";
+
+export default function HomeBodyweight() {
+  return <BodyweightOverview />;
+}
