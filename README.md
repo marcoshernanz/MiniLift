@@ -7,4 +7,9 @@
 
 - Fix toasts
 
+- Rounding in chart
+- Dashboard score last 30 days change
+- Remove dummy data in production
+- Use lowest value as reference in chart
+
 - Optimize
