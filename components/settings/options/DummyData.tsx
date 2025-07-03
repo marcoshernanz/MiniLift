@@ -11,7 +11,9 @@ import uuidv4 from "@/lib/utils/uuidv4";
 export default function DummyData() {
   const { setAppData } = useAppContext();
   const appVariant = Constants.expoConfig?.extra?.APP_VARIANT;
-  const showDummyData = appVariant !== "production";
+  const showDummyData =
+    appVariant === "development" || appVariant === "preview";
+
   if (!showDummyData) return null;
 
   const loadDummyData = () => {
