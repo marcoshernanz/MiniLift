@@ -5,6 +5,4 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Fix toasts
-
 - Optimize
