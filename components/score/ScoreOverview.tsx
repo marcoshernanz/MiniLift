@@ -32,11 +32,25 @@ export default function ScoreOverview({ exercise }: Props) {
     return acc;
   }, {} as Record<string, number | null>);
 
-  const values = Object.values(chartData).filter((value) => value !== null);
-  const change =
-    values.length >= 2 && values[0] !== 0
-      ? (values[values.length - 1] - values[0]) / values[0]
-      : 0;
+  const pts = days
+    .map((d, i) => {
+      const v = score[format(d, "yyyy-MM-dd")];
+      return v != null ? ([i, v] as [number, number]) : null;
+    })
+    .filter((p): p is [number, number] => p !== null);
+
+  let change = 0;
+  if (pts.length >= 2) {
+    const n = pts.length;
+    const meanX = pts.reduce((s, [x]) => s + x, 0) / n;
+    const meanY = pts.reduce((s, [, y]) => s + y, 0) / n;
+
+    const covXY =
+      pts.reduce((s, [x, y]) => s + (x - meanX) * (y - meanY), 0) / n;
+    const varX = pts.reduce((s, [x]) => s + (x - meanX) ** 2, 0) / n;
+    const slope = varX !== 0 ? covXY / varX : 0;
+    change = (slope * days.length) / meanY;
+  }
   const changePercent = (change * 100).toFixed(1);
   const router = useRouter();
 

@@ -7,6 +7,4 @@
 
 - Fix toasts
 
-- Dashboard score last 30 days change
-
 - Optimize
