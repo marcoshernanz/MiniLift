@@ -8,6 +8,5 @@
 - Fix toasts
 
 - Dashboard score last 30 days change
-- Use lowest value as reference in chart
 
 - Optimize

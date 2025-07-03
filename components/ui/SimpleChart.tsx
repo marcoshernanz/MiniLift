@@ -66,6 +66,7 @@ export default function SimpleChart({
   const numTotalLabels =
     pointsPerLabel === 0 ? 0 : Math.floor(dataLength / pointsPerLabel);
   const dataKeys = Object.keys(data);
+  const minValue = Math.min(...Object.values(data).filter((v) => v !== null));
 
   const { linePath, areaPath, points } = useMemo(
     () =>
@@ -75,9 +76,9 @@ export default function SimpleChart({
         height: chartHeight,
         bottomPadding,
         topOffset: chartTop,
-        minValue: 0,
+        minValue: minValue,
       }),
-    [data, width, chartHeight, chartTop]
+    [data, width, chartHeight, chartTop, minValue]
   );
 
   const pressX = useSharedValue<number>(0);
