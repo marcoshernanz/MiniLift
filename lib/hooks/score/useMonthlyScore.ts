@@ -93,7 +93,7 @@ export default function useMonthlyScore(exerciseId?: string): DataType {
         calculateScore({ weight, reps, bodyweight: bw! })
       );
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      lastScore = Math.round(avg);
+      lastScore = avg;
     }
     if (lastScore != null) {
       resultScore[key] = lastScore;

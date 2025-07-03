@@ -195,7 +195,7 @@ export default function SimpleChart({
       text: selectedPoint.value.key,
     })),
     selectedPointValue: useAnimatedProps(() => ({
-      text: selectedPoint.value.value.toString(),
+      text: selectedPoint.value.value.toFixed(1),
     })),
   };
 

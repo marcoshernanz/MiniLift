@@ -95,7 +95,7 @@ export default function useDailyScore(exerciseId?: string): DataType {
         calculateScore({ weight, reps, bodyweight: bodyweight! })
       );
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      resultScore[key] = Math.round(avg);
+      resultScore[key] = avg;
     } else {
       resultScore[key] = null;
     }
