@@ -5,4 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
+- Null values in bodyweight chart
+
 - Optimize
