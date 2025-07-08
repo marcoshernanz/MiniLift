@@ -54,7 +54,7 @@ export default function SimpleChart({
   width,
   height,
   tooltipHeight = 32,
-  tooltipWidth = 92,
+  tooltipWidth = 100,
   pointsPerLabel = 0,
   labelStart = 1,
 }: Props) {
