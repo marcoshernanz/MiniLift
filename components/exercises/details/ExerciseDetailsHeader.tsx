@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     position: "relative",
     paddingBottom: 20,
     paddingHorizontal: 16,
+    paddingRight: 56,
   },
   title: {
     paddingRight: 40,

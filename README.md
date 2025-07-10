@@ -5,7 +5,6 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
-- Exercise details title
 - Sort exercises alphabetically
 - Overview score
 - Optimize
