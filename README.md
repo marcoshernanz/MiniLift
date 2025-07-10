@@ -7,5 +7,6 @@
 
 - Tab auto-completes ComboBox
 - Return to accept
+- Sort exercises alphabetically
 - Overview score
 - Optimize
