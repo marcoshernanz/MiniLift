@@ -69,6 +69,7 @@ export default function LogBodyweight({
         editable={editingEnabled}
         onFocus={onInputFocus}
         onBlur={onInputBlur}
+        onSubmitEditing={handleSubmit}
       />
       <Button
         containerStyle={styles.confirmButtonContainer}

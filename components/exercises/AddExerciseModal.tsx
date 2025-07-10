@@ -71,6 +71,7 @@ export default function AddExerciseModal({ onClose }: Props) {
             placeholder="Exercise Name"
             value={name}
             onChangeText={setName}
+            onSubmitEditing={handleAdd}
           />
           <Button
             containerStyle={styles.confirmButtonContainer}

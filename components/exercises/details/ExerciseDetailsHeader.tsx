@@ -108,6 +108,7 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
                 placeholder="Exercise Name"
                 value={name}
                 onChangeText={setName}
+                onSubmitEditing={handleSubmit}
               />
               <Button
                 containerStyle={styles.confirmButtonContainer}

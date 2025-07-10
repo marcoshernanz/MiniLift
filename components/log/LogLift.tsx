@@ -143,6 +143,7 @@ export default function LogLift({
           editable={editingEnabled}
           onFocus={onInputFocus}
           onBlur={onInputBlur}
+          onSubmitEditing={handleSubmit}
         />
       </View>
       <Button
