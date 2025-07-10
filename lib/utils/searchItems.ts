@@ -11,14 +11,18 @@ export default function searchItems<T>({
   query,
   getText,
 }: Params<T>): T[] {
+  const sortedItems = items
+    .slice()
+    .sort((a, b) => getText(a).localeCompare(getText(b)));
+
   const queryLower = query
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "");
   if (!queryLower) {
-    return items;
+    return sortedItems;
   }
-  const scored = items.map((item) => {
+  const scored = sortedItems.map((item) => {
     const lowerText = getText(item).toLowerCase();
     const textTokens = lowerText.split(/[^a-z0-9]+/).filter(Boolean);
 
