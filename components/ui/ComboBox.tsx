@@ -137,6 +137,15 @@ export default function ComboBox({
           onInputBlur && onInputBlur();
           setTimeout(() => setShowDropdown(false), 100);
         }}
+        onSubmitEditing={(e) => {
+          const first = sortedOptions[0];
+          setSearchText(first);
+          onChange(first);
+          setShowDropdown(false);
+
+          inputProps?.onSubmitEditing?.(e);
+        }}
+        submitBehavior={inputProps?.submitBehavior || "submit"}
       />
       {clearable && searchText ? (
         <Pressable style={styles.clearIconContainer} onPress={handleClear}>
