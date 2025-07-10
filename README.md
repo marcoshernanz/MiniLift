@@ -6,6 +6,7 @@
 - Only render visible parts of the chart
 
 - Return to accept
+- Exercise details title
 - Sort exercises alphabetically
 - Overview score
 - Optimize
