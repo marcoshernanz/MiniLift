@@ -5,4 +5,7 @@
 - Chart tooltip when going back
 - Only render visible parts of the chart
 
+- Tab auto-completes ComboBox
+- Return to accept
+- Overview score
 - Optimize
