@@ -47,6 +47,7 @@ export default function useDailyGlobalScore(
     });
 
     const recency: Record<string, number> = {};
+    const scoresStats: Record<string, { sum: number; count: number }> = {};
     const result: Record<string, number | null> = {};
 
     for (const day of days) {
@@ -110,7 +111,14 @@ export default function useDailyGlobalScore(
         const S = rawScores.length
           ? rawScores.reduce((sum, v) => sum + v, 0) / rawScores.length
           : 0;
-        items.push({ weight: W, score: S });
+        const stats = scoresStats[exId] || { sum: 0, count: 0 };
+        const avgPrev = stats.count > 0 ? stats.sum / stats.count : S;
+        const normalized = avgPrev > 0 ? S / avgPrev : 1;
+
+        stats.sum += S;
+        stats.count += 1;
+        scoresStats[exId] = stats;
+        items.push({ weight: W, score: normalized });
       }
 
       const totalW = items.reduce((sum, x) => sum + x.weight, 0);
@@ -118,7 +126,7 @@ export default function useDailyGlobalScore(
         ? items.reduce((sum, x) => sum + x.score * x.weight, 0) / totalW
         : 0;
 
-      result[key] = items.length > 0 ? globalScore : null;
+      result[key] = items.length > 0 ? globalScore * 100 : null;
     }
 
     return result;

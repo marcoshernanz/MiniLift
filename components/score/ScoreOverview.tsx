@@ -22,7 +22,6 @@ export default function ScoreOverview({ exercise }: Props) {
   const daily = useDailyScore(exercise?.id ?? "");
   const globalScore = useDailyGlobalScore();
   const scoreMap = exercise ? daily.score : globalScore;
-  console.log(globalScore);
 
   const endDate = new Date();
   const startDate = subDays(endDate, 29);
