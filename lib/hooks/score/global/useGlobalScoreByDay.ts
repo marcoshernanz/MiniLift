@@ -36,6 +36,9 @@ export default function useGlobalScoreByDay(): Record<
   > = {};
   logs.forEach(({ weight, reps, date, exercise }) => {
     const key = format(date, "yyyy-MM-dd");
+    if (!logsByDay[key]) {
+      logsByDay[key] = {};
+    }
     if (!logsByDay[key][exercise.id]) {
       logsByDay[key][exercise.id] = [];
     }
@@ -69,7 +72,14 @@ export default function useGlobalScoreByDay(): Record<
       }
     }
 
-    if (bodyweight != null && logsByDay[key].length) {
+    // Populate result for days with logs
+    if (
+      bodyweight != null &&
+      logsByDay[key] &&
+      Object.keys(logsByDay[key]).length > 0
+    ) {
+      // initialize day entry
+      result[key] = {};
       for (const exerciseId in logsByDay[key]) {
         result[key][exerciseId] = logsByDay[key][exerciseId].map(
           ({ weight, reps }) => ({
