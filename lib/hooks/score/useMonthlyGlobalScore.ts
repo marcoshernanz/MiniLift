@@ -124,5 +124,5 @@ export default function useMonthlyGlobalScore(
     }
 
     return result;
-  }, [liftLogs, bodyweightLogs, alpha, setThreshold]);
+  }, [liftLogs, bodyweightLogs, setThreshold, alpha]);
 }
