@@ -3,7 +3,7 @@ import calculateOneRepMax from "@/lib/lift/calculateOneRepMax";
 import calculateScore from "@/lib/lift/calculateScore";
 import { eachDayOfInterval, format } from "date-fns";
 
-export default function useScoresByDay(
+export default function useScoreByDay(
   exerciseId?: string
 ): Record<string, { score: number; oneRepMax: number }[]> {
   const { appData } = useAppContext();

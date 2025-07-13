@@ -1,6 +1,6 @@
 import { useAppContext } from "@/context/AppContext";
-import useScoresByDay from "@/lib/hooks/score/useScoresByDay";
 import { eachDayOfInterval, format } from "date-fns";
+import useScoreByDay from "./useScoreByDay";
 
 export type DataType = {
   score: Record<string, number | null>;
@@ -9,7 +9,7 @@ export type DataType = {
 
 export default function useDailyScore(exerciseId?: string): DataType {
   const { appData } = useAppContext();
-  const scoresByDay = useScoresByDay(exerciseId);
+  const scoresByDay = useScoreByDay(exerciseId);
 
   if (!exerciseId) {
     return { oneRepMax: {}, score: {} };

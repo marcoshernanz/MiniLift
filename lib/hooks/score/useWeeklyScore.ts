@@ -1,9 +1,9 @@
-import useScoresByDay from "@/lib/hooks/score/useScoresByDay";
 import { eachWeekOfInterval, startOfWeek, format, parseISO } from "date-fns";
 import { DataType } from "./useDailyScore";
+import useScoreByDay from "@/lib/hooks/score/useScoreByDay";
 
 export default function useWeeklyScore(exerciseId?: string): DataType {
-  const scoresByDay = useScoresByDay(exerciseId);
+  const scoresByDay = useScoreByDay(exerciseId);
 
   if (!exerciseId) {
     return { oneRepMax: {}, score: {} };
