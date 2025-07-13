@@ -128,10 +128,12 @@ export default function StatisticsScreen() {
         />
       </View>
 
-      <StatisticsTypeSelector
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-      />
+      {id && (
+        <StatisticsTypeSelector
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+        />
+      )}
     </SafeArea>
   );
 }
