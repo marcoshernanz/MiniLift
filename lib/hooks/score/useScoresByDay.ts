@@ -30,6 +30,9 @@ export default function useScoresByDay(
     .forEach(({ date, bodyweight }) => {
       bodyweightMap[format(date, "yyyy-MM-dd")] = bodyweight;
     });
+  const bodyweightEntries = bodyweightLogs
+    .map(({ date, bodyweight }) => ({ date, weight: bodyweight }))
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
 
   const logsByDay: Record<string, { weight: number; reps: number }[]> = {};
   logs.forEach(({ weight, reps, date }) => {
@@ -45,28 +48,26 @@ export default function useScoresByDay(
   days.forEach((day) => {
     const key = format(day, "yyyy-MM-dd");
     let bodyweight: number | undefined;
-    if (bodyweightMap[key] !== null) {
+    if (bodyweightMap[key] != null) {
       bodyweight = bodyweightMap[key];
     } else {
-      const nextIndex = bodyweightLogs.findIndex(
+      const nextIndex = bodyweightEntries.findIndex(
         (e) => e.date.getTime() > day.getTime()
       );
       if (nextIndex === -1) {
-        bodyweight = bodyweightLogs[bodyweightLogs.length - 1].bodyweight;
+        bodyweight = bodyweightEntries[bodyweightEntries.length - 1]?.weight;
       } else if (nextIndex === 0) {
-        bodyweight = bodyweightLogs[0].bodyweight;
+        bodyweight = bodyweightEntries[0].weight;
       } else {
-        const prev = bodyweightLogs[nextIndex - 1];
-        const next = bodyweightLogs[nextIndex];
+        const prev = bodyweightEntries[nextIndex - 1];
+        const next = bodyweightEntries[nextIndex];
         const total = next.date.getTime() - prev.date.getTime();
         const dt = day.getTime() - prev.date.getTime();
-
-        bodyweight =
-          prev.bodyweight + (next.bodyweight - prev.bodyweight) * (dt / total);
+        bodyweight = prev.weight + (next.weight - prev.weight) * (dt / total);
       }
     }
 
-    if (bodyweight !== null && logsByDay[key]?.length) {
+    if (bodyweight != null && logsByDay[key]?.length) {
       result[key] = logsByDay[key].map(({ weight, reps }) => ({
         score: calculateScore({ weight, reps, bodyweight: bodyweight! }),
         oneRepMax: calculateOneRepMax({ weight, reps }),
