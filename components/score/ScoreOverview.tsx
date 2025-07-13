@@ -3,6 +3,7 @@ import SimpleChart from "@/components/ui/SimpleChart";
 import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
 import useDailyScore from "@/lib/hooks/score/useDailyScore";
+import useDailyGlobalScore from "@/lib/hooks/score/useDailyGlobalScore";
 import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { eachDayOfInterval, format, subDays } from "date-fns";
@@ -18,7 +19,10 @@ interface Props {
 export default function ScoreOverview({ exercise }: Props) {
   const [helpVisible, setHelpVisible] = useState(false);
 
-  const { score } = useDailyScore(exercise?.id);
+  const daily = useDailyScore(exercise?.id ?? "");
+  const globalScore = useDailyGlobalScore();
+  const scoreMap = exercise ? daily.score : globalScore;
+  console.log(globalScore);
 
   const endDate = new Date();
   const startDate = subDays(endDate, 29);
@@ -27,14 +31,14 @@ export default function ScoreOverview({ exercise }: Props) {
   const chartData: Record<string, number | null> = days.reduce((acc, day) => {
     const key = format(day, "yyyy-MM-dd");
     const label = format(day, "MMM dd");
-    acc[label] = score[key] ?? null;
+    acc[label] = scoreMap[key] ?? null;
 
     return acc;
   }, {} as Record<string, number | null>);
 
   const pts = days
     .map((d, i) => {
-      const v = score[format(d, "yyyy-MM-dd")];
+      const v = scoreMap[format(d, "yyyy-MM-dd")];
       return v != null ? ([i, v] as [number, number]) : null;
     })
     .filter((p): p is [number, number] => p !== null);
