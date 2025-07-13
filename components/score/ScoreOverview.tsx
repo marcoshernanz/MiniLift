@@ -3,7 +3,7 @@ import SimpleChart from "@/components/ui/SimpleChart";
 import SimpleDialog from "@/components/ui/SimpleDialog";
 import Text from "@/components/ui/Text";
 import useDailyScore from "@/lib/hooks/score/useDailyScore";
-import useDailyGlobalScore from "@/lib/hooks/score/useDailyGlobalScore";
+import useDailyGlobalScore from "@/lib/hooks/score/global/useDailyGlobalScore";
 import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { eachDayOfInterval, format, subDays } from "date-fns";
