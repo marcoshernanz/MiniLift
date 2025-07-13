@@ -4,6 +4,7 @@
 - FlashList performance
 - Chart tooltip when going back
 - Only render visible parts of the chart
+- Chart tooltip padding
 
 - Overview score
 - Optimize
