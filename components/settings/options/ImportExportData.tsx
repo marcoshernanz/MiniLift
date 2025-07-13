@@ -12,20 +12,6 @@ export default function ImportExportData() {
 
   const importAppData = async () => {
     try {
-      const data = exportData();
-      const filename = FileSystem.documentDirectory + "minilift-export.json";
-
-      await FileSystem.writeAsStringAsync(filename, data, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
-      await Sharing.shareAsync(filename, { mimeType: "application/json" });
-    } catch {
-      Toast.show({ text: "Export failed", variant: "error" });
-    }
-  };
-
-  const exportAppData = async () => {
-    try {
       const res = await DocumentPicker.getDocumentAsync({
         type: "application/json",
       });
@@ -52,6 +38,20 @@ export default function ImportExportData() {
       Toast.show({ text: "Import successful", variant: "success" });
     } catch {
       Toast.show({ text: "Import failed", variant: "error" });
+    }
+  };
+
+  const exportAppData = async () => {
+    try {
+      const data = exportData();
+      const filename = FileSystem.documentDirectory + "minilift-export.json";
+
+      await FileSystem.writeAsStringAsync(filename, data, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+      await Sharing.shareAsync(filename, { mimeType: "application/json" });
+    } catch {
+      Toast.show({ text: "Export failed", variant: "error" });
     }
   };
 
