@@ -8,8 +8,12 @@ export type DataType = {
   oneRepMax: Record<string, number | null>;
 };
 
-export default function useDailyScore(exerciseId: string): DataType {
+export default function useDailyScore(exerciseId?: string): DataType {
   const { appData } = useAppContext();
+
+  if (!exerciseId) {
+    return { oneRepMax: {}, score: {} };
+  }
 
   const { liftLogs, bodyweightLogs } = appData;
   const filteredLogs = liftLogs.filter((log) => log.exercise.id === exerciseId);

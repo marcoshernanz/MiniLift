@@ -5,8 +5,11 @@ import SafeArea from "@/components/ui/SafeArea";
 import Title from "@/components/ui/Title";
 import { useAppContext } from "@/context/AppContext";
 import useDailyScore from "@/lib/hooks/score/useDailyScore";
-import useMonthlyScore from "@/lib/hooks/score/useMonthlyScore";
 import useWeeklyScore from "@/lib/hooks/score/useWeeklyScore";
+import useMonthlyScore from "@/lib/hooks/score/useMonthlyScore";
+import useDailyGlobalScore from "@/lib/hooks/score/useDailyGlobalScore";
+import useWeeklyGlobalScore from "@/lib/hooks/score/useWeeklyGlobalScore";
+import useMonthlyGlobalScore from "@/lib/hooks/score/useMonthlyGlobalScore";
 import { format, parseISO } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -25,19 +28,44 @@ export default function StatisticsScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const exercise = id ? appData.exercises[id] : null;
 
-  const { score: dailyScore, oneRepMax: dailyOneRepMax } = useDailyScore(id);
-  const { score: weeklyScore, oneRepMax: weeklyOneRepMax } = useWeeklyScore(id);
-  const { score: monthlyScore, oneRepMax: monthlyOneRepMax } =
-    useMonthlyScore(id);
+  const dailyData = useDailyScore(id);
+  const weeklyData = useWeeklyScore(id);
+  const monthlyData = useMonthlyScore(id);
+
+  const dailyGlobal = useDailyGlobalScore();
+  const weeklyGlobal = useWeeklyGlobalScore();
+  const monthlyGlobal = useMonthlyGlobalScore();
+
   const { width } = Dimensions.get("window");
 
   let dataMap: Record<string, number | null>;
   if (selectedTimeFrame === "7D" || selectedTimeFrame === "1M") {
-    dataMap = selectedType === "score" ? dailyScore : dailyOneRepMax;
+    dataMap =
+      selectedType === "score"
+        ? id
+          ? dailyData.score
+          : dailyGlobal
+        : id
+        ? dailyData.oneRepMax
+        : {};
   } else if (selectedTimeFrame === "3M") {
-    dataMap = selectedType === "score" ? weeklyScore : weeklyOneRepMax;
+    dataMap =
+      selectedType === "score"
+        ? id
+          ? weeklyData.score
+          : weeklyGlobal
+        : id
+        ? weeklyData.oneRepMax
+        : {};
   } else {
-    dataMap = selectedType === "score" ? monthlyScore : monthlyOneRepMax;
+    dataMap =
+      selectedType === "score"
+        ? id
+          ? monthlyData.score
+          : monthlyGlobal
+        : id
+        ? monthlyData.oneRepMax
+        : {};
   }
 
   const chartData = Object.entries(dataMap)

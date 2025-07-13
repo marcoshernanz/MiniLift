@@ -4,8 +4,12 @@ import calculateScore from "@/lib/lift/calculateScore";
 import { eachWeekOfInterval, format, startOfWeek } from "date-fns";
 import { DataType } from "./useDailyScore";
 
-export default function useWeeklyScore(exerciseId: string): DataType {
+export default function useWeeklyScore(exerciseId?: string): DataType {
   const { appData } = useAppContext();
+
+  if (!exerciseId) {
+    return { oneRepMax: {}, score: {} };
+  }
 
   const { liftLogs, bodyweightLogs } = appData;
   const filteredLogs = liftLogs.filter((log) => log.exercise.id === exerciseId);
