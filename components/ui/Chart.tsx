@@ -70,6 +70,7 @@ export default function Chart({
   const chartWidth = widthPerPoint * (dataLength - 1);
   const numTotalLabels =
     pointsPerLabel === 0 ? 0 : Math.floor(dataLength / pointsPerLabel);
+  const minValue = Math.min(...Object.values(data).filter((v) => v !== null));
 
   const { linePath, visibleLinePath, areaPath, visibleAreaPath, points } =
     useMemo(
@@ -80,10 +81,10 @@ export default function Chart({
           height: chartHeight,
           bottomPadding,
           topOffset: chartTop,
-          minValue: 0,
+          minValue: minValue,
           numVisiblePoints: numPointsVisible * 2,
         }),
-      [data, chartWidth, chartHeight, chartTop, numPointsVisible]
+      [data, chartWidth, chartHeight, chartTop, minValue, numPointsVisible]
     );
 
   const animationProgress = useSharedValue(0);
