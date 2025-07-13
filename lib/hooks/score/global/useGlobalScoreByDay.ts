@@ -3,18 +3,14 @@ import calculateOneRepMax from "@/lib/lift/calculateOneRepMax";
 import calculateScore from "@/lib/lift/calculateScore";
 import { eachDayOfInterval, format } from "date-fns";
 
-export default function useScoreByDay(
-  exerciseId?: string
-): Record<string, { score: number; oneRepMax: number }[]> {
+export default function useGlobalScoreByDay(): Record<
+  string,
+  Record<string, { score: number; oneRepMax: number }[]>
+> {
   const { appData } = useAppContext();
 
-  if (!exerciseId) {
-    return {};
-  }
-
   const { liftLogs, bodyweightLogs } = appData;
-  const filteredLogs = liftLogs.filter((log) => log.exercise.id === exerciseId);
-  const logs = filteredLogs.sort((a, b) => a.date.getTime() - b.date.getTime());
+  const logs = liftLogs.sort((a, b) => a.date.getTime() - b.date.getTime());
 
   if (logs.length === 0) {
     return {};
@@ -34,16 +30,22 @@ export default function useScoreByDay(
     .map(({ date, bodyweight }) => ({ date, weight: bodyweight }))
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  const logsByDay: Record<string, { weight: number; reps: number }[]> = {};
-  logs.forEach(({ weight, reps, date }) => {
+  const logsByDay: Record<
+    string,
+    Record<string, { weight: number; reps: number }[]>
+  > = {};
+  logs.forEach(({ weight, reps, date, exercise }) => {
     const key = format(date, "yyyy-MM-dd");
-    if (!logsByDay[key]) {
-      logsByDay[key] = [];
+    if (!logsByDay[key][exercise.id]) {
+      logsByDay[key][exercise.id] = [];
     }
-    logsByDay[key].push({ weight, reps });
+    logsByDay[key][exercise.id].push({ weight, reps });
   });
 
-  const result: Record<string, { score: number; oneRepMax: number }[]> = {};
+  const result: Record<
+    string,
+    Record<string, { score: number; oneRepMax: number }[]>
+  > = {};
 
   days.forEach((day) => {
     const key = format(day, "yyyy-MM-dd");
@@ -68,10 +70,14 @@ export default function useScoreByDay(
     }
 
     if (bodyweight != null && logsByDay[key].length) {
-      result[key] = logsByDay[key].map(({ weight, reps }) => ({
-        score: calculateScore({ weight, reps, bodyweight }),
-        oneRepMax: calculateOneRepMax({ weight, reps }),
-      }));
+      for (const exerciseId in logsByDay[key]) {
+        result[key][exerciseId] = logsByDay[key][exerciseId].map(
+          ({ weight, reps }) => ({
+            score: calculateScore({ weight, reps, bodyweight }),
+            oneRepMax: calculateOneRepMax({ weight, reps }),
+          })
+        );
+      }
     }
   });
 
