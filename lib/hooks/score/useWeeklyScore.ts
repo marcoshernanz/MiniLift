@@ -1,104 +1,55 @@
-import { useAppContext } from "@/context/AppContext";
-import calculateOneRepMax from "@/lib/lift/calculateOneRepMax";
-import calculateScore from "@/lib/lift/calculateScore";
-import { eachWeekOfInterval, format, startOfWeek } from "date-fns";
+import useScoresByDay from "@/lib/hooks/score/useScoresByDay";
+import { eachWeekOfInterval, startOfWeek, format, parseISO } from "date-fns";
 import { DataType } from "./useDailyScore";
 
 export default function useWeeklyScore(exerciseId?: string): DataType {
-  const { appData } = useAppContext();
+  const scoresByDay = useScoresByDay(exerciseId);
 
   if (!exerciseId) {
     return { oneRepMax: {}, score: {} };
   }
 
-  const { liftLogs, bodyweightLogs } = appData;
-  const filteredLogs = liftLogs.filter((log) => log.exercise.id === exerciseId);
-  const logs = filteredLogs.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-  if (logs.length === 0) {
+  const dayKeys = Object.keys(scoresByDay);
+  if (dayKeys.length === 0) {
     return { oneRepMax: {}, score: {} };
   }
 
-  const startDate = startOfWeek(logs[0].date, { weekStartsOn: 1 });
+  const dates = dayKeys
+    .map((day) => parseISO(day))
+    .sort((a, b) => a.getTime() - b.getTime());
+  const startDate = startOfWeek(dates[0], { weekStartsOn: 1 });
   const endDate = new Date();
   const weeks = eachWeekOfInterval(
     { start: startDate, end: endDate },
     { weekStartsOn: 1 }
   );
 
-  const oneRepMaxAcc: Record<string, { sum: number; count: number }> = {};
-  logs.forEach(({ weight, reps, date }) => {
-    const weekStart = startOfWeek(date, { weekStartsOn: 1 });
-    const key = format(weekStart, "yyyy-MM-dd");
-    const oneRepMax = calculateOneRepMax({ weight, reps });
-    if (oneRepMaxAcc[key]) {
-      oneRepMaxAcc[key].sum += oneRepMax;
-      oneRepMaxAcc[key].count += 1;
-    } else {
-      oneRepMaxAcc[key] = { sum: oneRepMax, count: 1 };
+  const entriesByWeek: Record<string, { score: number; oneRepMax: number }[]> =
+    {};
+  dayKeys.forEach((day) => {
+    const weekStart = startOfWeek(parseISO(day), { weekStartsOn: 1 });
+    const weekKey = format(weekStart, "yyyy-MM-dd");
+    if (!entriesByWeek[weekKey]) {
+      entriesByWeek[weekKey] = [];
     }
-  });
-
-  const oneRepMaxMap: Record<string, number> = {};
-  Object.entries(oneRepMaxAcc).forEach(([key, { sum, count }]) => {
-    oneRepMaxMap[key] = sum / count;
+    entriesByWeek[weekKey].push(...scoresByDay[day]);
   });
 
   const resultOneRepMax: Record<string, number | null> = {};
-  weeks.forEach((weekStart) => {
-    const key = format(weekStart, "yyyy-MM-dd");
-    resultOneRepMax[key] = oneRepMaxMap[key] ?? null;
-  });
-
-  const bodyweightMap: Record<string, number> = {};
-  bodyweightLogs
-    .sort((a, b) => a.date.getTime() - b.date.getTime())
-    .forEach(({ date, bodyweight }) => {
-      bodyweightMap[format(date, "yyyy-MM-dd")] = bodyweight;
-    });
-
-  const logsByWeek: Record<string, { weight: number; reps: number }[]> = {};
-  logs.forEach(({ weight, reps, date }) => {
-    const weekStart = startOfWeek(date, { weekStartsOn: 1 });
-    const key = format(weekStart, "yyyy-MM-dd");
-    if (!logsByWeek[key]) logsByWeek[key] = [];
-    logsByWeek[key].push({ weight, reps });
-  });
-
   const resultScore: Record<string, number | null> = {};
-  const bodyweightEntries = bodyweightLogs
-    .map(({ date, bodyweight }) => ({ date, weight: bodyweight }))
-    .sort((a, b) => a.date.getTime() - b.date.getTime());
 
   weeks.forEach((weekStart) => {
     const key = format(weekStart, "yyyy-MM-dd");
-    let bw: number | undefined;
-    if (bodyweightMap[key] != null) {
-      bw = bodyweightMap[key];
-    } else {
-      const nextIndex = bodyweightEntries.findIndex(
-        (e) => e.date.getTime() > weekStart.getTime()
-      );
-      if (nextIndex === -1) {
-        bw = bodyweightEntries[bodyweightEntries.length - 1]?.weight;
-      } else if (nextIndex === 0) {
-        bw = bodyweightEntries[0].weight;
-      } else {
-        const prev = bodyweightEntries[nextIndex - 1];
-        const next = bodyweightEntries[nextIndex];
-        const total = next.date.getTime() - prev.date.getTime();
-        const dt = weekStart.getTime() - prev.date.getTime();
-        bw = prev.weight + ((next.weight - prev.weight) * dt) / total;
-      }
-    }
+    const entries = entriesByWeek[key] ?? [];
 
-    if (bw != null && logsByWeek[key]?.length) {
-      const scores = logsByWeek[key].map(({ weight, reps }) =>
-        calculateScore({ weight, reps, bodyweight: bw! })
-      );
-      const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      resultScore[key] = avg;
+    if (entries.length > 0) {
+      const totalOneRepMax = entries.reduce((sum, e) => sum + e.oneRepMax, 0);
+      const totalScore = entries.reduce((sum, e) => sum + e.score, 0);
+
+      resultOneRepMax[key] = totalOneRepMax / entries.length;
+      resultScore[key] = totalScore / entries.length;
     } else {
+      resultOneRepMax[key] = null;
       resultScore[key] = null;
     }
   });
