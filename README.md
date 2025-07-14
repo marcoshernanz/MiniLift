@@ -4,5 +4,4 @@
 - FlashList performance
 - Chart tooltip when going back
 
-- Chart tooltip padding
 - Optimize

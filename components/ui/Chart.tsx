@@ -233,8 +233,8 @@ export default function Chart({
     })),
     tooltipBox: useAnimatedStyle(() => ({
       left: Math.max(
-        0,
-        Math.min(pressX.value - tooltipWidth / 2, width - tooltipWidth)
+        8,
+        Math.min(pressX.value - tooltipWidth / 2, width - tooltipWidth - 8)
       ),
     })),
     fadeIn: useAnimatedStyle(() => ({
