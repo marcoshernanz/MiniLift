@@ -2,54 +2,53 @@ import { eachMonthOfInterval, startOfMonth, format, parseISO } from "date-fns";
 import { DataType } from "./useDailyScore";
 import useScoreByDay from "@/lib/hooks/score/useScoreByDay";
 
+import { useMemo } from "react";
 export default function useMonthlyScore(exerciseId?: string): DataType {
   const scoresByDay = useScoreByDay(exerciseId);
-
-  if (!exerciseId) {
-    return { oneRepMax: {}, score: {} };
-  }
-
-  const dayKeys = Object.keys(scoresByDay);
-  if (dayKeys.length === 0) {
-    return { oneRepMax: {}, score: {} };
-  }
-
-  const dates = dayKeys
-    .map((day) => parseISO(day))
-    .sort((a, b) => a.getTime() - b.getTime());
-  const startDate = startOfMonth(dates[0]);
-  const endDate = new Date();
-  const months = eachMonthOfInterval({ start: startDate, end: endDate });
-
-  const entriesByMonth: Record<string, { score: number; oneRepMax: number }[]> =
-    {};
-  dayKeys.forEach((day) => {
-    const monthStart = startOfMonth(parseISO(day));
-    const monthKey = format(monthStart, "yyyy-MM-dd");
-    if (!entriesByMonth[monthKey]) {
-      entriesByMonth[monthKey] = [];
+  return useMemo(() => {
+    if (!exerciseId) {
+      return { oneRepMax: {}, score: {} };
     }
-    entriesByMonth[monthKey].push(...scoresByDay[day]);
-  });
-
-  const resultOneRepMax: Record<string, number | null> = {};
-  const resultScore: Record<string, number | null> = {};
-
-  months.forEach((monthStart) => {
-    const key = format(monthStart, "yyyy-MM-dd");
-    const entries = entriesByMonth[key] ?? [];
-
-    if (entries.length > 0) {
-      const totalOneRepMax = entries.reduce((sum, e) => sum + e.oneRepMax, 0);
-      const totalScore = entries.reduce((sum, e) => sum + e.score, 0);
-
-      resultOneRepMax[key] = totalOneRepMax / entries.length;
-      resultScore[key] = totalScore / entries.length;
-    } else {
-      resultOneRepMax[key] = null;
-      resultScore[key] = null;
+    const dayKeys = Object.keys(scoresByDay);
+    if (dayKeys.length === 0) {
+      return { oneRepMax: {}, score: {} };
     }
-  });
 
-  return { oneRepMax: resultOneRepMax, score: resultScore };
+    const dates = dayKeys
+      .map((day) => parseISO(day))
+      .sort((a, b) => a.getTime() - b.getTime());
+    const startDate = startOfMonth(dates[0]);
+    const endDate = new Date();
+    const months = eachMonthOfInterval({ start: startDate, end: endDate });
+
+    const entriesByMonth: Record<
+      string,
+      { score: number; oneRepMax: number }[]
+    > = {};
+    dayKeys.forEach((day) => {
+      const monthStart = startOfMonth(parseISO(day));
+      const monthKey = format(monthStart, "yyyy-MM-dd");
+      if (!entriesByMonth[monthKey]) {
+        entriesByMonth[monthKey] = [];
+      }
+      entriesByMonth[monthKey].push(...scoresByDay[day]);
+    });
+
+    const resultOneRepMax: Record<string, number | null> = {};
+    const resultScore: Record<string, number | null> = {};
+    months.forEach((monthStart) => {
+      const key = format(monthStart, "yyyy-MM-dd");
+      const entries = entriesByMonth[key] ?? [];
+      if (entries.length > 0) {
+        const totalOneRepMax = entries.reduce((sum, e) => sum + e.oneRepMax, 0);
+        const totalScore = entries.reduce((sum, e) => sum + e.score, 0);
+        resultOneRepMax[key] = totalOneRepMax / entries.length;
+        resultScore[key] = totalScore / entries.length;
+      } else {
+        resultOneRepMax[key] = null;
+        resultScore[key] = null;
+      }
+    });
+    return { oneRepMax: resultOneRepMax, score: resultScore };
+  }, [exerciseId, scoresByDay]);
 }

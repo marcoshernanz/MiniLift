@@ -6,7 +6,7 @@ import useDailyBodyweight from "@/lib/hooks/bodyweight/useDailyBodyweight";
 import useMonthlyBodyweight from "@/lib/hooks/bodyweight/useMonthlyBodyweight";
 import useWeeklyBodyweight from "@/lib/hooks/bodyweight/useWeeklyBodyweight";
 import { format, parseISO } from "date-fns";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 export type TimeFrame = "7D" | "1M" | "3M" | "1Y" | "All";
@@ -21,48 +21,52 @@ export default function StatisticsScreen() {
 
   const { width } = Dimensions.get("window");
 
-  let dataMap: Record<string, number | null>;
-  if (selectedTimeFrame === "7D" || selectedTimeFrame === "1M") {
-    dataMap = dailyBodyweight;
-  } else if (selectedTimeFrame === "3M") {
-    dataMap = weeklyBodyweight;
-  } else {
-    dataMap = monthlyBodyweight;
-  }
+  const dataMap = useMemo<Record<string, number | null>>(() => {
+    if (selectedTimeFrame === "7D" || selectedTimeFrame === "1M") {
+      return dailyBodyweight;
+    } else if (selectedTimeFrame === "3M") {
+      return weeklyBodyweight;
+    }
+    // "1Y" or "All"
+    return monthlyBodyweight;
+  }, [selectedTimeFrame, dailyBodyweight, weeklyBodyweight, monthlyBodyweight]);
 
-  const chartData = Object.entries(dataMap)
-    .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
-    .reduce<Record<string, number | null>>((acc, [key, val]) => {
-      const date = parseISO(key);
-      const labelFormat =
-        selectedTimeFrame === "7D" ||
-        selectedTimeFrame === "1M" ||
-        selectedTimeFrame === "3M"
-          ? "MMM dd"
-          : "MMM yyyy";
-      const label = format(date, labelFormat);
-      acc[label] = val;
-      return acc;
-    }, {} as Record<string, number | null>);
+  const chartData = useMemo(() => {
+    return Object.entries(dataMap)
+      .sort(([a], [b]) => parseISO(a).getTime() - parseISO(b).getTime())
+      .reduce<Record<string, number | null>>((acc, [key, val]) => {
+        const date = parseISO(key);
+        const labelFormat =
+          selectedTimeFrame === "7D" ||
+          selectedTimeFrame === "1M" ||
+          selectedTimeFrame === "3M"
+            ? "MMM dd"
+            : "MMM yyyy";
+        const label = format(date, labelFormat);
+        acc[label] = val;
+        return acc;
+      }, {});
+  }, [dataMap, selectedTimeFrame]);
 
-  const numPointsVisible = {
-    "7D": 7,
-    "1M": 30,
-    "3M": 12,
-    "1Y": 12,
-    All:
-      Object.entries(chartData).length === 1
-        ? 2
-        : Object.entries(chartData).length,
-  }[selectedTimeFrame];
+  const numPointsVisible = useMemo(() => {
+    const len = Object.keys(chartData).length;
+    if (selectedTimeFrame === "7D") return 7;
+    if (selectedTimeFrame === "1M") return 30;
+    if (selectedTimeFrame === "3M") return 12;
+    if (selectedTimeFrame === "1Y") return 12;
+    // "All"
+    return len === 1 ? 2 : len;
+  }, [chartData, selectedTimeFrame]);
 
-  const pointsPerLabel = {
-    "7D": 2,
-    "1M": 7,
-    "3M": 3,
-    "1Y": 3,
-    All: 3 * Math.round(1 + Object.entries(chartData).length / 365),
-  }[selectedTimeFrame];
+  const pointsPerLabel = useMemo(() => {
+    const len = Object.keys(chartData).length;
+    if (selectedTimeFrame === "7D") return 2;
+    if (selectedTimeFrame === "1M") return 7;
+    if (selectedTimeFrame === "3M") return 3;
+    if (selectedTimeFrame === "1Y") return 3;
+    // "All"
+    return 3 * Math.round(1 + len / 365);
+  }, [chartData, selectedTimeFrame]);
 
   return (
     <SafeArea style={styles.container}>
