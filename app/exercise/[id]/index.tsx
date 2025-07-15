@@ -6,7 +6,7 @@ import SafeArea from "@/components/ui/SafeArea";
 import Text from "@/components/ui/Text";
 import { useAppContext } from "@/context/AppContext";
 import { useLocalSearchParams } from "expo-router";
-import React from "react";
+import React, { useMemo } from "react";
 import ScoreOverview from "@/components/score/ScoreOverview";
 
 export default function ExerciseDetailScreen() {
@@ -14,13 +14,14 @@ export default function ExerciseDetailScreen() {
   const { appData } = useAppContext();
 
   const exercise = appData.exercises[id];
-
+  const logs = useMemo(() => {
+    if (!exercise) return [];
+    return appData.liftLogs
+      .filter((log) => log.exercise.id === exercise.id)
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .map((log) => ({ ...log, type: "lift" as const }));
+  }, [appData.liftLogs, exercise]);
   if (!exercise) return null;
-
-  const logs = appData.liftLogs
-    .filter((log) => log.exercise.id === exercise.id)
-    .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .map((log) => ({ ...log, type: "lift" as const }));
 
   return (
     <SafeArea style={{ paddingHorizontal: 0 }} edges={["top", "left", "right"]}>
