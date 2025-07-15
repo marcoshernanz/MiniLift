@@ -11,18 +11,15 @@ import { Toast } from "../ui/Toast";
 
 interface Props {
   item: Exercise;
+  logsCount: number;
 }
 
 let navigationInProgress = false;
 
-export default function ExerciseListItem({ item }: Props) {
+export default function ExerciseListItem({ item, logsCount }: Props) {
   const router = useRouter();
-  const { appData, setAppData } = useAppContext();
+  const { setAppData } = useAppContext();
   const [dialogVisible, setDialogVisible] = useState(false);
-
-  const logsCount = appData.liftLogs.filter(
-    (log) => log.exercise.id === item.id
-  ).length;
 
   const toggleFavorite = () => {
     setAppData((prev) => {
