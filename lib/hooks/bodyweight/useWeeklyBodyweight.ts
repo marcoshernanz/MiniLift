@@ -18,15 +18,21 @@ export default function useWeeklyBodyweight(): Record<string, number | null> {
       { start: startDate, end: endDate },
       { weekStartsOn: 1 }
     );
-    const bodyweightMap: Record<string, number> = {};
+
+    const bodyweightMap: Record<string, { sum: number; count: number }> = {};
     logs.forEach(({ date, bodyweight }) => {
       const key = format(startOfWeek(date, { weekStartsOn: 1 }), "yyyy-MM-dd");
-      bodyweightMap[key] = bodyweight;
+      if (!bodyweightMap[key]) {
+        bodyweightMap[key] = { sum: 0, count: 0 };
+      }
+      bodyweightMap[key].sum += bodyweight;
+      bodyweightMap[key].count += 1;
     });
     const result: Record<string, number | null> = {};
     weeks.forEach((weekStart) => {
       const key = format(weekStart, "yyyy-MM-dd");
-      result[key] = bodyweightMap[key] ?? null;
+      const data = bodyweightMap[key];
+      result[key] = data ? data.sum / data.count : null;
     });
     return result;
   }, [bodyweightLogs]);

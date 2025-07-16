@@ -15,15 +15,21 @@ export default function useMonthlyBodyweight(): Record<string, number | null> {
     const startDate = startOfMonth(logs[0].date);
     const endDate = new Date();
     const months = eachMonthOfInterval({ start: startDate, end: endDate });
-    const bodyweightMap: Record<string, number> = {};
+
+    const bodyweightMap: Record<string, { sum: number; count: number }> = {};
     logs.forEach(({ date, bodyweight }) => {
       const key = format(startOfMonth(date), "yyyy-MM-dd");
-      bodyweightMap[key] = bodyweight;
+      if (!bodyweightMap[key]) {
+        bodyweightMap[key] = { sum: 0, count: 0 };
+      }
+      bodyweightMap[key].sum += bodyweight;
+      bodyweightMap[key].count += 1;
     });
     const result: Record<string, number | null> = {};
     months.forEach((monthStart) => {
       const key = format(monthStart, "yyyy-MM-dd");
-      result[key] = bodyweightMap[key] ?? null;
+      const data = bodyweightMap[key];
+      result[key] = data ? data.sum / data.count : null;
     });
     return result;
   }, [bodyweightLogs]);
