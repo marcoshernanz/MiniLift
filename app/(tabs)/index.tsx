@@ -1,3 +1,4 @@
+import React, { useMemo, useCallback } from "react";
 import ActivityLogItem from "@/components/activity/ActivityLogItem";
 import HomeBodyweight from "@/components/home/HomeBodyweight";
 import HomeScore from "@/components/home/HomeScore";
@@ -10,29 +11,43 @@ import { FlatList, StyleSheet, View } from "react-native";
 export default function HomeScreen() {
   const { appData } = useAppContext();
 
-  const logs = [
-    ...appData.liftLogs.map((log) => ({ ...log, type: "lift" as const })),
-    ...appData.bodyweightLogs.map((log) => ({
-      ...log,
-      type: "bodyweight" as const,
-    })),
-  ].sort((a, b) => b.date.getTime() - a.date.getTime());
+  const logs = useMemo(
+    () =>
+      [
+        ...appData.liftLogs.map((log) => ({ ...log, type: "lift" as const })),
+        ...appData.bodyweightLogs.map((log) => ({
+          ...log,
+          type: "bodyweight" as const,
+        })),
+      ].sort((a, b) => b.date.getTime() - a.date.getTime()),
+    [appData.liftLogs, appData.bodyweightLogs]
+  );
+
+  const renderHeader = useCallback(
+    () => (
+      <View style={styles.headerContainer}>
+        <HomeScore />
+        <HomeBodyweight />
+        <Text style={styles.activityTitle}>Activity</Text>
+      </View>
+    ),
+    []
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => <ActivityLogItem log={item} showDate />,
+    []
+  );
 
   return (
-    <SafeArea style={{ paddingHorizontal: 0 }} edges={["top", "left", "right"]}>
+    <SafeArea style={styles.safeArea} edges={["top", "left", "right"]}>
       <Title style={styles.title}>Home</Title>
       <FlatList
         data={logs}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={() => (
-          <View style={{ paddingHorizontal: 16 }}>
-            <HomeScore />
-            <HomeBodyweight />
-            <Text style={styles.activityTitle}>Activity</Text>
-          </View>
-        )}
-        renderItem={({ item }) => <ActivityLogItem log={item} showDate />}
-        contentContainerStyle={{ paddingHorizontal: 0, paddingBottom: 24 }}
+        ListHeaderComponent={renderHeader}
+        renderItem={renderItem}
+        contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         overScrollMode="never"
@@ -52,5 +67,15 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     paddingBottom: 12,
+  },
+  safeArea: {
+    paddingHorizontal: 0,
+  },
+  headerContainer: {
+    paddingHorizontal: 16,
+  },
+  contentContainer: {
+    paddingHorizontal: 0,
+    paddingBottom: 24,
   },
 });
