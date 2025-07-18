@@ -40,27 +40,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: getUniqueIdentifier(),
-    adaptiveIcon: {
-      foregroundImage: "./assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff",
-    },
+    // adaptiveIcon: {
+    //   foregroundImage: "./assets/images/adaptive-icon.png",
+    //   backgroundColor: "#ffffff",
+    // },
     edgeToEdgeEnabled: true,
     softwareKeyboardLayoutMode: "pan",
-  },
-  web: {
-    bundler: "metro",
-    output: "static",
-    favicon: "./assets/images/favicon.png",
   },
   plugins: [
     "expo-router",
     [
       "expo-splash-screen",
       {
+        backgroundColor: "#020817",
         image: "./assets/images/splash-icon.png",
         imageWidth: 200,
         resizeMode: "contain",
-        backgroundColor: "#ffffff",
       },
     ],
     [
