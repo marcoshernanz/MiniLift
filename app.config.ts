@@ -40,10 +40,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: getUniqueIdentifier(),
-    // adaptiveIcon: {
-    //   foregroundImage: "./assets/images/adaptive-icon.png",
-    //   backgroundColor: "#ffffff",
-    // },
     edgeToEdgeEnabled: true,
     softwareKeyboardLayoutMode: "pan",
   },
