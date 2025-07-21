@@ -8,7 +8,7 @@ import ImportExportData from "@/components/settings/options/ImportExportData";
 export default function SettingsScreen() {
   return (
     <SafeArea>
-      <Title style={styles.title}>Activity</Title>
+      <Title style={styles.title}>Settings</Title>
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
