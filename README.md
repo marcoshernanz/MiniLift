@@ -8,3 +8,4 @@
 - Default weight
 - Default exercises
 - Better way of calculating global score
+- Ask for rating
