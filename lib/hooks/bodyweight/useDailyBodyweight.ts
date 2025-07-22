@@ -1,7 +1,7 @@
 import { useAppContext } from "@/context/AppContext";
 import { eachDayOfInterval, format } from "date-fns";
-
 import { useMemo } from "react";
+
 export default function useDailyBodyweight(): Record<string, number | null> {
   const { appData } = useAppContext();
   const { bodyweightLogs } = appData;
