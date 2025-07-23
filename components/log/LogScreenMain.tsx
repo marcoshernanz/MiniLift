@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Button from "../ui/Button";
 import { Toast } from "../ui/Toast";
+import * as StoreReview from "expo-store-review";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
 import uuidv4 from "@/lib/utils/uuidv4";
@@ -35,7 +36,7 @@ export default function LogScreenMain({
   logBodyweightDescription,
   logDate = new Date(),
 }: Props) {
-  const { setAppData } = useAppContext();
+  const { setAppData, appData } = useAppContext();
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -49,7 +50,7 @@ export default function LogScreenMain({
     },
   });
 
-  const handleLogLift = ({
+  const handleLogLift = async ({
     exercise,
     weight,
     reps,
@@ -58,6 +59,7 @@ export default function LogScreenMain({
     weight: number;
     reps: number;
   }) => {
+    const prevCount = appData.liftLogs.length;
     const newLog = {
       id: uuidv4(),
       date: logDate,
@@ -75,6 +77,12 @@ export default function LogScreenMain({
       text: `${exercise.name}: ${weight}kg x ${Math.floor(reps)}`,
       variant: "success",
     });
+    if (prevCount + 1 === 50) {
+      const isAvailable = await StoreReview.isAvailableAsync();
+      if (isAvailable) {
+        StoreReview.requestReview();
+      }
+    }
   };
 
   const handleLogBodyweight = ({ bodyweight }: { bodyweight: number }) => {
