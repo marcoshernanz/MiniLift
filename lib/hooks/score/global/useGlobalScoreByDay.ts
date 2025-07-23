@@ -72,13 +72,7 @@ export default function useGlobalScoreByDay(): Record<
       }
     }
 
-    // Populate result for days with logs
-    if (
-      bodyweight != null &&
-      logsByDay[key] &&
-      Object.keys(logsByDay[key]).length > 0
-    ) {
-      // initialize day entry
+    if (logsByDay[key] && Object.keys(logsByDay[key]).length > 0) {
       result[key] = {};
       for (const exerciseId in logsByDay[key]) {
         result[key][exerciseId] = logsByDay[key][exerciseId].map(

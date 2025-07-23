@@ -68,7 +68,7 @@ export default function useScoreByDay(
     }
 
     const dayLogs = logsByDay[key] ?? [];
-    if (bodyweight != null && dayLogs.length > 0) {
+    if (dayLogs.length > 0) {
       result[key] = dayLogs.map(({ weight, reps }) => ({
         score: calculateScore({ weight, reps, bodyweight }),
         oneRepMax: calculateOneRepMax({ weight, reps }),
