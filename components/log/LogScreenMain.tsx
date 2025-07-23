@@ -77,7 +77,7 @@ export default function LogScreenMain({
       text: `${exercise.name}: ${weight}kg x ${Math.floor(reps)}`,
       variant: "success",
     });
-    if (prevCount + 1 === 50) {
+    if (prevCount + 1 === 100) {
       const isAvailable = await StoreReview.isAvailableAsync();
       if (isAvailable) {
         StoreReview.requestReview();
