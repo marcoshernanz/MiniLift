@@ -23,11 +23,24 @@ export default function BodyweightOverview() {
     return acc;
   }, {} as Record<string, number | null>);
 
-  const values = Object.values(chartData).filter((value) => value !== null);
-  const change =
-    values.length >= 2 && values[0] !== 0
-      ? (values[values.length - 1] - values[0]) / values[0]
-      : 0;
+  const yValues = Object.values(chartData).filter(
+    (value): value is number => value !== null
+  );
+
+  let change = 0;
+  if (yValues.length >= 2 && yValues[0] !== 0) {
+    const points = yValues.map((y, i) => ({ x: i, y }));
+    const n = points.length;
+    const xMean = points.reduce((sum, p) => sum + p.x, 0) / n;
+    const yMean = points.reduce((sum, p) => sum + p.y, 0) / n;
+    const numerator = points.reduce(
+      (sum, p) => sum + (p.x - xMean) * (p.y - yMean),
+      0
+    );
+    const denominator = points.reduce((sum, p) => sum + (p.x - xMean) ** 2, 0);
+    const slope = denominator !== 0 ? numerator / denominator : 0;
+    change = (slope * (n - 1)) / yValues[0];
+  }
   const changePercent = (change * 100).toFixed(1);
   const router = useRouter();
 
