@@ -10,3 +10,4 @@
 - Better way of calculating global score
 - Ask for rating
 - Show previous weight and reps in log screen
+- Bodyweight change with linear regression
