@@ -6,6 +6,7 @@ import Description from "../ui/Description";
 import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
+import { useAppContext } from "@/context/AppContext";
 
 interface LogBodyweightProps {
   onInputFocus?: () => void;
@@ -31,6 +32,8 @@ export default function LogBodyweight({
     startingValues?.bodyweight || ""
   );
   const inputRef = useRef<TextInputHandle>(null);
+  const { appData } = useAppContext();
+  const lastLog = appData.bodyweightLogs[appData.bodyweightLogs.length - 1];
 
   const LogBodyweightForm = z.object({
     bodyweight: z.preprocess(
@@ -62,7 +65,9 @@ export default function LogBodyweight({
       </View>
       <TextInput
         ref={inputRef}
-        placeholder="Bodyweight"
+        placeholder={
+          lastLog ? `Bodyweight (${lastLog.bodyweight})` : "Bodyweight"
+        }
         keyboardType="numeric"
         value={bodyweight}
         onChangeText={setBodyweight}

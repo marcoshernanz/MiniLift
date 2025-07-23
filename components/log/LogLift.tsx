@@ -1,6 +1,6 @@
 import { useAppContext } from "@/context/AppContext";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import { z } from "zod";
 import Button from "../ui/Button";
@@ -57,6 +57,15 @@ export default function LogLift({
   const favoriteExercises = Object.values(appData.exercises)
     .filter((e) => e.isFavorite)
     .map((e) => e.name);
+
+  // Compute last lift log for selected exercise
+  const lastLog = useMemo(() => {
+    if (!exercise) return undefined;
+    const logs = appData.liftLogs
+      .filter((log) => log.exercise.name === exercise)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return logs.length > 0 ? logs[logs.length - 1] : undefined;
+  }, [appData.liftLogs, exercise]);
 
   const LogLiftForm = z.object({
     exercise: z
@@ -121,7 +130,7 @@ export default function LogLift({
           onInputBlur={onInputBlur}
         />
         <TextInput
-          placeholder="Weight"
+          placeholder={lastLog ? `Weight (${lastLog.weight})` : "Weight"}
           keyboardType="numeric"
           submitBehavior="submit"
           returnKeyType="next"
@@ -134,7 +143,9 @@ export default function LogLift({
           onBlur={onInputBlur}
         />
         <TextInput
-          placeholder="Repetitions"
+          placeholder={
+            lastLog ? `Repetitions (${lastLog.reps})` : "Repetitions"
+          }
           keyboardType="numeric"
           returnKeyType="done"
           ref={repsInputRef}
