@@ -6,4 +6,5 @@
 - Optimize
 - Onboarding
 - Better way of calculating global score
-- Ask for rating
+
+- Ask for rating in settings
