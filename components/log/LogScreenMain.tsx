@@ -59,7 +59,7 @@ export default function LogScreenMain({
     weight: number;
     reps: number;
   }) => {
-    const prevCount = appData.liftLogs.length;
+    const prevCount = appData.liftLogs.length + appData.bodyweightLogs.length;
     const newLog = {
       id: uuidv4(),
       date: logDate,
@@ -77,15 +77,20 @@ export default function LogScreenMain({
       text: `${exercise.name}: ${weight}kg x ${Math.floor(reps)}`,
       variant: "success",
     });
-    if (prevCount + 1 === 100) {
+    if (prevCount + 1 === 200) {
       const isAvailable = await StoreReview.isAvailableAsync();
       if (isAvailable) {
-        StoreReview.requestReview();
+        await StoreReview.requestReview();
       }
     }
   };
 
-  const handleLogBodyweight = ({ bodyweight }: { bodyweight: number }) => {
+  const handleLogBodyweight = async ({
+    bodyweight,
+  }: {
+    bodyweight: number;
+  }) => {
+    const prevCount = appData.liftLogs.length + appData.bodyweightLogs.length;
     const newLog = {
       id: uuidv4(),
       date: logDate,
@@ -97,6 +102,12 @@ export default function LogScreenMain({
     }));
 
     Toast.show({ text: `${bodyweight}kg`, variant: "success" });
+    if (prevCount + 1 === 200) {
+      const isAvailable = await StoreReview.isAvailableAsync();
+      if (isAvailable) {
+        await StoreReview.requestReview();
+      }
+    }
   };
 
   return (
