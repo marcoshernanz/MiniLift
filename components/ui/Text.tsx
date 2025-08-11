@@ -54,11 +54,15 @@ const resolveFontFamily = (style: StyleProp<TextStyle>) => {
 };
 
 export default function Text({ style, ...props }: TextProps) {
+  const flatStyle: TextStyle = Array.isArray(style)
+    ? Object.assign({}, ...style)
+    : style || {};
+  const { fontWeight, fontStyle, ...restStyle } = flatStyle;
   const fontFamily = resolveFontFamily(style);
   return (
     <RNText
       {...props}
-      style={[{ fontFamily, color: getColor("foreground") }, style]}
+      style={[{ fontFamily, color: getColor("foreground") }, restStyle]}
     />
   );
 }
