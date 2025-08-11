@@ -3,14 +3,22 @@ import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
 import LogScreen from "./log/LogScreen";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabsAddButton() {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const tabsHeight = 49 + bottomInset;
+  const size = 60 + Math.max(0, bottomInset / 2 - 10);
+
   return (
     <>
       <Pressable
-        style={styles.floatingButton}
+        style={[
+          styles.floatingButton,
+          { bottom: tabsHeight - size + 10, height: size, width: size },
+        ]}
         android_ripple={{
           color: getColor("background", 0.25),
           radius: 30,
@@ -37,7 +45,6 @@ export default function TabsAddButton() {
 const styles = StyleSheet.create({
   floatingButton: {
     position: "absolute",
-    bottom: 16,
     left: "50%",
     width: 60,
     height: 60,
