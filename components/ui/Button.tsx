@@ -9,6 +9,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
+  Platform,
 } from "react-native";
 
 type ButtonVariant =
@@ -46,10 +47,11 @@ export default function Button({
   return (
     <View style={[styles.wrapperView, containerStyle]}>
       <Pressable
-        style={() => [
+        style={({ pressed }) => [
           styles.baseButton,
           styles[`${variant}Button`],
           pressableStyle,
+          Platform.OS === "ios" && pressed && { opacity: 0.675 },
         ]}
         android_ripple={{ color: rippleColor }}
         {...props}

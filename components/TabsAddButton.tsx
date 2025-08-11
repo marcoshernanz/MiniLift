@@ -1,23 +1,29 @@
 import getColor from "@/lib/utils/getColor";
 import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
-import { Modal, Pressable, StyleSheet } from "react-native";
+import { Modal, StyleSheet } from "react-native";
 import LogScreen from "./log/LogScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Button from "@/components/ui/Button";
 
 export default function TabsAddButton() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const { bottom: bottomInset } = useSafeAreaInsets();
   const tabsHeight = 49 + bottomInset;
-  const size = 60 + Math.max(0, bottomInset / 2 - 10);
+  const size = 59 + Math.max(0, bottomInset / 2 - 10);
 
   return (
     <>
-      <Pressable
-        style={[
-          styles.floatingButton,
+      <Button
+        variant="primary"
+        containerStyle={[
+          styles.floatingButtonContainer,
           { bottom: tabsHeight - size + 10, height: size, width: size },
+        ]}
+        pressableStyle={[
+          styles.floatingButtonPressable,
+          { height: size, width: size },
         ]}
         android_ripple={{
           color: getColor("background", 0.25),
@@ -26,7 +32,7 @@ export default function TabsAddButton() {
         onPress={() => setModalVisible(true)}
       >
         <PlusIcon color={getColor("primaryForeground")} size={32} />
-      </Pressable>
+      </Button>
 
       <Modal
         statusBarTranslucent={true}
@@ -43,20 +49,20 @@ export default function TabsAddButton() {
 }
 
 const styles = StyleSheet.create({
-  floatingButton: {
+  floatingButtonContainer: {
     position: "absolute",
     left: "50%",
-    width: 60,
-    height: 60,
     borderRadius: 9999,
-    backgroundColor: getColor("primary"),
-    borderWidth: 1,
-    borderColor: getColor("border"),
+    backgroundColor: getColor("background"),
     transform: [{ translateX: "-50%" }],
     zIndex: 10,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  floatingButtonPressable: {
+    borderRadius: 9999,
     elevation: 5,
-    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
 });
