@@ -2,7 +2,7 @@ import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/utils/getColor";
 import { XIcon } from "lucide-react-native";
 import React, { useRef, useState } from "react";
-import { Keyboard, Pressable, StyleSheet, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, View, Platform } from "react-native";
 import { z } from "zod";
 import Button from "../ui/Button";
 import SafeArea from "../ui/SafeArea";
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 26,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
   },
   confirmButtonContainer: {
     marginTop: 20,

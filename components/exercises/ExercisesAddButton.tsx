@@ -24,10 +24,10 @@ export default function ExercisesAddButton() {
         <Modal
           statusBarTranslucent={true}
           navigationBarTranslucent={true}
-          transparent={true}
           visible={logScreenVisible}
           onRequestClose={() => setLogScreenVisible(false)}
           animationType="slide"
+          presentationStyle="pageSheet"
         >
           <SafeAreaProvider>
             <AddExerciseModal onClose={() => setLogScreenVisible(false)} />
