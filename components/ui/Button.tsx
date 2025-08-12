@@ -25,6 +25,7 @@ interface ButtonProps extends Omit<PressableProps, "style"> {
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   pressableStyle?: StyleProp<ViewStyle>;
+  text?: boolean;
 }
 
 export default function Button({
@@ -33,6 +34,7 @@ export default function Button({
   containerStyle,
   pressableStyle,
   textStyle,
+  text = true,
   ...props
 }: ButtonProps) {
   const rippleColor =
@@ -50,15 +52,19 @@ export default function Button({
         style={({ pressed }) => [
           styles.baseButton,
           styles[`${variant}Button`],
-          pressableStyle,
           Platform.OS === "ios" && pressed && { opacity: 0.675 },
+          pressableStyle,
         ]}
         android_ripple={{ color: rippleColor }}
         {...props}
       >
-        <Text style={[styles.baseText, styles[`${variant}Text`], textStyle]}>
-          {children}
-        </Text>
+        {text ? (
+          <Text style={[styles.baseText, styles[`${variant}Text`], textStyle]}>
+            {children}
+          </Text>
+        ) : (
+          children
+        )}
       </Pressable>
     </View>
   );

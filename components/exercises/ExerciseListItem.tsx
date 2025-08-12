@@ -4,10 +4,11 @@ import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { useRouter } from "expo-router";
 import { StarIcon, TrashIcon } from "lucide-react-native";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import AlertDialog from "../ui/AlertDialog";
 import Text from "../ui/Text";
 import { Toast } from "../ui/Toast";
+import Button from "../ui/Button";
 
 interface Props {
   item: Exercise;
@@ -58,45 +59,48 @@ export default function ExerciseListItem({ item, logsCount }: Props) {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.mainPressableWrapper}>
-          <Pressable
-            style={styles.mainPressable}
-            android_ripple={{ color: getColor("muted") }}
-            onPress={handleNavigate}
-          >
-            <Text style={styles.mainText}>{item.name}</Text>
+        <Button
+          variant="ghost"
+          containerStyle={styles.mainPressableContainer}
+          pressableStyle={styles.mainPressable}
+          onPress={handleNavigate}
+          text={false}
+        >
+          <Text style={styles.mainText}>{item.name}</Text>
 
-            <View style={styles.iconsContainer}>
-              <Pressable
-                style={styles.favoritePressable}
-                android_ripple={{ color: getColor("muted"), radius: 20 }}
-                onPress={toggleFavorite}
-              >
-                <StarIcon
-                  size={20}
-                  strokeWidth={1.75}
-                  color={
-                    item.isFavorite
-                      ? getColor("primary")
-                      : getColor("mutedForeground")
-                  }
-                  fill={item.isFavorite ? getColor("primary") : "transparent"}
-                />
-              </Pressable>
-              <Pressable
-                style={styles.deletePressable}
-                android_ripple={{ color: getColor("muted"), radius: 20 }}
-                onPress={() => setDialogVisible(true)}
-              >
-                <TrashIcon
-                  size={20}
-                  strokeWidth={1.75}
-                  color={getColor("mutedForeground")}
-                />
-              </Pressable>
-            </View>
-          </Pressable>
-        </View>
+          <View style={styles.iconsContainer}>
+            <Button
+              variant="ghost"
+              pressableStyle={styles.favoritePressable}
+              containerStyle={styles.favoriteContainer}
+              android_ripple={{ color: getColor("muted"), radius: 20 }}
+              onPress={toggleFavorite}
+            >
+              <StarIcon
+                size={20}
+                strokeWidth={1.75}
+                color={
+                  item.isFavorite
+                    ? getColor("primary")
+                    : getColor("mutedForeground")
+                }
+                fill={item.isFavorite ? getColor("primary") : "transparent"}
+              />
+            </Button>
+            <Button
+              variant="ghost"
+              pressableStyle={styles.deletePressable}
+              android_ripple={{ color: getColor("muted"), radius: 20 }}
+              onPress={() => setDialogVisible(true)}
+            >
+              <TrashIcon
+                size={20}
+                strokeWidth={1.75}
+                color={getColor("mutedForeground")}
+              />
+            </Button>
+          </View>
+        </Button>
       </View>
 
       <AlertDialog
@@ -122,9 +126,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
   },
-  mainPressableWrapper: {
-    borderRadius: 8,
-    overflow: "hidden",
+  mainPressableContainer: {
     position: "relative",
   },
   mainPressable: {
@@ -132,11 +134,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderRadius: 8,
+    padding: 0,
   },
   mainText: {
     fontSize: 16,
-    padding: 12,
+    padding: 14,
     flex: 1,
     flexShrink: 1,
   },
@@ -146,17 +148,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
-  deletePressable: {
-    height: "100%",
-    width: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   favoritePressable: {
     height: "100%",
     width: 40,
+    padding: 0,
     alignItems: "center",
     justifyContent: "center",
     marginRight: -5,
+  },
+  favoriteContainer: {
+    overflow: "visible",
+  },
+  deletePressable: {
+    height: "100%",
+    width: 40,
+    padding: 0,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
