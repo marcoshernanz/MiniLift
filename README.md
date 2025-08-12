@@ -6,3 +6,4 @@
 - Optimize
 - Onboarding
 - Better way of calculating global score
+- Remove over scroll for ios
