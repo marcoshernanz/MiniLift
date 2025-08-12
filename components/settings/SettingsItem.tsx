@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   pressable: {
     borderRadius: 0,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: getColor("border"),
     alignItems: "flex-start",
