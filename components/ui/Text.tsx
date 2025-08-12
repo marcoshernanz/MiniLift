@@ -62,7 +62,14 @@ export default function Text({ style, ...props }: TextProps) {
   return (
     <RNText
       {...props}
-      style={[{ fontFamily, color: getColor("foreground") }, restStyle]}
+      style={[
+        {
+          fontFamily,
+          color: getColor("foreground"),
+          ...(Platform.OS === "android" ? { includeFontPadding: false } : null),
+        },
+        restStyle,
+      ]}
     />
   );
 }
