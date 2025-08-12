@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: getColor("background"),
-    paddingTop: 20,
+    paddingTop: 8,
     paddingHorizontal: 16,
   },
 });
