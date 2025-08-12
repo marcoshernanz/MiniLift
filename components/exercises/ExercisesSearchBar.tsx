@@ -38,8 +38,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   textInput: {
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingHorizontal: 40,
   },
   searchIconContainer: {
     position: "absolute",

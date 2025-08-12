@@ -33,7 +33,7 @@ export default function ExercisesScreen() {
 
 const styles = StyleSheet.create({
   safeAreaView: {
-    paddingTop: 20,
+    paddingTop: 8,
     backgroundColor: getColor("background"),
     flex: 1,
   },
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   title: {
-    marginBottom: 20,
+    marginBottom: 22,
     paddingHorizontal: 16,
   },
   pressable: {

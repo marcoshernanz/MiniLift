@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     width: 38,
   },
   title: {
-    marginBottom: 24,
+    marginBottom: 26,
   },
   confirmButtonContainer: {
     marginTop: 20,

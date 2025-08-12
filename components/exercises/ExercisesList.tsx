@@ -47,8 +47,6 @@ export default function ExercisesList({ search }: Props) {
       contentContainerStyle={styles.flatList}
       showsVerticalScrollIndicator={false}
       overScrollMode="never"
-      bounces={false}
-      alwaysBounceVertical={false}
     />
   );
 }
