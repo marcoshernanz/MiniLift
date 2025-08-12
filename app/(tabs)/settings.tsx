@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
-    paddingBottom: 16,
+    paddingBottom: 18,
   },
 });
