@@ -4,6 +4,7 @@ import { Modal, StyleSheet } from "react-native";
 import getColor from "../../lib/utils/getColor";
 import Button from "../ui/Button";
 import AddExerciseModal from "./AddExerciseModal";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function ExercisesAddButton() {
   const [logScreenVisible, setLogScreenVisible] = useState(false);
@@ -28,7 +29,9 @@ export default function ExercisesAddButton() {
           onRequestClose={() => setLogScreenVisible(false)}
           animationType="slide"
         >
-          <AddExerciseModal onClose={() => setLogScreenVisible(false)} />
+          <SafeAreaProvider>
+            <AddExerciseModal onClose={() => setLogScreenVisible(false)} />
+          </SafeAreaProvider>
         </Modal>
       )}
     </>

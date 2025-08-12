@@ -3,19 +3,25 @@ import AppContextProvider from "@/context/AppContext";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView>
-      <AppContextProvider>
-        <StatusBar style="light" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
-      </AppContextProvider>
-      <ToastProvider />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <AppContextProvider>
+          <StatusBar style="light" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          />
+        </AppContextProvider>
+        <ToastProvider />
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
