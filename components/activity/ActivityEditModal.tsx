@@ -1,17 +1,15 @@
 import { useAppContext } from "@/context/AppContext";
-import getColor from "@/lib/utils/getColor";
 import { LogType } from "@/lib/hooks/useActivity";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { format } from "date-fns";
-import { XIcon } from "lucide-react-native";
 import { useState } from "react";
-import { Dimensions, Modal, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import LogBodyweight from "../log/LogBodyweight";
 import LogLift from "../log/LogLift";
 import AlertDialog from "../ui/AlertDialog";
 import Button from "../ui/Button";
-import SafeArea from "../ui/SafeArea";
 import { Toast } from "../ui/Toast";
+import FullScreenModal from "../ui/FullScreenModal";
 
 interface Props {
   log: LogType;
@@ -81,56 +79,39 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
   };
 
   return (
-    <Modal
-      statusBarTranslucent={true}
-      navigationBarTranslucent={true}
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-      animationType="slide"
-    >
-      <SafeArea style={styles.safeArea}>
-        <View style={styles.container}>
-          {log.type === "lift" && (
-            <LogLift
-              startingValues={{
-                exercise: log.exercise.name,
-                weight: log.weight.toString(),
-                reps: log.reps.toString(),
-              }}
-              handleLog={handleLogLift}
-              onClose={onClose}
-              title="Edit Lift"
-              description={format(log.date, "MMMM dd, yyyy")}
-            />
-          )}
-          {log.type === "bodyweight" && (
-            <LogBodyweight
-              startingValues={{ bodyweight: log.bodyweight.toString() }}
-              handleLog={handleLogBodyweight}
-              onClose={onClose}
-              title="Edit Bodyweight"
-              description={format(log.date, "MMMM dd, yyyy")}
-            />
-          )}
+    <FullScreenModal modalVisible={visible} setModalVisible={onClose}>
+      <View style={styles.container}>
+        {log.type === "lift" && (
+          <LogLift
+            startingValues={{
+              exercise: log.exercise.name,
+              weight: log.weight.toString(),
+              reps: log.reps.toString(),
+            }}
+            handleLog={handleLogLift}
+            onClose={onClose}
+            title="Edit Lift"
+            description={format(log.date, "MMMM dd, yyyy")}
+          />
+        )}
+        {log.type === "bodyweight" && (
+          <LogBodyweight
+            startingValues={{ bodyweight: log.bodyweight.toString() }}
+            handleLog={handleLogBodyweight}
+            onClose={onClose}
+            title="Edit Bodyweight"
+            description={format(log.date, "MMMM dd, yyyy")}
+          />
+        )}
+      </View>
 
-          <Button
-            variant="ghost"
-            containerStyle={styles.closeButtonContainer}
-            pressableStyle={styles.closeButtonPressable}
-            onPress={onClose}
-          >
-            <XIcon color={getColor("foreground")} />
-          </Button>
-        </View>
-        <Button
-          variant="destructive"
-          containerStyle={styles.deleteButtonContainer}
-          onPress={() => setDialogVisible(true)}
-        >
-          Delete
-        </Button>
-      </SafeArea>
+      <Button
+        variant="destructive"
+        containerStyle={styles.deleteButtonContainer}
+        onPress={() => setDialogVisible(true)}
+      >
+        Delete
+      </Button>
 
       <AlertDialog
         visible={dialogVisible}
@@ -141,34 +122,17 @@ export default function ActivityEditModal({ log, visible, onClose }: Props) {
         onCancel={() => setDialogVisible(false)}
         onConfirm={handleDelete}
       />
-    </Modal>
+    </FullScreenModal>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    justifyContent: "space-between",
-    height: Dimensions.get("screen").height,
-    paddingHorizontal: 0,
-    paddingTop: 0,
-    flex: 0,
-  },
   container: {
     position: "relative",
     flex: 1,
   },
-  closeButtonContainer: {
-    position: "absolute",
-    top: 20,
-    right: 16,
-    borderRadius: 9999,
-    zIndex: 10,
+  deleteButtonContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 20,
   },
-  closeButtonPressable: {
-    borderRadius: 9999,
-    padding: 10,
-    height: 38,
-    width: 38,
-  },
-  deleteButtonContainer: { paddingHorizontal: 16, paddingVertical: 20 },
 });
