@@ -108,6 +108,7 @@ export default function TextInput({
       onFocus={handleFocus}
       onBlur={handleBlur}
       placeholderTextColor={getColor("mutedForeground")}
+      keyboardAppearance="dark"
       {...props}
     />
   );
