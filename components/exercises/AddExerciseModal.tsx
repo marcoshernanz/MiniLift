@@ -1,11 +1,8 @@
 import { useAppContext } from "@/context/AppContext";
-import getColor from "@/lib/utils/getColor";
-import { XIcon } from "lucide-react-native";
 import React, { useRef, useState } from "react";
-import { Keyboard, Pressable, StyleSheet, View, Platform } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { z } from "zod";
 import Button from "../ui/Button";
-import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
 import { Toast } from "../ui/Toast";
@@ -57,42 +54,23 @@ export default function AddExerciseModal({ onClose }: Props) {
   };
 
   return (
-    <Pressable
-      onPress={Keyboard.dismiss}
-      accessible={false}
-      style={styles.pressable}
-    >
-      <SafeArea>
-        <View style={styles.container}>
-          <Title style={styles.title}>Add Exercise</Title>
+    <View style={styles.container}>
+      <Title style={styles.title}>Add Exercise</Title>
 
-          <TextInput
-            ref={inputRef}
-            placeholder="Exercise Name"
-            value={name}
-            onChangeText={setName}
-            onSubmitEditing={handleAdd}
-          />
-          <Button
-            containerStyle={styles.confirmButtonContainer}
-            onPress={handleAdd}
-          >
-            Add
-          </Button>
-
-          {Platform.OS === "android" && (
-            <Button
-              variant="ghost"
-              containerStyle={styles.closeButtonContainer}
-              pressableStyle={styles.closeButtonPressable}
-              onPress={onClose}
-            >
-              <XIcon color={getColor("foreground")} />
-            </Button>
-          )}
-        </View>
-      </SafeArea>
-    </Pressable>
+      <TextInput
+        ref={inputRef}
+        placeholder="Exercise Name"
+        value={name}
+        onChangeText={setName}
+        onSubmitEditing={handleAdd}
+      />
+      <Button
+        containerStyle={styles.confirmButtonContainer}
+        onPress={handleAdd}
+      >
+        Add
+      </Button>
+    </View>
   );
 }
 
@@ -101,27 +79,10 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
   },
-  closeButtonContainer: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    borderRadius: 9999,
-    zIndex: 10,
-  },
-  closeButtonPressable: {
-    borderRadius: 9999,
-    padding: 10,
-    height: 38,
-    width: 38,
-  },
   title: {
     marginBottom: 26,
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
   },
   confirmButtonContainer: {
     marginTop: 20,
-  },
-  pressable: {
-    flex: 1,
   },
 });
