@@ -2,9 +2,10 @@ import getColor from "@/lib/utils/getColor";
 import { format } from "date-fns";
 import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
-import { Modal, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import LogScreen from "../log/LogScreen";
 import Button from "../ui/Button";
+import FullScreenModal from "../ui/FullScreenModal";
 
 interface Props {
   date: Date;
@@ -24,24 +25,19 @@ export default function ActivityAdd({ date }: Props) {
         <PlusIcon color={getColor("foreground")} />
       </Button>
 
-      {modalVisible && (
-        <Modal
-          statusBarTranslucent={true}
-          navigationBarTranslucent={true}
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-          animationType="slide"
-        >
-          <LogScreen
-            onClose={() => setModalVisible(false)}
-            logLiftTitle="Add Lift"
-            logLiftDescription={format(date, "MMMM dd, yyyy")}
-            logBodyweightTitle="Add Bodyweight"
-            logBodyweightDescription={format(date, "MMMM dd, yyyy")}
-          />
-        </Modal>
-      )}
+      <FullScreenModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        safeArea={false}
+      >
+        <LogScreen
+          onClose={() => setModalVisible(false)}
+          logLiftTitle="Add Lift"
+          logLiftDescription={format(date, "MMMM dd, yyyy")}
+          logBodyweightTitle="Add Bodyweight"
+          logBodyweightDescription={format(date, "MMMM dd, yyyy")}
+        />
+      </FullScreenModal>
     </>
   );
 }
