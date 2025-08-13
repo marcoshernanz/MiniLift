@@ -3,7 +3,10 @@ import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, StyleSheet } from "react-native";
 import LogScreen from "./log/LogScreen";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import Button from "@/components/ui/Button";
 
 export default function TabsAddButton() {
@@ -37,12 +40,14 @@ export default function TabsAddButton() {
       <Modal
         statusBarTranslucent={true}
         navigationBarTranslucent={true}
-        transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
         animationType="slide"
+        presentationStyle="pageSheet"
       >
-        <LogScreen onClose={() => setModalVisible(false)} />
+        <SafeAreaProvider>
+          <LogScreen onClose={() => setModalVisible(false)} />
+        </SafeAreaProvider>
       </Modal>
     </>
   );
