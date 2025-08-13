@@ -1,9 +1,10 @@
 import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
-import SafeArea from "../ui/SafeArea";
 import LogScreenMain from "./LogScreenMain";
 import LogScreenSelector from "./LogScreenSelector";
+import getColor from "@/lib/utils/getColor";
+import SafeArea from "../ui/SafeArea";
 
 interface Props {
   onClose: () => void;
@@ -24,7 +25,7 @@ export default function LogScreen({
   const scrollX = useSharedValue(0);
 
   return (
-    <SafeArea style={styles.safeArea}>
+    <SafeArea style={styles.safeArea} edges={["top", "bottom"]}>
       <LogScreenMain
         onClose={onClose}
         scrollViewRef={scrollViewRef}
@@ -43,8 +44,8 @@ const styles = StyleSheet.create({
   safeArea: {
     justifyContent: "space-between",
     height: Dimensions.get("screen").height,
-    paddingHorizontal: 0,
-    paddingTop: 0,
     flex: 0,
+    backgroundColor: getColor("background"),
+    paddingHorizontal: 0,
   },
 });

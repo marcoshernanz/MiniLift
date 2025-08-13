@@ -1,13 +1,11 @@
 import getColor from "@/lib/utils/getColor";
 import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
-import { Modal, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import LogScreen from "./log/LogScreen";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Button from "@/components/ui/Button";
+import FullScreenModal from "./ui/FullScreenModal";
 
 export default function TabsAddButton() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,18 +35,13 @@ export default function TabsAddButton() {
         <PlusIcon color={getColor("primaryForeground")} size={32} />
       </Button>
 
-      <Modal
-        statusBarTranslucent={true}
-        navigationBarTranslucent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-        animationType="slide"
-        presentationStyle="pageSheet"
+      <FullScreenModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        safeArea={false}
       >
-        <SafeAreaProvider>
-          <LogScreen onClose={() => setModalVisible(false)} />
-        </SafeAreaProvider>
-      </Modal>
+        <LogScreen onClose={() => setModalVisible(false)} />
+      </FullScreenModal>
     </>
   );
 }

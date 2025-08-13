@@ -1,19 +1,17 @@
 import { useAppContext } from "@/context/AppContext";
-import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
-import { XIcon } from "lucide-react-native";
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import Animated, {
   SharedValue,
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
-import Button from "../ui/Button";
 import { Toast } from "../ui/Toast";
 import * as StoreReview from "expo-store-review";
 import LogBodyweight from "./LogBodyweight";
 import LogLift from "./LogLift";
 import uuidv4 from "@/lib/utils/uuidv4";
+import SafeArea from "../ui/SafeArea";
 
 interface Props {
   onClose: () => void;
@@ -124,60 +122,45 @@ export default function LogScreenMain({
       onMomentumScrollBegin={() => setIsAnimating(true)}
       onMomentumScrollEnd={() => setIsAnimating(false)}
     >
-      <View style={{ width: screenWidth, position: "relative" }}>
-        <LogLift
-          onInputFocus={handleInputFocus}
-          onInputBlur={handleInputBlur}
-          editingEnabled={!isAnimating}
-          title={logLiftTitle}
-          description={logLiftDescription}
-          handleLog={handleLogLift}
-          onClose={onClose}
-        />
-        <Button
-          variant="ghost"
-          containerStyle={styles.closeButtonContainer}
-          pressableStyle={styles.closeButtonPressable}
-          onPress={onClose}
-        >
-          <XIcon color={getColor("foreground")} />
-        </Button>
+      <View style={{ width: screenWidth }}>
+        <SafeArea style={styles.safeArea} edges={["left", "right"]}>
+          <View style={styles.container}>
+            <LogLift
+              onInputFocus={handleInputFocus}
+              onInputBlur={handleInputBlur}
+              editingEnabled={!isAnimating}
+              title={logLiftTitle}
+              description={logLiftDescription}
+              handleLog={handleLogLift}
+              onClose={onClose}
+            />
+          </View>
+        </SafeArea>
       </View>
-      <View style={{ width: screenWidth, position: "relative" }}>
-        <LogBodyweight
-          onInputFocus={handleInputFocus}
-          onInputBlur={handleInputBlur}
-          editingEnabled={!isAnimating}
-          title={logBodyweightTitle}
-          description={logBodyweightDescription}
-          handleLog={handleLogBodyweight}
-          onClose={onClose}
-        />
-        <Button
-          variant="ghost"
-          containerStyle={styles.closeButtonContainer}
-          pressableStyle={styles.closeButtonPressable}
-          onPress={onClose}
-        >
-          <XIcon color={getColor("foreground")} />
-        </Button>
+      <View style={{ width: screenWidth }}>
+        <SafeArea>
+          <View style={styles.container}>
+            <LogBodyweight
+              onInputFocus={handleInputFocus}
+              onInputBlur={handleInputBlur}
+              editingEnabled={!isAnimating}
+              title={logBodyweightTitle}
+              description={logBodyweightDescription}
+              handleLog={handleLogBodyweight}
+              onClose={onClose}
+            />
+          </View>
+        </SafeArea>
       </View>
     </Animated.ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  closeButtonContainer: {
-    position: "absolute",
-    top: 20,
-    right: 16,
-    borderRadius: 9999,
-    zIndex: 10,
+  container: {
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
   },
-  closeButtonPressable: {
-    borderRadius: 9999,
-    padding: 10,
-    height: 38,
-    width: 38,
+  safeArea: {
+    paddingTop: 0,
   },
 });
