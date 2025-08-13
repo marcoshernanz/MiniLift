@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { z } from "zod";
 import Button from "../ui/Button";
 import Description from "../ui/Description";
-import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
 import { useAppContext } from "@/context/AppContext";
@@ -58,7 +57,7 @@ export default function LogBodyweight({
   };
 
   return (
-    <SafeArea>
+    <>
       <View style={{ marginBottom: 24 }}>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
@@ -82,7 +81,7 @@ export default function LogBodyweight({
       >
         Log
       </Button>
-    </SafeArea>
+    </>
   );
 }
 
