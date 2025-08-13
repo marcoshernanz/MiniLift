@@ -1,12 +1,13 @@
 import getColor from "@/lib/utils/getColor";
 import { DumbbellIcon, WeightIcon } from "lucide-react-native";
 import React from "react";
-import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   interpolate,
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import Button from "../ui/Button";
 
 interface Props {
   scrollViewRef: React.RefObject<Animated.ScrollView | null>;
@@ -27,8 +28,10 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.pressable}
+      <Button
+        variant="ghost"
+        containerStyle={styles.buttonContainer}
+        pressableStyle={styles.buttonPressable}
         android_ripple={{ color: getColor("muted"), borderless: true }}
         onPress={() =>
           scrollViewRef.current?.scrollTo({ x: 0, animated: true })
@@ -44,9 +47,11 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
             <DumbbellIcon size={24} strokeWidth={1.75} color={primaryColor} />
           </Animated.View>
         </View>
-      </Pressable>
-      <Pressable
-        style={styles.pressable}
+      </Button>
+      <Button
+        variant="ghost"
+        containerStyle={styles.buttonContainer}
+        pressableStyle={styles.buttonPressable}
         android_ripple={{ color: getColor("muted"), borderless: true }}
         onPress={() =>
           scrollViewRef.current?.scrollTo({ x: screenWidth, animated: true })
@@ -62,7 +67,7 @@ export default function LogScreenSelector({ scrollViewRef, scrollX }: Props) {
             <WeightIcon size={24} strokeWidth={1.75} color={primaryColor} />
           </Animated.View>
         </View>
-      </Pressable>
+      </Button>
     </View>
   );
 }
@@ -74,10 +79,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: getColor("border"),
   },
-  pressable: {
+  buttonContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "visible",
+    borderRadius: 0,
+  },
+  buttonPressable: {
+    padding: 0,
+    borderRadius: 0,
+    flex: 1,
   },
   iconWrapper: {
     width: 24,
