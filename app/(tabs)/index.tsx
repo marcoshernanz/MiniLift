@@ -51,8 +51,6 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         overScrollMode="never"
-        bounces={false}
-        alwaysBounceVertical={false}
       />
     </SafeArea>
   );

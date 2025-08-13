@@ -34,8 +34,6 @@ export default function ActivityItem({ item }: Props) {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           overScrollMode="never"
-          bounces={false}
-          alwaysBounceVertical={false}
         />
       )}
     </View>
