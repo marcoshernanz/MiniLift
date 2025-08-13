@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import LogScreenMain from "./LogScreenMain";
 import LogScreenSelector from "./LogScreenSelector";
@@ -43,8 +43,7 @@ export default function LogScreen({
 const styles = StyleSheet.create({
   safeArea: {
     justifyContent: "space-between",
-    height: Dimensions.get("screen").height,
-    flex: 0,
+    flex: 1,
     backgroundColor: getColor("background"),
     paddingHorizontal: 0,
   },
