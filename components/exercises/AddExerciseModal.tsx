@@ -80,14 +80,16 @@ export default function AddExerciseModal({ onClose }: Props) {
             Add
           </Button>
 
-          <Button
-            variant="ghost"
-            containerStyle={styles.closeButtonContainer}
-            pressableStyle={styles.closeButtonPressable}
-            onPress={onClose}
-          >
-            <XIcon color={getColor("foreground")} />
-          </Button>
+          {Platform.OS === "android" && (
+            <Button
+              variant="ghost"
+              containerStyle={styles.closeButtonContainer}
+              pressableStyle={styles.closeButtonPressable}
+              onPress={onClose}
+            >
+              <XIcon color={getColor("foreground")} />
+            </Button>
+          )}
         </View>
       </SafeArea>
     </Pressable>
