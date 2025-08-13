@@ -8,9 +8,17 @@ import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { Edit3Icon, XIcon } from "lucide-react-native";
 import { useRef, useState } from "react";
-import { Keyboard, Modal, Pressable, StyleSheet, View } from "react-native";
+import {
+  Keyboard,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import { z } from "zod";
 import { Toast } from "@/components/ui/Toast";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 interface Props {
   exercise: Exercise;
@@ -86,48 +94,58 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
       <Modal
         statusBarTranslucent={true}
         navigationBarTranslucent={true}
-        transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
         animationType="slide"
+        presentationStyle="pageSheet"
       >
-        <Pressable
-          onPress={Keyboard.dismiss}
-          accessible={false}
-          style={styles.pressable}
-        >
-          <SafeArea>
-            <View style={styles.modalContainer}>
-              <View style={{ marginBottom: 24 }}>
-                <Title>Edit Exercise Name</Title>
-                <Description>{exercise.name}</Description>
+        <SafeAreaProvider>
+          <Pressable
+            onPress={Keyboard.dismiss}
+            accessible={false}
+            style={styles.pressable}
+          >
+            <SafeArea>
+              <View style={styles.modalContainer}>
+                <View style={{ marginBottom: 24 }}>
+                  <Title
+                    style={{
+                      paddingTop: Platform.OS === "ios" ? 20 : 0,
+                    }}
+                  >
+                    Edit Exercise Name
+                  </Title>
+                  <Description>{exercise.name}</Description>
+                </View>
+
+                <TextInput
+                  ref={inputRef}
+                  placeholder="Exercise Name"
+                  value={name}
+                  onChangeText={setName}
+                  onSubmitEditing={handleSubmit}
+                />
+                <Button
+                  containerStyle={styles.confirmButtonContainer}
+                  onPress={handleSubmit}
+                >
+                  Confirm
+                </Button>
+
+                {Platform.OS === "android" && (
+                  <Button
+                    variant="ghost"
+                    containerStyle={styles.closeButtonContainer}
+                    pressableStyle={styles.closeButtonPressable}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <XIcon color={getColor("foreground")} />
+                  </Button>
+                )}
               </View>
-
-              <TextInput
-                ref={inputRef}
-                placeholder="Exercise Name"
-                value={name}
-                onChangeText={setName}
-                onSubmitEditing={handleSubmit}
-              />
-              <Button
-                containerStyle={styles.confirmButtonContainer}
-                onPress={handleSubmit}
-              >
-                Confirm
-              </Button>
-
-              <Button
-                variant="ghost"
-                containerStyle={styles.closeButtonContainer}
-                pressableStyle={styles.closeButtonPressable}
-                onPress={() => setModalVisible(false)}
-              >
-                <XIcon color={getColor("foreground")} />
-              </Button>
-            </View>
-          </SafeArea>
-        </Pressable>
+            </SafeArea>
+          </Pressable>
+        </SafeAreaProvider>
       </Modal>
     </>
   );

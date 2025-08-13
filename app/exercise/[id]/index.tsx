@@ -41,8 +41,6 @@ export default function ExerciseDetailScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         overScrollMode="never"
-        bounces={false}
-        alwaysBounceVertical={false}
       />
     </SafeArea>
   );
