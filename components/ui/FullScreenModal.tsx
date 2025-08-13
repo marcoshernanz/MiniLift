@@ -13,12 +13,14 @@ interface Props {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
   children: React.ReactNode;
+  safeArea?: boolean;
 }
 
 export default function FullScreenModal({
   modalVisible,
   setModalVisible,
   children,
+  safeArea = true,
 }: Props) {
   return (
     <Modal
@@ -30,15 +32,19 @@ export default function FullScreenModal({
       presentationStyle="pageSheet"
     >
       <SafeAreaProvider>
-        <Pressable
-          onPress={Keyboard.dismiss}
-          accessible={false}
-          style={styles.pressable}
-        >
-          <SafeArea>
-            <View style={styles.container}>{children}</View>
-          </SafeArea>
-        </Pressable>
+        {safeArea ? (
+          <Pressable
+            onPress={Keyboard.dismiss}
+            accessible={false}
+            style={styles.pressable}
+          >
+            <SafeArea>
+              <View style={styles.container}>{children}</View>
+            </SafeArea>
+          </Pressable>
+        ) : (
+          <>{children}</>
+        )}
       </SafeAreaProvider>
     </Modal>
   );
