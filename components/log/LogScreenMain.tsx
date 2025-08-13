@@ -116,6 +116,7 @@ export default function LogScreenMain({
       keyboardShouldPersistTaps="handled"
       showsHorizontalScrollIndicator={false}
       overScrollMode="never"
+      bounces={false}
       scrollEnabled={!isInputFocused && !isAnimating}
       scrollEventThrottle={16}
       onScroll={scrollHandler}
