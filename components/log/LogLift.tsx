@@ -6,7 +6,6 @@ import { z } from "zod";
 import Button from "../ui/Button";
 import ComboBox from "../ui/ComboBox";
 import Description from "../ui/Description";
-import SafeArea from "../ui/SafeArea";
 import TextInput, { TextInputHandle } from "../ui/TextInput";
 import Title from "../ui/Title";
 
@@ -58,7 +57,6 @@ export default function LogLift({
     .filter((e) => e.isFavorite)
     .map((e) => e.name);
 
-  // Compute last lift log for selected exercise
   const lastLog = useMemo(() => {
     if (!exercise) return undefined;
     const logs = appData.liftLogs
@@ -106,7 +104,7 @@ export default function LogLift({
   };
 
   return (
-    <SafeArea>
+    <>
       <View style={{ marginBottom: 24 }}>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
@@ -163,7 +161,7 @@ export default function LogLift({
       >
         Log
       </Button>
-    </SafeArea>
+    </>
   );
 }
 
