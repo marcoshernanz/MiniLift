@@ -1,24 +1,16 @@
 import Button from "@/components/ui/Button";
 import Description from "@/components/ui/Description";
-import SafeArea from "@/components/ui/SafeArea";
 import TextInput, { TextInputHandle } from "@/components/ui/TextInput";
 import Title from "@/components/ui/Title";
 import { useAppContext } from "@/context/AppContext";
 import getColor from "@/lib/utils/getColor";
 import { Exercise } from "@/zod/schemas/ExerciseSchema";
-import { Edit3Icon, XIcon } from "lucide-react-native";
+import { Edit3Icon } from "lucide-react-native";
 import { useRef, useState } from "react";
-import {
-  Keyboard,
-  Modal,
-  Platform,
-  Pressable,
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { z } from "zod";
 import { Toast } from "@/components/ui/Toast";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import FullScreenModal from "@/components/ui/FullScreenModal";
 
 interface Props {
   exercise: Exercise;
@@ -91,62 +83,31 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
         </Button>
       </View>
 
-      <Modal
-        statusBarTranslucent={true}
-        navigationBarTranslucent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-        animationType="slide"
-        presentationStyle="pageSheet"
+      <FullScreenModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
       >
-        <SafeAreaProvider>
-          <Pressable
-            onPress={Keyboard.dismiss}
-            accessible={false}
-            style={styles.pressable}
+        <View style={styles.modalContainer}>
+          <View style={{ marginBottom: 24 }}>
+            <Title>Edit Exercise Name</Title>
+            <Description>{exercise.name}</Description>
+          </View>
+
+          <TextInput
+            ref={inputRef}
+            placeholder="Exercise Name"
+            value={name}
+            onChangeText={setName}
+            onSubmitEditing={handleSubmit}
+          />
+          <Button
+            containerStyle={styles.confirmButtonContainer}
+            onPress={handleSubmit}
           >
-            <SafeArea>
-              <View style={styles.modalContainer}>
-                <View style={{ marginBottom: 24 }}>
-                  <Title
-                    style={{
-                      paddingTop: Platform.OS === "ios" ? 20 : 0,
-                    }}
-                  >
-                    Edit Exercise Name
-                  </Title>
-                  <Description>{exercise.name}</Description>
-                </View>
-
-                <TextInput
-                  ref={inputRef}
-                  placeholder="Exercise Name"
-                  value={name}
-                  onChangeText={setName}
-                  onSubmitEditing={handleSubmit}
-                />
-                <Button
-                  containerStyle={styles.confirmButtonContainer}
-                  onPress={handleSubmit}
-                >
-                  Confirm
-                </Button>
-
-                {Platform.OS === "android" && (
-                  <Button
-                    variant="ghost"
-                    containerStyle={styles.closeButtonContainer}
-                    pressableStyle={styles.closeButtonPressable}
-                    onPress={() => setModalVisible(false)}
-                  >
-                    <XIcon color={getColor("foreground")} />
-                  </Button>
-                )}
-              </View>
-            </SafeArea>
-          </Pressable>
-        </SafeAreaProvider>
-      </Modal>
+            Confirm
+          </Button>
+        </View>
+      </FullScreenModal>
     </>
   );
 }
@@ -157,9 +118,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 16,
     paddingRight: 56,
-  },
-  title: {
-    paddingRight: 40,
   },
   buttonContainer: {
     position: "absolute",
@@ -174,27 +132,11 @@ const styles = StyleSheet.create({
     height: 42,
     width: 42,
   },
-  pressable: {
-    flex: 1,
-  },
   modalContainer: {
     flex: 1,
     position: "relative",
   },
   confirmButtonContainer: {
     marginTop: 20,
-  },
-  closeButtonContainer: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    borderRadius: 9999,
-    zIndex: 10,
-  },
-  closeButtonPressable: {
-    borderRadius: 9999,
-    padding: 10,
-    height: 38,
-    width: 38,
   },
 });
