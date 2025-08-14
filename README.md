@@ -7,7 +7,6 @@
 - Onboarding
 - Add buttons to go back and to close modals
 
-- Fix adding log from activity
 - StyleSheet for everything
 - Lint
 - Better way of calculating global score

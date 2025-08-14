@@ -32,6 +32,7 @@ export default function ActivityAdd({ date }: Props) {
       >
         <LogScreen
           onClose={() => setModalVisible(false)}
+          logDate={date}
           logLiftTitle="Add Lift"
           logLiftDescription={format(date, "MMMM dd, yyyy")}
           logBodyweightTitle="Add Bodyweight"

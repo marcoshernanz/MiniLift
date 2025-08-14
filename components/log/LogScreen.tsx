@@ -12,6 +12,7 @@ interface Props {
   logLiftDescription?: string;
   logBodyweightTitle?: string;
   logBodyweightDescription?: string;
+  logDate?: Date;
 }
 
 export default function LogScreen({
@@ -20,6 +21,7 @@ export default function LogScreen({
   logLiftDescription,
   logBodyweightTitle,
   logBodyweightDescription,
+  logDate,
 }: Props) {
   const scrollViewRef = React.useRef<Animated.ScrollView>(null);
   const scrollX = useSharedValue(0);
@@ -34,6 +36,7 @@ export default function LogScreen({
         logLiftDescription={logLiftDescription}
         logBodyweightTitle={logBodyweightTitle}
         logBodyweightDescription={logBodyweightDescription}
+        logDate={logDate}
       />
       <LogScreenSelector scrollViewRef={scrollViewRef} scrollX={scrollX} />
     </SafeArea>
