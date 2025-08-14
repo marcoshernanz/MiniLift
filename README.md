@@ -9,3 +9,4 @@
 
 - Change pressable for button
 - Fix adding log from activity
+- StyleSheet for everything
