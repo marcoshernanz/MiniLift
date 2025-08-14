@@ -88,7 +88,7 @@ export default function ExerciseDetailsHeader({ exercise }: Props) {
         setModalVisible={setModalVisible}
       >
         <View style={styles.modalContainer}>
-          <View style={{ marginBottom: 24 }}>
+          <View style={{ marginBottom: 24, gap: 4 }}>
             <Title>Edit Exercise Name</Title>
             <Description>{exercise.name}</Description>
           </View>

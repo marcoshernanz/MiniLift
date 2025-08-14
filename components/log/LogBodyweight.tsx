@@ -58,7 +58,7 @@ export default function LogBodyweight({
 
   return (
     <>
-      <View style={{ marginBottom: 24 }}>
+      <View style={{ marginBottom: 24, gap: 4 }}>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
       </View>

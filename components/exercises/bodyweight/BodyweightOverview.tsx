@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   description: {
+    paddingTop: 4,
     fontSize: 14,
     fontWeight: 400,
     color: getColor("mutedForeground"),
