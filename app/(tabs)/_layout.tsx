@@ -8,12 +8,16 @@ import {
   SettingsIcon,
 } from "lucide-react-native";
 import React, { forwardRef } from "react";
-import { Pressable, View, type PressableProps } from "react-native";
+import { Platform, Pressable, View, type PressableProps } from "react-native";
 
 const TabBarPressableButton = forwardRef<any, PressableProps>((props, ref) => (
   <Pressable
     {...props}
     ref={ref}
+    style={(state) => [
+      Platform.OS === "ios" && state.pressed && { opacity: 0.675 },
+      typeof props.style === "function" ? props.style(state) : props.style,
+    ]}
     android_ripple={{ color: getColor("muted"), borderless: true }}
   />
 ));
