@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import useGlobalScoreByDay from "./useGlobalScoreByDay";
+import { eachDayOfInterval, format, parseISO } from "date-fns";
 
 export default function useDailyGlobalScore(
   alpha: number = 0.1,
@@ -12,9 +13,13 @@ export default function useDailyGlobalScore(
 
     const statsAll: Record<string, { sum: number; count: number }> = {};
     const result: Record<string, number | null> = {};
-    const dayKeys = Object.keys(globalByDay).sort();
+    const rawDayKeys = Object.keys(globalByDay).sort();
+    const dayInterval = rawDayKeys.length
+      ? eachDayOfInterval({ start: parseISO(rawDayKeys[0]), end: new Date() })
+      : [];
+    const dayKeys = dayInterval.map((d) => format(d, "yyyy-MM-dd"));
 
-    dayKeys.forEach((key) => {
+    rawDayKeys.forEach((key) => {
       const exMap = globalByDay[key];
       for (const exId in exMap) {
         const entries = exMap[exId];
@@ -34,7 +39,7 @@ export default function useDailyGlobalScore(
     }
 
     dayKeys.forEach((key) => {
-      const exMap = globalByDay[key];
+      const exMap = globalByDay[key] || {};
       const items: { weight: number; score: number }[] = [];
 
       for (const exId in exMap) {
