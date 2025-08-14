@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   description: {
+    marginTop: 4,
     marginBottom: 20,
     paddingHorizontal: 16,
   },
