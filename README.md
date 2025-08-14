@@ -5,9 +5,12 @@
 - Chart tooltip when going back
 - Optimize
 - Onboarding
-- Better way of calculating global score
+- Add buttons to go back and to close modals
 
 - Change pressable for button
 - Fix adding log from activity
 - StyleSheet for everything
-- Add buttons to go back and to close modals
+- Lint
+- Better way of calculating global score
+- Add buttons to go back in statistics
+- Fix fast navigation opening multiple pages
