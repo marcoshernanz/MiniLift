@@ -8,7 +8,6 @@
 - Add buttons to go back and to close modals
 - StyleSheet for everything
 
-- Lint
 - Better way of calculating global score
 - Add buttons to go back in statistics
 - Fix fast navigation opening multiple pages
