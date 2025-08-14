@@ -9,9 +9,29 @@ export default function useDailyGlobalScore(
 
   return useMemo(() => {
     const recency: Record<string, number> = {};
-    const stats: Record<string, { sum: number; count: number }> = {};
+
+    const statsAll: Record<string, { sum: number; count: number }> = {};
     const result: Record<string, number | null> = {};
     const dayKeys = Object.keys(globalByDay).sort();
+
+    dayKeys.forEach((key) => {
+      const exMap = globalByDay[key];
+      for (const exId in exMap) {
+        const entries = exMap[exId];
+        if (entries.length < setThreshold) continue;
+        const S = entries.reduce((sum, e) => sum + e.score, 0) / entries.length;
+        const st = statsAll[exId] || { sum: 0, count: 0 };
+        st.sum += S;
+        st.count += 1;
+        statsAll[exId] = st;
+      }
+    });
+
+    const avgAll: Record<string, number> = {};
+    for (const exId in statsAll) {
+      const st = statsAll[exId];
+      avgAll[exId] = st.count > 0 ? st.sum / st.count : 0;
+    }
 
     dayKeys.forEach((key) => {
       const exMap = globalByDay[key];
@@ -27,13 +47,9 @@ export default function useDailyGlobalScore(
         recency[exId] = W;
 
         const S = entries.reduce((sum, e) => sum + e.score, 0) / entries.length;
-        const prev = stats[exId] || { sum: 0, count: 0 };
-        const avgPrev = prev.count > 0 ? prev.sum / prev.count : S;
-        const norm = avgPrev > 0 ? S / avgPrev : 1;
 
-        prev.sum += S;
-        prev.count += 1;
-        stats[exId] = prev;
+        const avgConst = avgAll[exId] || S;
+        const norm = avgConst > 0 ? S / avgConst : 1;
         items.push({ weight: W, score: norm });
       }
 
