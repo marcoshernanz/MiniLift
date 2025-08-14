@@ -8,3 +8,4 @@
 - Better way of calculating global score
 
 - Change pressable for button
+- Fix adding log from activity
