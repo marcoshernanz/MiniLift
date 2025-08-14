@@ -10,3 +10,4 @@
 - Change pressable for button
 - Fix adding log from activity
 - StyleSheet for everything
+- Add buttons to go back and to close modals
