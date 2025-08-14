@@ -1,8 +1,9 @@
 import { StatisticsType } from "@/app/statistics/score/[id]";
 import getColor from "@/lib/utils/getColor";
 import { AtomIcon, DumbbellIcon } from "lucide-react-native";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
+import Button from "../ui/Button";
 
 interface Props {
   selectedType: StatisticsType;
@@ -15,8 +16,11 @@ export default function StatisticsTypeSelector({
 }: Props) {
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.pressable}
+      <Button
+        variant="ghost"
+        containerStyle={styles.buttonContainer}
+        pressableStyle={styles.buttonPressable}
+        text={false}
         android_ripple={{ color: getColor("muted"), borderless: true }}
         onPress={() => setSelectedType("score")}
       >
@@ -39,9 +43,12 @@ export default function StatisticsTypeSelector({
         >
           Score
         </Text>
-      </Pressable>
-      <Pressable
-        style={styles.pressable}
+      </Button>
+      <Button
+        variant="ghost"
+        containerStyle={styles.buttonContainer}
+        pressableStyle={styles.buttonPressable}
+        text={false}
         android_ripple={{ color: getColor("muted"), borderless: true }}
         onPress={() => setSelectedType("oneRepMax")}
       >
@@ -66,7 +73,7 @@ export default function StatisticsTypeSelector({
         >
           1 Rep Max
         </Text>
-      </Pressable>
+      </Button>
     </View>
   );
 }
@@ -79,10 +86,16 @@ const styles = StyleSheet.create({
     borderTopColor: getColor("border"),
     overflow: "hidden",
   },
-  pressable: {
+  buttonContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "visible",
+    borderRadius: 0,
+  },
+  buttonPressable: {
+    padding: 0,
+    borderRadius: 0,
+    flex: 1,
+    gap: 2,
   },
   iconWrapper: {
     width: 24,
