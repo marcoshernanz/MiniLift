@@ -3,9 +3,10 @@ import { LogType } from "@/lib/hooks/useActivity";
 import { format } from "date-fns";
 import { DumbbellIcon, WeightIcon } from "lucide-react-native";
 import { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Text from "../ui/Text";
 import ActivityEditModal from "./ActivityEditModal";
+import Button from "../ui/Button";
 
 interface Props {
   log: LogType;
@@ -27,10 +28,12 @@ export default function ActivityLogItem({ log, showDate = false }: Props) {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.pressable}
-        android_ripple={{ color: getColor("muted") }}
+      <Button
+        variant="ghost"
+        containerStyle={styles.buttonContainer}
+        pressableStyle={styles.buttonPressable}
         onPress={() => setEditModalVisible(true)}
+        text={false}
       >
         <View style={styles.iconContainer}>
           <Icon size={24} strokeWidth={1.75} color={getColor("primary")} />
@@ -42,7 +45,7 @@ export default function ActivityLogItem({ log, showDate = false }: Props) {
         <View style={styles.timeContainer}>
           <Text style={styles.timeText}>{date}</Text>
         </View>
-      </Pressable>
+      </Button>
 
       <ActivityEditModal
         log={log}
@@ -59,11 +62,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 8,
   },
-  pressable: {
+  buttonContainer: {
+    borderRadius: 8,
+  },
+  buttonPressable: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 8,
     borderRadius: 8,
+    padding: 8,
   },
   iconContainer: {
     height: 50,
@@ -76,6 +82,7 @@ const styles = StyleSheet.create({
   textContainer: {
     marginLeft: 12,
     flexShrink: 1,
+    gap: 2,
   },
   primaryText: {
     fontSize: 15,
