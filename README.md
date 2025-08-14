@@ -8,5 +8,4 @@
 - Add buttons to go back and to close modals
 - StyleSheet for everything
 
-- Add buttons to go back in statistics
 - Fix fast navigation opening multiple pages

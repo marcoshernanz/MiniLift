@@ -11,9 +11,12 @@ import useDailyGlobalScore from "@/lib/hooks/score/global/useDailyGlobalScore";
 import useWeeklyGlobalScore from "@/lib/hooks/score/global/useWeeklyGlobalScore";
 import useMonthlyGlobalScore from "@/lib/hooks/score/global/useMonthlyGlobalScore";
 import { format, parseISO } from "date-fns";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState, useMemo } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
+import Button from "@/components/ui/Button";
+import { ChevronLeftIcon } from "lucide-react-native";
+import getColor from "@/lib/utils/getColor";
 
 export type TimeFrame = "7D" | "1M" | "3M" | "1Y" | "All";
 export type StatisticsType = "score" | "oneRepMax";
@@ -112,12 +115,24 @@ export default function StatisticsScreen() {
     return 3 * Math.round(1 + len / 365);
   }, [chartData, selectedTimeFrame]);
 
+  const router = useRouter();
+
   return (
     <SafeArea style={styles.container}>
       <View style={styles.headerContainer}>
-        <Title style={styles.title} numberOfLines={1}>
-          {exercise ? exercise.name : "Overall"}
-        </Title>
+        <View style={styles.titleContainer}>
+          <Button
+            variant="ghost"
+            containerStyle={styles.backButtonContainer}
+            pressableStyle={styles.backButtonPressable}
+            onPress={() => router.back()}
+          >
+            <ChevronLeftIcon color={getColor("foreground")} />
+          </Button>
+          <Title style={styles.title} numberOfLines={1}>
+            {exercise ? exercise.name : "Overall"}
+          </Title>
+        </View>
         <StatisticsTimeFrameSelector
           selectedTimeFrame={selectedTimeFrame}
           setSelectedTimeFrame={setSelectedTimeFrame}
@@ -156,8 +171,25 @@ const styles = StyleSheet.create({
   headerContainer: {
     paddingHorizontal: 16,
     paddingBottom: 16,
+    gap: 16,
+  },
+  titleContainer: {
+    position: "relative",
+  },
+  backButtonContainer: {
+    position: "absolute",
+    zIndex: 1,
+    left: -8,
+    top: "50%",
+    transform: [{ translateY: "-50%" }],
+    borderRadius: "50%",
+  },
+  backButtonPressable: {
+    padding: 8,
+    borderRadius: "50%",
   },
   title: {
-    paddingBottom: 16,
+    textAlign: "center",
+    paddingHorizontal: 42,
   },
 });
