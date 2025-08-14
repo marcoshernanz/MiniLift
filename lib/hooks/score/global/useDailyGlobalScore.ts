@@ -60,6 +60,27 @@ export default function useDailyGlobalScore(
 
       result[key] = items.length > 0 ? g * 100 : null;
     });
-    return result;
+
+    const windowSize = 7;
+    const smoothed: Record<string, number | null> = {};
+    dayKeys.forEach((key, idx) => {
+      const raw = result[key];
+      if (raw === null) {
+        smoothed[key] = null;
+        return;
+      }
+      const start = Math.max(0, idx - windowSize + 1);
+      const windowKeys = dayKeys.slice(start, idx + 1);
+      const windowValues = windowKeys
+        .map((k) => result[k])
+        .filter((v): v is number => v !== null);
+
+      const ma = windowValues.length
+        ? windowValues.reduce((sum, v) => sum + v, 0) / windowValues.length
+        : raw;
+
+      smoothed[key] = (raw + ma) / 2;
+    });
+    return smoothed;
   }, [globalByDay, alpha, setThreshold]);
 }
