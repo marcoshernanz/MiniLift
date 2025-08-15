@@ -36,7 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   newArchEnabled: true,
   ios: {
     bundleIdentifier: getUniqueIdentifier(),
-    supportsTablet: true,
+    supportsTablet: false,
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
     },
