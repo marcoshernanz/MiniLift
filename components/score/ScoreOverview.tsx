@@ -111,9 +111,9 @@ export default function ScoreOverview({ exercise }: Props) {
         containerStyle={styles.maximizeButtonContainer}
         onPress={() => {
           if (!exercise) {
-            router.push("/statistics/score");
+            router.navigate("/statistics/score");
           } else {
-            router.push(`/statistics/score/${exercise?.id}`);
+            router.navigate(`/statistics/score/${exercise?.id}`);
           }
         }}
       >

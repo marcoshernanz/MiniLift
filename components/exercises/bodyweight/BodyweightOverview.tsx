@@ -75,9 +75,7 @@ export default function BodyweightOverview() {
         variant="ghost"
         pressableStyle={styles.maximizeButton}
         containerStyle={styles.maximizeButtonContainer}
-        onPress={() => {
-          router.push(`/statistics/bodyweight`);
-        }}
+        onPress={() => router.navigate(`/statistics/bodyweight`)}
       >
         <MaximizeIcon color={getColor("foreground")} />
       </Button>

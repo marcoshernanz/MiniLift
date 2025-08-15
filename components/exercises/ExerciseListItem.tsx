@@ -15,8 +15,6 @@ interface Props {
   logsCount: number;
 }
 
-let navigationInProgress = false;
-
 export default function ExerciseListItem({ item, logsCount }: Props) {
   const router = useRouter();
   const { setAppData } = useAppContext();
@@ -48,15 +46,6 @@ export default function ExerciseListItem({ item, logsCount }: Props) {
     Toast.show({ text: `${item.name} has been deleted.`, variant: "success" });
   };
 
-  const handleNavigate = () => {
-    if (navigationInProgress) return;
-    navigationInProgress = true;
-    router.push(`/exercise/${item.id}`);
-    setTimeout(() => {
-      navigationInProgress = false;
-    }, 1000);
-  };
-
   return (
     <>
       <View style={styles.container}>
@@ -64,7 +53,7 @@ export default function ExerciseListItem({ item, logsCount }: Props) {
           variant="ghost"
           containerStyle={styles.mainPressableContainer}
           pressableStyle={styles.mainPressable}
-          onPress={handleNavigate}
+          onPress={() => router.navigate(`/exercise/${item.id}`)}
           dimOnPress={false}
           onPressIn={() => setPressed(true)}
           onPressOut={() => setPressed(false)}

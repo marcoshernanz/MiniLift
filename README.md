@@ -7,5 +7,3 @@
 - Onboarding
 - Add buttons to go back and to close modals
 - StyleSheet for everything
-
-- Fix fast navigation opening multiple pages
