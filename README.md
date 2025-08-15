@@ -7,3 +7,5 @@
 - Onboarding
 - Add buttons to go back and to close modals
 - StyleSheet for everything
+
+- Expo doctor
