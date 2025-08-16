@@ -24,7 +24,7 @@ export default function SettingsItem({
         isFirst && styles.containerFirst,
         isLast && styles.containerLast,
       ]}
-      pressableStyle={[styles.pressable, isLast && styles.pressableLast]}
+      pressableStyle={styles.pressable}
       onPress={onPress}
     >
       <Text>{text}</Text>
@@ -35,13 +35,13 @@ export default function SettingsItem({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: getColor("border"),
   },
   pressable: {
     borderRadius: 0,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: getColor("border"),
     alignItems: "flex-start",
   },
   containerFirst: {
@@ -51,8 +51,6 @@ const styles = StyleSheet.create({
   containerLast: {
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
-  },
-  pressableLast: {
     borderBottomWidth: 0,
   },
 });
