@@ -14,8 +14,6 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         overScrollMode="never"
-        bounces={false}
-        alwaysBounceVertical={false}
       >
         <DummyData />
         <ImportExportData />
