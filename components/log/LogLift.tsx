@@ -150,7 +150,7 @@ export default function LogLift({
             lastLog ? `Repetitions (${lastLog.reps})` : "Repetitions"
           }
           keyboardType="numeric"
-          returnKeyType="done"
+          returnKeyType={lastLog && !reps ? "next" : "done"}
           ref={repsInputRef}
           value={reps}
           onChangeText={setReps}

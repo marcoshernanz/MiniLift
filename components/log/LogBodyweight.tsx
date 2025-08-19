@@ -68,6 +68,7 @@ export default function LogBodyweight({
           lastLog ? `Bodyweight (${lastLog.bodyweight})` : "Bodyweight"
         }
         keyboardType="numeric"
+        returnKeyType={lastLog && !bodyweight ? "next" : "done"}
         value={bodyweight}
         onChangeText={setBodyweight}
         editable={editingEnabled}
