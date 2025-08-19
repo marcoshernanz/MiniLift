@@ -132,7 +132,12 @@ export default function LogLift({
           keyboardType="numeric"
           submitBehavior="submit"
           returnKeyType="next"
-          onSubmitEditing={() => repsInputRef.current?.focus()}
+          onSubmitEditing={() => {
+            if (lastLog && !weight) {
+              setWeight(String(lastLog.weight));
+            }
+            repsInputRef.current?.focus();
+          }}
           ref={weightInputRef}
           value={weight}
           onChangeText={setWeight}
@@ -152,7 +157,13 @@ export default function LogLift({
           editable={editingEnabled}
           onFocus={onInputFocus}
           onBlur={onInputBlur}
-          onSubmitEditing={handleSubmit}
+          onSubmitEditing={() => {
+            if (lastLog && !reps) {
+              setReps(String(lastLog.reps));
+            } else {
+              handleSubmit();
+            }
+          }}
         />
       </View>
       <Button
