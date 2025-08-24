@@ -4,7 +4,7 @@ import { Exercise } from "@/zod/schemas/ExerciseSchema";
 import { useRouter } from "expo-router";
 import { StarIcon, TrashIcon } from "lucide-react-native";
 import React, { useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import AlertDialog from "../ui/AlertDialog";
 import Text from "../ui/Text";
 import { Toast } from "../ui/Toast";
@@ -19,7 +19,6 @@ export default function ExerciseListItem({ item, logsCount }: Props) {
   const router = useRouter();
   const { setAppData } = useAppContext();
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [pressed, setPressed] = useState(false);
 
   const toggleFavorite = () => {
     setAppData((prev) => {
@@ -54,19 +53,9 @@ export default function ExerciseListItem({ item, logsCount }: Props) {
           containerStyle={styles.mainPressableContainer}
           pressableStyle={styles.mainPressable}
           onPress={() => router.navigate(`/exercise/${item.id}`)}
-          dimOnPress={false}
-          onPressIn={() => setPressed(true)}
-          onPressOut={() => setPressed(false)}
           text={false}
         >
-          <Text
-            style={[
-              styles.mainText,
-              pressed && Platform.OS === "ios" && { opacity: 0.675 },
-            ]}
-          >
-            {item.name}
-          </Text>
+          <Text style={styles.mainText}>{item.name}</Text>
 
           <View style={styles.iconsContainer}>
             <Button
