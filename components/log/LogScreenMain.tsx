@@ -139,7 +139,7 @@ export default function LogScreenMain({
         </SafeArea>
       </View>
       <View style={{ width: screenWidth }}>
-        <SafeArea>
+        <SafeArea style={styles.safeArea} edges={["left", "right"]}>
           <View style={styles.container}>
             <LogBodyweight
               onInputFocus={handleInputFocus}
