@@ -1,7 +1,7 @@
 {
   "name": "minilift",
   "main": "index.ts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scripts": {
     "dev": "APP_VARIANT=development npx expo start",
     "prebuild": "APP_VARIANT=development npx expo prebuild",
