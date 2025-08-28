@@ -8,5 +8,4 @@
 - Add buttons to go back and to close modals
 - StyleSheet for everything
 
-- Log bodyweight top padding
-- Expo doctor
+- Fix font weight
