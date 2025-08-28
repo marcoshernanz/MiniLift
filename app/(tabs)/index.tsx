@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   activityTitle: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: 600,
     paddingBottom: 12,
   },
   safeArea: {
