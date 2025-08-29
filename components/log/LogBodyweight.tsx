@@ -68,6 +68,7 @@ export default function LogBodyweight({
           lastLog ? `Bodyweight (${lastLog.bodyweight})` : "Bodyweight"
         }
         keyboardType="numeric"
+        submitBehavior={lastLog && !bodyweight ? "submit" : "blurAndSubmit"}
         returnKeyType={lastLog && !bodyweight ? "next" : "done"}
         value={bodyweight}
         onChangeText={setBodyweight}

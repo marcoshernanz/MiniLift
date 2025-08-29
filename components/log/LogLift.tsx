@@ -150,6 +150,7 @@ export default function LogLift({
             lastLog ? `Repetitions (${lastLog.reps})` : "Repetitions"
           }
           keyboardType="numeric"
+          submitBehavior={lastLog && !reps ? "submit" : "blurAndSubmit"}
           returnKeyType={lastLog && !reps ? "next" : "done"}
           ref={repsInputRef}
           value={reps}
