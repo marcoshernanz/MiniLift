@@ -30,7 +30,6 @@ interface ComboBoxProps {
   inputRef?: React.Ref<TextInputHandle>;
   favorites?: string[];
   clearable?: boolean;
-  onClear?: () => void;
 }
 
 export default function ComboBox({
@@ -80,6 +79,9 @@ export default function ComboBox({
     setSearchText("");
     onChange("");
     handleChangeText("");
+    if (inputRef && "current" in inputRef) {
+      inputRef.current?.focus();
+    }
   };
 
   const opacity = useSharedValue(0);
