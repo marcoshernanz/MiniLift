@@ -51,6 +51,8 @@ const tooltipMargin = 16;
 const baseLabelHeight = 32;
 const lineWidth = 1;
 const animationDuration = 1000;
+const tooltipHorizontalPadding = 12;
+const tooltipVerticalPadding = 6;
 
 export default function Chart({
   data,
@@ -88,6 +90,8 @@ export default function Chart({
     );
 
   const animationProgress = useSharedValue(0);
+  const tooltipContentWidth = useSharedValue<number>(tooltipWidth);
+  const tooltipContentHeight = useSharedValue<number>(tooltipHeight);
 
   const animatedLinePath = usePathValue((path) => {
     "worklet";
@@ -234,7 +238,10 @@ export default function Chart({
     tooltipBox: useAnimatedStyle(() => ({
       left: Math.max(
         0,
-        Math.min(pressX.value - tooltipWidth / 2, width - tooltipWidth)
+        Math.min(
+          pressX.value - tooltipContentWidth.value / 2,
+          width - tooltipContentWidth.value
+        )
       ),
     })),
     fadeIn: useAnimatedStyle(() => ({
@@ -410,10 +417,22 @@ export default function Chart({
                 animatedStyles.tooltipBox,
                 styles.tooltipBox,
                 {
-                  width: tooltipWidth,
-                  height: tooltipHeight,
+                  minHeight: tooltipHeight,
+                  paddingHorizontal: tooltipHorizontalPadding,
+                  paddingVertical: tooltipVerticalPadding,
                 },
               ]}
+              onLayout={(e) => {
+                const { width: boxW, height: boxH } = e.nativeEvent.layout;
+                const w = Math.max(24, boxW);
+                const h = Math.max(20, boxH);
+                if (Math.abs(tooltipContentWidth.value - w) > 0.5) {
+                  tooltipContentWidth.value = w;
+                }
+                if (Math.abs(tooltipContentHeight.value - h) > 0.5) {
+                  tooltipContentHeight.value = h;
+                }
+              }}
             >
               <AnimateableText
                 animatedProps={animatedProps.selectedPointKey}

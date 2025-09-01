@@ -48,6 +48,8 @@ const baseLabelHeight = 24;
 const circleRadius = 4;
 const lineWidth = 1;
 const animationDuration = 1000;
+const tooltipHorizontalPadding = 12;
+const tooltipVerticalPadding = 6;
 
 export default function SimpleChart({
   data,
@@ -83,6 +85,9 @@ export default function SimpleChart({
 
   const pressX = useSharedValue<number>(0);
   const showTooltip = useSharedValue<boolean>(false);
+
+  const tooltipContentWidth = useSharedValue<number>(tooltipWidth);
+  const tooltipContentHeight = useSharedValue<number>(tooltipHeight);
 
   const animationProgress = useSharedValue(0);
   const animatedLinePath = usePathValue((path) => {
@@ -172,15 +177,15 @@ export default function SimpleChart({
     tooltipBox: useAnimatedStyle(() => ({
       position: "absolute",
       left: Math.min(
-        Math.max(pressX.value - tooltipWidth / 2, 0),
-        width - tooltipWidth
+        Math.max(pressX.value - tooltipContentWidth.value / 2, 0),
+        width - tooltipContentWidth.value
       ),
       top: 0,
-      width: tooltipWidth,
-      height: tooltipHeight,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
+      paddingHorizontal: tooltipHorizontalPadding,
+      paddingVertical: tooltipVerticalPadding,
       borderWidth: 1,
       borderColor: getColor("primary"),
       backgroundColor: getColor("primary", 0.1),
@@ -301,10 +306,19 @@ export default function SimpleChart({
 
         <Animated.View style={animatedStyles.tooltipContainer}>
           <Animated.View style={animatedStyles.tooltipLine} />
-
           <Animated.View style={animatedStyles.tooltipCircle} />
-
-          <Animated.View style={animatedStyles.tooltipBox}>
+          <Animated.View
+            style={animatedStyles.tooltipBox}
+            onLayout={(e) => {
+              const { width: boxW, height: boxH } = e.nativeEvent.layout;
+              if (Math.abs(tooltipContentWidth.value - boxW) > 0.5) {
+                tooltipContentWidth.value = boxW;
+              }
+              if (Math.abs(tooltipContentHeight.value - boxH) > 0.5) {
+                tooltipContentHeight.value = boxH;
+              }
+            }}
+          >
             <AnimateableText
               animatedProps={animatedProps.selectedPointKey}
               style={[
